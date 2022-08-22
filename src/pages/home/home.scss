@@ -1,0 +1,28 @@
+.home {
+  display: flex;
+
+  .homeContainer {
+    background-color: #ffff;
+    flex: 8;
+
+    .widgets {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .listContainer {
+      -webkit-box-shadow: 1px 7px 26px -13px rgba(0, 0, 0, 0.73);
+      -moz-box-shadow: 1px 7px 26px -13px rgba(0, 0, 0, 0.73);
+      box-shadow: 1px 7px 26px -13px rgba(0, 0, 0, 0.73);
+      margin: 20px;
+      padding: 20px;
+
+      .listTitle {
+        font-weight: 600;
+        color: grey;
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
