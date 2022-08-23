@@ -3,25 +3,22 @@ import "./navbar.scss";
 // import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 // import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Row } from "react-bootstrap";
 
-function navbar() {
+function Navbar() {
   const current = new Date();
   const date = `${current.getDate()}/${
     current.getMonth() + 1
   }/${current.getFullYear()}`;
 
   return (
-    <div className="navbar">
-      <div className="wrapper">
-        <h1>Department of Industrial Management</h1>
-
-        <div className="items">
-          {/* <h3> {date}</h3> */}
-          <LogoutIcon className="icon" />
-        </div>
+    <Row className="m-0 position-sticky top-0 bg-light shadow py-2">
+      <div className="col-11"><h1>Department of Industrial Management</h1></div>
+      <div className="col d-flex justify-content-end pt-3 ">
+        <LogoutIcon className="icon text-dark" />
       </div>
-    </div>
+    </Row>
   );
 }
 
-export default navbar;
+export default Navbar;

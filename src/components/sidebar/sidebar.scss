@@ -1,19 +1,11 @@
 .sidebar {
-  flex: 1;
   border-right: 0.5px solid rgb(230, 227, 227);
-  min-height: 100vh;
   background-color: #007c5d;
 
   .top {
-    height: 50px;
     display: flex;
-    padding: auto;
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
-
-    .logo {
-    }
   }
 
   .lists {

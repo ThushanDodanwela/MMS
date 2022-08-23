@@ -5,16 +5,17 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import SchoolIcon from "@mui/icons-material/School";
+import { Col } from "react-bootstrap";
 
-function sidebar() {
+function Sidebar() {
   return (
-    <div className="sidebar">
-      <div className="top">
+    <Col lg={2} className="sidebar bg-success vh-100 position-fixed">
+      <div className="top d-flex justify-content-center">
         <span className="logo">
           <img src={logo} alt="" height={100} width={100} />
         </span>
       </div>
-      <div className="lists">
+        <div className="lists">
         <ul>
           <li>
             <DashboardIcon />
@@ -34,8 +35,8 @@ function sidebar() {
           </li>
         </ul>
       </div>
-    </div>
+    </Col>
   );
 }
 
-export default sidebar;
+export default Sidebar;
