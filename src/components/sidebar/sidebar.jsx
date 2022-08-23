@@ -11,10 +11,11 @@ import { Col } from "react-bootstrap";
 function Sidebar() {
   return (
     <Col lg={2} className="sidebar bg-success vh-100 position-fixed">
-      <div className="top d-flex justify-content-center">
+      <div className="top d-flex justify-content-start pt-1">
         <span className="logo">
-          <img src={logo} alt="" height={100} width={100} />
+          <img src={logo} alt="" height={70} width={70} />
         </span>
+        <span className="fs-2 fw-bold text-white pt-3">MMS</span>
       </div>
         <div className="lists">
         <ul>
