@@ -12,8 +12,8 @@ function Navbar() {
   }/${current.getFullYear()}`;
 
   return (
-    <Row className="m-0 position-sticky top-0 bg-light shadow py-2">
-      <div className="col-11"><h1>Department of Industrial Management</h1></div>
+    <Row className="m-0 position-sticky top-0 bg-light shadow pt-3 pb-2">
+      <div className="col-11 "><h1 className="fw-bold pt-1">Dashboard</h1></div>
       <div className="col d-flex justify-content-end pt-3 ">
         <LogoutIcon className="icon text-dark" />
       </div>

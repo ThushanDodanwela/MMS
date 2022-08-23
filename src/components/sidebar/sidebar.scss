@@ -10,7 +10,6 @@
 
   .lists {
     margin-top: 40px;
-    padding-left: 10px;
 
     ul {
       list-style: none;
@@ -22,9 +21,9 @@
       color: white;
       display: flex;
       align-items: center;
-      padding: 5px;
+      padding: 20px 20px 20px 20px;
       cursor: pointer;
-      margin-top: 20px;
+      margin-top: 5px;
 
       &:hover {
         background-color: #00574b;
