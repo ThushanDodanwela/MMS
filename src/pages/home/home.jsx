@@ -85,8 +85,8 @@ function Home({setNavbar}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.moduleCode}>
+            {rows.map((row,index) => (
+              <TableRow key={index}>
                 <TableCell className="tablecell">{row.moduleCode}</TableCell>
                 <TableCell className="tablecell">{row.Level}</TableCell>
                 <TableCell className="tablecell">{row.Semester}</TableCell>

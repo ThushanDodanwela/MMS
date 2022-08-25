@@ -35,14 +35,14 @@ const Module = ({setNavbar}) => {
       semester: "Semester 2",
     },
     {
-      moduleCode: "INTE2222",
+      moduleCode: "INTE2722",
       moduleName: "Advanced Web Appplication Development",
       level: "Level 2",
       credits: "2",
       semester: "Semester 2",
     },
     {
-      moduleCode: "INTE2222",
+      moduleCode: "INTE2228",
       moduleName: "Advanced Web Appplication Development",
       level: "Level 2",
       credits: "2",

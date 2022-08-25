@@ -10,15 +10,15 @@ import { useState } from "react";
 
 function App() {
 
-  const [narbar,setNavbar] = useState('Dashboard')
+  const [navbar,setNavbar] = useState('Dashboard')
 
   return (
     <div className="App d-flex">
       <BrowserRouter>
-        <Sidebar />
+        <Sidebar section={navbar} />
         <Col lg={2}></Col>
         <Col lg={10}>
-          <Navbar section={narbar} />
+          <Navbar section={navbar} />
           <Row className="m-0">
             <Routes>
               <Route path="/" element={<Home setNavbar={setNavbar}/>} />

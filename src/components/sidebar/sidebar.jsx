@@ -9,7 +9,7 @@ import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
-function Sidebar() {
+function Sidebar({section}) {
   return (
     <Col lg={2} className="sidebar bg-success vh-100 position-fixed">
       <div className="top d-flex justify-content-start pt-1">
@@ -20,25 +20,25 @@ function Sidebar() {
       </div>
         <div className="lists">
         <ul>
-        <Link to={'/'} className="text-decoration-none"> 
-          <li>
+        <Link to={'/'} className="text-decoration-none "> 
+          <li className={section === "Dashboard" ?'selected':" "}>
             <DashboardIcon />
             <span>Dashboard</span>
           </li>
           </Link>
           <Link to={'/modules'} className="text-decoration-none"> 
-          <li>
+          <li className={section === "Modules" ?'selected':" "}>
             <LibraryBooksIcon />
             <span>Modules</span>
           </li>
           </Link>
           <Link to="/lecturers" className="text-decoration-none">
-          <li>
+          <li className={section === "Lecturers" ?'selected':" "}>
             <SchoolIcon />
-            <span>Lectures</span>
+            <span>Lecturers</span>
           </li>
           </Link>
-          <li>
+          <li className={section === "Semesters" ?'selected':" "}>
             <CastForEducationIcon />
             <span>Semesters</span>
           </li>
