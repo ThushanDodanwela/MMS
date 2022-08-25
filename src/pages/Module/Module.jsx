@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Button from "react-bootstrap/Button";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
-import { Modal } from "react-bootstrap";
+import { Modal, Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {FaEdit} from 'react-icons/fa';
+import {MdDelete} from 'react-icons/md';
 
 const Module = () => {
   const [show, setShow] = useState(false);
@@ -59,42 +53,48 @@ const Module = () => {
     <div className="module">
       <div className="listContainer ">
         <div className="table pt-5 px-4">
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column, index) => {
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+              {columns.map((column, index) => {
                     return (
-                      <TableCell key={index} className="tablecell text-center">
+                      <th key={index} className="tablecell text-center">
                         {column}
-                      </TableCell>
+                      </th>
                     );
                   })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="tablecell text-center">
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                  <tr key={index}>
+                    <td className="tablecell text-center">
                       {row.moduleCode}
-                    </TableCell>
-                    <TableCell className="tablecell text-center">
+                    </td>
+                    <td className="tablecell text-center">
                       {row.moduleName}
-                    </TableCell>
-                    <TableCell className="tablecell text-center">
+                    </td>
+                    <td className="tablecell text-center">
                       {row.level}
-                    </TableCell>
-                    <TableCell className="tablecell text-center">
+                    </td>
+                    <td className="tablecell text-center">
                       {row.credits}
-                    </TableCell>
-                    <TableCell className="tablecell text-center">
+                    </td>
+                    <td className="tablecell text-center">
                       {row.semester}
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                    <td>
+                      <div className="d-flex justify-content-center">
+                      <span className="text-success" role="button"><FaEdit class='me-2' size={25}/></span>
+                      <span className="text-danger" role="button"><MdDelete class="ms-2" size={28} /></span>
+                      </div>
+                    </td>
+          
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              
+            </tbody>
+          </Table>
         </div>
         <FloatingButton handleShow={handleShow} />
       </div>

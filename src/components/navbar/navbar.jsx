@@ -5,7 +5,7 @@ import "./navbar.scss";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Row } from "react-bootstrap";
 
-function Navbar() {
+function Navbar({section}) {
   const current = new Date();
   const date = `${current.getDate()}/${
     current.getMonth() + 1
@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <Row className="m-0 position-sticky top-0 bg-light shadow pt-3 pb-2">
-      <div className="col-11 "><h1 className="fw-bold pt-1">Dashboard</h1></div>
+      <div className="col-11 "><h1 className="fw-bold pt-1">{section}</h1></div>
       <div className="col d-flex justify-content-end pt-3 ">
         <LogoutIcon className="icon text-dark" />
       </div>
