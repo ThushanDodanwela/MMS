@@ -1,5 +1,5 @@
 import React from "react";
-import "./sidebar.scss";
+import "./Sidebar.scss";
 import logo from "../../assets/IMSSALOGO.png";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -32,10 +32,12 @@ function Sidebar() {
             <span>Modules</span>
           </li>
           </Link>
+          <Link to="/lecturers" className="text-decoration-none">
           <li>
             <SchoolIcon />
             <span>Lectures</span>
           </li>
+          </Link>
           <li>
             <CastForEducationIcon />
             <span>Semesters</span>
