@@ -6,6 +6,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import SchoolIcon from "@mui/icons-material/School";
 import { Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 function Sidebar() {
@@ -19,14 +20,18 @@ function Sidebar() {
       </div>
         <div className="lists">
         <ul>
+        <Link to={'/'} className="text-decoration-none"> 
           <li>
             <DashboardIcon />
             <span>Dashboard</span>
           </li>
+          </Link>
+          <Link to={'/modules'} className="text-decoration-none"> 
           <li>
             <LibraryBooksIcon />
             <span>Modules</span>
           </li>
+          </Link>
           <li>
             <SchoolIcon />
             <span>Lectures</span>
