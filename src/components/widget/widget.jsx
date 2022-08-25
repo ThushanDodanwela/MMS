@@ -1,5 +1,5 @@
 import React from "react";
-import "./widget.scss";
+import "./Widget.scss";
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 import ShowChartRoundedIcon from "@mui/icons-material/ShowChartRounded";
 import SchoolIcon from "@mui/icons-material/School";

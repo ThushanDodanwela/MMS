@@ -1,5 +1,5 @@
 import React from "react";
-import "./navbar.scss";
+import "./Navbar.scss";
 // import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 // import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";

@@ -1,11 +1,15 @@
 import React from "react";
-import "./home.scss";
-import Navbar from "../../components/Navbar/Navbar";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Widget from "../../components/widget/widget";
-import Table from "../../components/table/table";
+import "./Home.scss";
+import Widget from "../../components/Widget/Widget";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-function Home() {
+function Home({setNavbar}) {
 
   const columns = ['Module Code','Level','Semestre','Lecturer','Status'];
   const rows = [
@@ -57,6 +61,9 @@ function Home() {
       Status: "Pending",
     },
   ];
+
+  setNavbar("Dashboard");
+
   return (
     <div className="home">
       <div className="homeContainer">
@@ -68,7 +75,30 @@ function Home() {
 
         <div className="listContainer">
           <div className="listTitle">Results</div>
-          <Table columns={columns} rows={rows}/>
+          <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column,index)=>{
+                return <TableCell key={index} className="tablecell">{column}</TableCell>;
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.moduleCode}>
+                <TableCell className="tablecell">{row.moduleCode}</TableCell>
+                <TableCell className="tablecell">{row.Level}</TableCell>
+                <TableCell className="tablecell">{row.Semester}</TableCell>
+                <TableCell className="tablecell">{row.Lecturer}</TableCell>
+                <TableCell className="tablecell">
+                  <span className={`status ${row.Status}`}>{row.Status}</span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
         </div>
       </div>
     </div>
