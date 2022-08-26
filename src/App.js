@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import { Col, Row } from "react-bootstrap";
 import Lecturers from "./pages/Lecturers/Lecturers";
 import { useState } from "react";
+import Allocations from "./pages/Allocations/Allocations";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/" element={<Home setNavbar={setNavbar}/>} />
               <Route path="/modules" element={<Modules setNavbar={setNavbar}/>} />
               <Route path="/lecturers" element={<Lecturers setNavbar={setNavbar}/>} />
+              <Route path="/allocations" element={<Allocations setNavbar={setNavbar}/>} />
             </Routes>
           </Row>
         </Col>

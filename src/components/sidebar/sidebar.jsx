@@ -8,8 +8,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-
-function Sidebar({section}) {
+function Sidebar({ section }) {
   return (
     <Col lg={2} className="sidebar bg-success vh-100 position-fixed">
       <div className="top d-flex justify-content-start pt-1">
@@ -18,30 +17,36 @@ function Sidebar({section}) {
         </span>
         <span className="fs-2 fw-bold text-white pt-3">MMS</span>
       </div>
-        <div className="lists">
+      <div className="lists">
         <ul>
-        <Link to={'/'} className="text-decoration-none "> 
-          <li className={section === "Dashboard" ?'selected':" "}>
-            <DashboardIcon />
-            <span>Dashboard</span>
-          </li>
+          <Link to={"/"} className="text-decoration-none ">
+            <li className={section === "Dashboard" ? "selected" : " "}>
+              <DashboardIcon />
+              <span>Dashboard</span>
+            </li>
           </Link>
-          <Link to={'/modules'} className="text-decoration-none"> 
-          <li className={section === "Modules" ?'selected':" "}>
-            <LibraryBooksIcon />
-            <span>Modules</span>
-          </li>
+
+          <Link to={"/allocations"} className="text-decoration-none ">
+            <li className={section === "Allocations" ? "selected" : " "}>
+              <CastForEducationIcon />
+              <span>Allocations</span>
+            </li>
           </Link>
+
+          <Link to={"/modules"} className="text-decoration-none">
+            <li className={section === "Modules" ? "selected" : " "}>
+              <LibraryBooksIcon />
+              <span>Modules</span>
+            </li>
+          </Link>
+
           <Link to="/lecturers" className="text-decoration-none">
-          <li className={section === "Lecturers" ?'selected':" "}>
-            <SchoolIcon />
-            <span>Lecturers</span>
-          </li>
+            <li className={section === "Lecturers" ? "selected" : " "}>
+              <SchoolIcon />
+              <span>Lecturers</span>
+            </li>
           </Link>
-          <li className={section === "Semesters" ?'selected':" "}>
-            <CastForEducationIcon />
-            <span>Semesters</span>
-          </li>
+
         </ul>
       </div>
     </Col>

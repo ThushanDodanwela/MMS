@@ -121,7 +121,7 @@ const Lecturer = ({ setNavbar }) => {
                   <td className="tablecell text-center">{row.position}</td>
                   <td className="tablecell text-center">{row.room}</td>
                   <td className="tablecell text-center">{row.phone}</td>
-                  <td className="tablecell text-center">{row.email}</td>
+                  <td className="tablecell text-center" ><a href={`mailto:${row.email}`}>{row.email}</a></td>
                   <td>
                     <div className="d-flex justify-content-center">
                       <span className="text-success" role="button">
