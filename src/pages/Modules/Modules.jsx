@@ -19,6 +19,7 @@ const Module = ({setNavbar}) => {
     "Semester",
     "Actions"
   ];
+  
   const rows = [
     {
       moduleCode: "INTE2223",
