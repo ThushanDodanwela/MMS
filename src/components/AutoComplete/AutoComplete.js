@@ -21,7 +21,6 @@ const Label = styled("label")`
 
 const InputWrapper = styled("div")(
   ({ theme }) => `
-    width: 300px;
     border: 1px solid ${theme.palette.mode === "dark" ? "#434343" : "#d9d9d9"};
     background-color: ${theme.palette.mode === "dark" ? "#141414" : "#fff"};
     border-radius: 4px;
@@ -29,7 +28,7 @@ const InputWrapper = styled("div")(
     display: flex;
     flex-wrap: wrap;
     height:5rem;
-    overflow-y:scroll;
+    overflow-y:auto;
 
   
     &:hover {
@@ -165,7 +164,7 @@ export default function AutoComplete({ dataset, title }) {
   return (
     <Root>
       <div {...getRootProps()}>
-        <div className="py-2 fs-5">{title}</div>
+        <div className="py-2 fs-5 fw-semibold">{title}</div>
         <InputWrapper ref={setAnchorEl} className={focused ? "focused" : ""}>
           {value.map((option, index) => (
             <StyledTag label={option.title} {...getTagProps({ index })} />
