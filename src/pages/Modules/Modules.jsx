@@ -1,25 +1,18 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import FloatingButton from "../../components/FloatingButton/FloatingButton";
 import { Modal, Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import RecentModulesCard from "../../components/RecentModulesCard/RecentModulesCard";
+import Button from '@mui/material/Button';
 
-const Module = ({setNavbar}) => {
+const Module = ({ setNavbar }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const columns = [
-    "Module Code",
-    "Module Name",
-    "Level",
-    "Credits",
-    "Semester",
-    "Actions"
-  ];
-  
+  const columns = ["Module Code", "Module Name", "Level", "Credits", "Semester", "Actions"];
+
   const rows = [
     {
       moduleCode: "INTE2223",
@@ -52,13 +45,25 @@ const Module = ({setNavbar}) => {
   ];
 
   setNavbar("Modules");
-  
+
   return (
     <div className="module">
       <div className="listContainer ">
-        <div className="table pt-5 px-4">
+        <div className="table pt-1 ">
+          <div className="mb-4">
+            <div className="d-flex justify-content-between fw-semibold ">
+              <div className="fs-5">Recent Modules</div>
+              <div>&lt; &gt;</div>
+            </div>
 
-
+            <div className="d-flex gap-4 ps-3 col-12 pt-2" style={{overflowX:"hidden"}}>
+              <RecentModulesCard moduleCode="MGTE 31222" moduleName="Advanced Statistics Techniques" level="02" semester="02"/>
+              <RecentModulesCard moduleCode="INTE 31222" moduleName="Advanced Statistics Techniques" level="02" semester="02"/>
+              <RecentModulesCard moduleCode="INTE 31222" moduleName="Advanced Statistics Techniques" level="02" semester="02"/>
+              <RecentModulesCard moduleCode="INTE 31222" moduleName="Advanced Statistics Techniques" level="02" semester="02"/>
+              <RecentModulesCard moduleCode="INTE 31222" moduleName="Advanced Statistics Techniques" level="02" semester="02"/>
+            </div>
+          </div>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Add New Module</Modal.Title>
@@ -103,13 +108,18 @@ const Module = ({setNavbar}) => {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          <Table striped bordered hover>
+<div className=" fw-semibold ps-2 pt-3 pb-3 d-flex justify-content-between ">
+  <div className="fs-5">All Modules</div>
+  <div className="pe-4">
+  <Button className="btn bg-success text-light px-3 rounded-2">Add new</Button>
+  </div>
+</div>
+          <Table borderless hover >
             <thead>
               <tr>
                 {columns.map((column, index) => {
                   return (
-                    <th key={index} className="tablecell text-center">
+                    <th key={index} className="tablecell text-center pb-3" style={{ color: "#B5B7C0" }}>
                       {column}
                     </th>
                   );
@@ -118,7 +128,7 @@ const Module = ({setNavbar}) => {
             </thead>
             <tbody>
               {rows.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} className="border border-0">
                   <td className="tablecell text-center">{row.moduleCode}</td>
                   <td className="tablecell text-center">{row.moduleName}</td>
                   <td className="tablecell text-center">{row.level}</td>
@@ -138,8 +148,6 @@ const Module = ({setNavbar}) => {
               ))}
             </tbody>
           </Table>
-
-          <FloatingButton handleShow={handleShow} />
 
         </div>
       </div>
