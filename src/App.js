@@ -8,10 +8,10 @@ import { Col, Row } from "react-bootstrap";
 import Lecturers from "./pages/Lecturers/Lecturers";
 import { useState } from "react";
 import Allocations from "./pages/Allocations/Allocations";
+import DashboardLecturer from "./pages/DashboardLecturer/DashboardLecturer";
 
 function App() {
-
-  const [navbar,setNavbar] = useState('Dashboard')
+  const [navbar, setNavbar] = useState("Dashboard");
 
   return (
     <div className="App d-flex">
@@ -22,10 +22,11 @@ function App() {
           <Navbar section={navbar} />
           <Row className="m-0">
             <Routes>
-              <Route path="/" element={<Home setNavbar={setNavbar}/>} />
-              <Route path="/modules" element={<Modules setNavbar={setNavbar}/>} />
-              <Route path="/lecturers" element={<Lecturers setNavbar={setNavbar}/>} />
-              <Route path="/allocations" element={<Allocations setNavbar={setNavbar}/>} />
+              <Route path="/" element={<Home setNavbar={setNavbar} />} />
+              <Route path="/modules" element={<Modules setNavbar={setNavbar} />} />
+              <Route path="/lecturers" element={<Lecturers setNavbar={setNavbar} />} />
+              <Route path="/allocations" element={<Allocations setNavbar={setNavbar} />} />
+              <Route path="/lecturer/dashboard" element={<DashboardLecturer setNavbar={setNavbar} />} />
             </Routes>
           </Row>
         </Col>
