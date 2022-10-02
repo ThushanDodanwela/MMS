@@ -8,6 +8,7 @@ import { Col, Row } from "react-bootstrap";
 import Lecturers from "./pages/Lecturers/Lecturers";
 import { useState } from "react";
 import Allocations from "./pages/Allocations/Allocations";
+import DashboardLecturer from "./pages/DashboardLecturer/DashboardLecturer";
 import AllocationsView from "./pages/AllocationsView/AllocationsView";
 
 function App() {
@@ -23,18 +24,11 @@ function App() {
           <Row className="m-0">
             <Routes>
               <Route path="/" element={<Home setNavbar={setNavbar} />} />
-              <Route
-                path="/modules"
-                element={<Modules setNavbar={setNavbar} />}
-              />
-              <Route
-                path="/lecturers"
-                element={<Lecturers setNavbar={setNavbar} />}
-              />
-              <Route
-                path="/allocations"
-                element={<AllocationsView setNavbar={setNavbar} />}
-              />
+              <Route path="/modules" element={<Modules setNavbar={setNavbar} />} />
+              <Route path="/lecturers" element={<Lecturers setNavbar={setNavbar} />} />
+              <Route path="/allocations" element={<Allocations setNavbar={setNavbar} />} />
+              <Route path="/lecturer/dashboard" element={<DashboardLecturer setNavbar={setNavbar} />} />
+
             </Routes>
           </Row>
         </Col>
