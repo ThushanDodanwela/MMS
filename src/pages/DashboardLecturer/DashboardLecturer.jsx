@@ -1,6 +1,7 @@
 import React from "react";
 import LecturerDashboardLargeCard from "../../components/LecturerDashboardLargeCard/LecturerDashboardLargeCard";
 import LecturerDashboardSmallCard from "../../components/LecturerDashboardSmallCard/LecturerDashboardSmallCard";
+import ModuleCard from "../../components/ModuleCard/ModuleCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
 function DashboardLecturer({ setNavbar }) {
   setNavbar("Dashboard");
@@ -36,10 +37,42 @@ function DashboardLecturer({ setNavbar }) {
           <LecturerDashboardSmallCard />
         </div>
         <div className="mt-3 fs-5 fw-semibold">All courses</div>
-        <div className="mt-3 d-flex flex-wrap">
-          <LecturerDashboardLargeCard />
-          <LecturerDashboardLargeCard />
-          <LecturerDashboardLargeCard />
+        <div className="mt-3 d-flex flex-wrap gap-1">
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
         </div>
       </div>
     </div>
