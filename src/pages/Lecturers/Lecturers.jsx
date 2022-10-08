@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal, Table } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -56,7 +56,9 @@ const Lecturer = ({ setNavbar }) => {
     },
   ];
 
-  setNavbar("Lecturers");
+  useEffect(() => {
+    setNavbar("Lecturers");
+  });
 
   return (
     <div className="module">
@@ -121,14 +123,16 @@ const Lecturer = ({ setNavbar }) => {
                   <td className="tablecell text-center">{row.position}</td>
                   <td className="tablecell text-center">{row.room}</td>
                   <td className="tablecell text-center">{row.phone}</td>
-                  <td className="tablecell text-center" ><a href={`mailto:${row.email}`}>{row.email}</a></td>
+                  <td className="tablecell text-center">
+                    <a href={`mailto:${row.email}`}>{row.email}</a>
+                  </td>
                   <td>
                     <div className="d-flex justify-content-center">
                       <span className="text-success" role="button">
-                        <FaEdit class="me-2" size={25} />
+                        <FaEdit className="me-2" size={25} />
                       </span>
                       <span className="text-danger" role="button">
-                        <MdDelete class="ms-2" size={28} />
+                        <MdDelete className="ms-2" size={28} />
                       </span>
                     </div>
                   </td>

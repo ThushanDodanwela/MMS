@@ -1,23 +1,20 @@
-import React from 'react'
-import { ProgressBar } from 'react-bootstrap'
+import React from "react";
 
 function LecturerDashboardSmallCard() {
-    const now = 60
-    
   return (
-    <div className='col-2 p-2 ' style={{backgroundColor:"red"}}>
-        <div className='d-flex justify-content-between '>
-            <div>Total courses</div>
-            <div>100</div>
-        </div>
+    <div
+      className="col-2 p-3 rounded-3"
+      style={{ backgroundColor: "#008f7a", minHeight: "6rem" }}
+    >
+      <div className="d-flex">
         <div>
-            vehicles in service
+          <div className="text-white fs-4 text-nowrap">Total modules</div>
+          <div className="fs-2">99</div>
         </div>
-        <div>
-        <ProgressBar now={now} label={`80%`} visuallyHidden />
-        </div>
+        <div className="d-flex align-items-center px-2">icon</div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default LecturerDashboardSmallCard
+export default LecturerDashboardSmallCard;
