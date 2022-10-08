@@ -56,7 +56,7 @@ const Module = ({ setNavbar }) => {
   });
 
   return (
-    <div className="module">
+    <div className="col-12">
       <div className="listContainer ">
         <div className="table pt-1 ">
           <div className="mb-4">
@@ -66,17 +66,11 @@ const Module = ({ setNavbar }) => {
             </div>
 
             <div
-              className="d-flex gap-4 ps-3 col-12 pt-2"
-              style={{ overflowX: "hidden" }}
+              className="d-flex gap-4 ps-3 pt-2"
+              style={{ maxWidth: "65rem", overflowX: "scroll" }}
             >
               <RecentModulesCard
                 moduleCode="MGTE 31222"
-                moduleName="Advanced Statistics Techniques"
-                level="02"
-                semester="02"
-              />
-              <RecentModulesCard
-                moduleCode="INTE 31222"
                 moduleName="Advanced Statistics Techniques"
                 level="02"
                 semester="02"
