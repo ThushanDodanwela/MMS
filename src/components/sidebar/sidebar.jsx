@@ -1,16 +1,16 @@
-import React from "react";
-import "./Sidebar.scss";
-import logo from "../../assets/IMSSALOGO.png";
+import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import CastForEducationIcon from "@mui/icons-material/CastForEducation";
 import SchoolIcon from "@mui/icons-material/School";
+import React from "react";
 import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import logo from "../../assets/IMSSALOGO.png";
+import "./Sidebar.scss";
 
 function Sidebar({ section }) {
   return (
-    <Col lg={2} className="sidebar bg-success vh-100 position-fixed">
+    <Col lg={2} className="sidebar bg-success vh-100 position-sticky top-0">
       <div className="top d-flex justify-content-start pt-1">
         <span className="logo">
           <img src={logo} alt="" height={70} width={70} />
@@ -46,7 +46,6 @@ function Sidebar({ section }) {
               <span>Lecturers</span>
             </li>
           </Link>
-
         </ul>
       </div>
     </Col>
