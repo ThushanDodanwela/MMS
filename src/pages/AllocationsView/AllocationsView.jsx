@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Badge from "react-bootstrap/Badge";
 import { Button } from "@mui/material";
+import { useEffect } from "react";
 
 function stringToColor(string) {
   let hash = 0;
@@ -90,7 +91,10 @@ const rows = [
   ),
 ];
 
-function AllocationsView() {
+function AllocationsView({ setNavbar }) {
+  useEffect(() => {
+    setNavbar("Allocations");
+  });
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

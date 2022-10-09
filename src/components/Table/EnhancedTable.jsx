@@ -46,7 +46,7 @@ function stableSort(array, comparator) {
 
 const EnhancedTableToolbar = (props) => {
   return props.isToolbarVisible ? (
-    <Toolbar sx={{ mt: 2, pt: 2 }}>
+    <Toolbar sx={{ pt: 2 }}>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -55,12 +55,12 @@ const EnhancedTableToolbar = (props) => {
       >
         <div className="d-flex">
           <div class="input-group">
-            <span class="input-group-text bg-background" id="basic-addon1">
+            <span class="input-group-text bg-transparent" id="basic-addon1">
               <BiSearchAlt2 />
             </span>
             <input
               type="text"
-              class="form-control"
+              class="form-control border-start-0 ps-0"
               placeholder="Search Lecturer"
             />
           </div>
@@ -114,7 +114,7 @@ export default function EnhancedTable({
   const emptyRows = 1 > 0 ? Math.max(0, rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", p: 0 }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           tableTitle={tableTitle}
