@@ -1,10 +1,126 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, Table } from "react-bootstrap";
+import { Container, Form, Modal } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import EnhancedTable from "../../components/Table/EnhancedTable";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
+import { Button } from "@mui/material";
 
 const Lecturer = ({ setNavbar }) => {
+  const tableRows = [
+    {
+      name: "Prof. Janaka Wijayanayake",
+      position: "Head of the Department",
+      room: "A4.201",
+      phone: "+94 (0)11 2914482(ext204)",
+      email: "janaka@kln.ac.lk",
+    },
+    {
+      name: "Prof. Janaka Wijayanayake",
+      position: "Head of the Department",
+      room: "A4.201",
+      phone: "+94 (0)11 2914482(ext204)",
+      email: "janaka@kln.ac.lk",
+    },
+    {
+      name: "Prof. Janaka Wijayanayake",
+      position: "Head of the Department",
+      room: "A4.201",
+      phone: "+94 (0)11 2914482(ext204)",
+      email: "janaka@kln.ac.lk",
+    },
+    {
+      name: "Prof. Janaka Wijayanayake",
+      position: "Head of the Department",
+      room: "A4.201",
+      phone: "+94 (0)11 2914482(ext204)",
+      email: "janaka@kln.ac.lk",
+    },
+    {
+      name: "Prof. Janaka Wijayanayake",
+      position: "Head of the Department",
+      room: "A4.201",
+      phone: "+94 (0)11 2914482(ext204)",
+      email: "janaka@kln.ac.lk",
+    },
+  ];
+
+  function createData(lec_name, position, room, phone, email) {
+    return {
+      lec_name,
+      position,
+      room,
+      phone,
+      email,
+    };
+  }
+
+  const [numOfRows, setNumOfRows] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rows, setRows] = React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const headCells = [
+    {
+      id: "lec_name",
+      numeric: false,
+      disablePadding: true,
+      label: "Lecturer Name",
+    },
+    {
+      id: "position",
+      numeric: true,
+      disablePadding: false,
+      label: "Position",
+    },
+    {
+      id: "room",
+      numeric: true,
+      disablePadding: false,
+      label: "Room",
+    },
+    {
+      id: "phone",
+      numeric: true,
+      disablePadding: false,
+      label: "Phone",
+    },
+    {
+      id: "email",
+      numeric: true,
+      disablePadding: false,
+      label: "Email",
+    },
+
+    {
+      id: "Actions",
+      numeric: true,
+      disablePadding: false,
+      label: "Actions",
+      align: "center",
+      sorting: false,
+    },
+  ];
+
+  const editClickHandler = (userId) => {
+    console.log(userId);
+  };
+
+  // Data retriving
+  useEffect(() => {
+    setRows(
+      tableRows.map((lecturer) => {
+        return createData(
+          lecturer.name,
+          lecturer.position,
+          lecturer.room,
+          lecturer.phone,
+          lecturer.email
+        );
+      })
+    );
+  }, [page, rowsPerPage]);
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -18,44 +134,6 @@ const Lecturer = ({ setNavbar }) => {
     "Actions",
   ];
 
-  const rows = [
-    {
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-  ];
-
   useEffect(() => {
     setNavbar("Lecturers");
   });
@@ -63,7 +141,7 @@ const Lecturer = ({ setNavbar }) => {
   return (
     <div className="module">
       <div className="listContainer ">
-        <div className="table pt-5 px-4">
+        <div className="table px-4">
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Add New Lecturer</Modal.Title>
@@ -104,44 +182,63 @@ const Lecturer = ({ setNavbar }) => {
             </Modal.Footer>
           </Modal>
 
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                {columns.map((column, index) => {
-                  return (
-                    <th key={index} className="tablecell text-center">
-                      {column}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, index) => (
-                <tr key={index}>
-                  <td className="tablecell text-center">{row.name}</td>
-                  <td className="tablecell text-center">{row.position}</td>
-                  <td className="tablecell text-center">{row.room}</td>
-                  <td className="tablecell text-center">{row.phone}</td>
-                  <td className="tablecell text-center">
-                    <a href={`mailto:${row.email}`}>{row.email}</a>
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-center">
-                      <span className="text-success" role="button">
-                        <FaEdit className="me-2" size={25} />
-                      </span>
-                      <span className="text-danger" role="button">
-                        <MdDelete className="ms-2" size={28} />
-                      </span>
-                    </div>
-                  </td>
+          {/* <Table striped bordered hover>
+              <thead>
+                <tr>
+                  {columns.map((column, index) => {
+                    return (
+                      <th key={index} className="tablecell text-center">
+                        {column}
+                      </th>
+                    );
+                  })}
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {rows.map((row, index) => (
+                  <tr key={index}>
+                    <td className="tablecell text-center">{row.name}</td>
+                    <td className="tablecell text-center">{row.position}</td>
+                    <td className="tablecell text-center">{row.room}</td>
+                    <td className="tablecell text-center">{row.phone}</td>
+                    <td className="tablecell text-center">
+                      <a href={`mailto:${row.email}`}>{row.email}</a>
+                    </td>
+                    <td>
+                      <div className="d-flex justify-content-center">
+                        <span className="text-success" role="button">
+                          <FaEdit className="me-2" size={25} />
+                        </span>
+                        <span className="text-danger" role="button">
+                          <MdDelete className="ms-2" size={28} />
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table> */}
 
-          <FloatingButton handleShow={handleShow} />
+          <Container>
+            <EnhancedTable
+              headCells={headCells}
+              rows={rows}
+              page={page}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              numOfRows={numOfRows}
+              actionButtons={[
+                { btnName: "Edit", actionFunc: editClickHandler },
+              ]}
+              isToolbarVisible={true}
+              optionalButton={
+                <Button onClick={handleShow} variant="contained">
+                  Add new
+                </Button>
+              }
+            />
+          </Container>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ function DashboardLecturer({ setNavbar }) {
           <SearchBar />
         </div>
 
-        <div className="d-flex justify-content-between mt-3">
+        <div className="d-flex justify-content-between mt-3 ">
           <LecturerDashboardSmallCard />
           <LecturerDashboardSmallCard />
           <LecturerDashboardSmallCard />
@@ -38,6 +38,20 @@ function DashboardLecturer({ setNavbar }) {
         </div>
         <div className="mt-3 fs-5 fw-semibold">All courses</div>
         <div className="mt-3 d-flex flex-wrap gap-1">
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
+          <ModuleCard
+            moduleCode="MGTE"
+            moduleName="WEB APPLICAIRON"
+            level="2"
+            semester="2"
+            state=" Exams ongoing"
+          />
           <ModuleCard
             moduleCode="MGTE"
             moduleName="WEB APPLICAIRON"
