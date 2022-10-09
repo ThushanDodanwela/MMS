@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home";
 import Lecturers from "./pages/Lecturers/Lecturers";
 import Modules from "./pages/Modules/Modules";
 import SidebarAndNavbar from "./shared/SidebarAndNavbar";
+import AllocationsView from "./pages/AllocationsView/AllocationsView";
 
 function App() {
   const [navbar, setNavbar] = useState("Dashboard");
@@ -41,7 +42,7 @@ function App() {
             }
           />
           <Route
-            path="/allocations"
+            path="/allocations/view"
             element={
               <SidebarAndNavbar section={navbar}>
                 <Allocations setNavbar={setNavbar} />
@@ -51,6 +52,14 @@ function App() {
           <Route
             path="/lecturer/dashboard"
             element={<DashboardLecturer setNavbar={setNavbar} />}
+          />
+          <Route
+            path="/allocations"
+            element={
+              <SidebarAndNavbar section={navbar}>
+                <AllocationsView setNavbar={setNavbar} />
+              </SidebarAndNavbar>
+            }
           />
         </Routes>
       </BrowserRouter>

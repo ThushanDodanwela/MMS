@@ -16,9 +16,10 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow className="bg-table">
         {headCells.map((headCell) => (
           <TableCell
+            sx={{ fontSize: 15 }}
             key={headCell.id}
             padding="normal"
             align={headCell.align ? headCell.align : "left"}

@@ -4,7 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import EnhancedTable from "../../components/Table/EnhancedTable";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 
 const Lecturer = ({ setNavbar }) => {
   const tableRows = [
@@ -66,29 +66,37 @@ const Lecturer = ({ setNavbar }) => {
       numeric: false,
       disablePadding: true,
       label: "Lecturer Name",
+      align: "center",
     },
     {
       id: "position",
       numeric: true,
       disablePadding: false,
+      align: "center",
+
       label: "Position",
     },
     {
       id: "room",
       numeric: true,
       disablePadding: false,
+      align: "center",
+
       label: "Room",
     },
     {
       id: "phone",
       numeric: true,
       disablePadding: false,
+      align: "center",
+
       label: "Phone",
     },
     {
       id: "email",
       numeric: true,
       disablePadding: false,
+      align: "center",
       label: "Email",
     },
 
@@ -219,7 +227,7 @@ const Lecturer = ({ setNavbar }) => {
               </tbody>
             </Table> */}
 
-          <Container>
+          <div className="shadow mt-3">
             <EnhancedTable
               headCells={headCells}
               rows={rows}
@@ -238,7 +246,7 @@ const Lecturer = ({ setNavbar }) => {
                 </Button>
               }
             />
-          </Container>
+          </div>
         </div>
       </div>
     </div>

@@ -9,7 +9,13 @@ $theme-colors: (
     "light":      #f8f9fa ,
     "dark":       #212529 ,
     "background": #f7f7f7,
-    "red-100": #ff152c,
+    "red-100":    #ff152c,
+    "table":   #f4f6f8,
+    "btns": #3ba875,
 );
+$input-border-color:#b0c8e0;
+$input-focus-border-color:tint-color(#38aa75, 50%);
+$input-focus-border-color:#38aa75;
+$input-focus-box-shadow:none;
 
 @import "~bootstrap/scss/bootstrap";

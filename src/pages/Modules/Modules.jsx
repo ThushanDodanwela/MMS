@@ -55,6 +55,31 @@ const Module = ({ setNavbar }) => {
     setNavbar("Modules");
   });
 
+  const [moduleInfo, setModuleInfo] = useState({
+    moduleCode: "",
+    moduleName: "",
+    level: "",
+    credits: "",
+    semester: "",
+  });
+
+  const onChangeInput = (event) => {
+    setModuleInfo({
+      ...moduleInfo,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleEditClick = (moduleCode) => {
+    let selectedModule = rows.find((module) => {
+      if (module.moduleCode === moduleCode) {
+        return module;
+      }
+    });
+    setModuleInfo({ ...selectedModule });
+    setShow(true);
+  };
+
   return (
     <div className="col-12">
       <div className="listContainer ">
@@ -67,7 +92,7 @@ const Module = ({ setNavbar }) => {
 
             <div
               className="d-flex gap-4 ps-3 pt-2"
-              style={{ maxWidth: "65rem", overflowX: "scroll" }}
+              style={{ maxWidth: "70rem", overflowX: "hidden" }}
             >
               <RecentModulesCard
                 moduleCode="MGTE 31222"
@@ -103,25 +128,55 @@ const Module = ({ setNavbar }) => {
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Module Code</Form.Label>
-                  <Form.Control type="text" placeholder="INTE 12212" />
+                  <Form.Control
+                    name="moduleCode"
+                    type="text"
+                    placeholder="INTE 12212"
+                    value={moduleInfo.moduleCode}
+                    onChange={onChangeInput}
+                  />
                   <Form.Label className="pt-3">Module Name</Form.Label>
-                  <Form.Control type="text" placeholder="Web Development" />
+                  <Form.Control
+                    name="moduleName"
+                    type="text"
+                    placeholder="Web Development"
+                    value={moduleInfo.moduleName}
+                    onChange={onChangeInput}
+                  />
                   <Form.Label className="pt-3">Credits</Form.Label>
-                  <Form.Control type="number" placeholder="2" min={1} max={6} />
+                  <Form.Control
+                    type="number"
+                    placeholder="2"
+                    min={1}
+                    max={6}
+                    value={moduleInfo.credits}
+                    onChange={onChangeInput}
+                    name="credits"
+                  />
 
                   <div className="d-flex">
                     <div className="col pe-2 pt-4">
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Level</option>
-                        <option value="Level 01">Level 01</option>
-                        <option value="Level 02">Level 02</option>
-                        <option value="Level 03">Level 03</option>
-                        <option value="Level 04">Level 04</option>
+                      <Form.Select
+                        aria-label="Default select example"
+                        value={moduleInfo.level}
+                        onChange={onChangeInput}
+                        name="level"
+                      >
+                        <option value="Select Level">Select Level</option>
+                        <option value="Level 1">Level 01</option>
+                        <option value="Level 2">Level 02</option>
+                        <option value="Level 3">Level 03</option>
+                        <option value="Level 4">Level 04</option>
                       </Form.Select>
                     </div>
                     <div className="col ps-2 pt-4">
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Semester</option>
+                      <Form.Select
+                        aria-label="Default select example"
+                        value={moduleInfo.semester}
+                        onChange={onChangeInput}
+                        name="semester"
+                      >
+                        <option value="Select Semester">Select Semester</option>
                         <option value="Semester 1">Semester 01</option>
                         <option value="Semester 2">Semester 02</option>
                       </Form.Select>
@@ -131,10 +186,19 @@ const Module = ({ setNavbar }) => {
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                variant="contained"
+                className="bg-secondary"
+                onClick={handleClose}
+              >
                 Close
               </Button>
-              <Button variant="success" onClick={handleClose}>
+              <Button
+                sx={{ ml: 1 }}
+                variant="contained"
+                className="bg-success"
+                onClick={handleClose}
+              >
                 Save Changes
               </Button>
             </Modal.Footer>
@@ -142,7 +206,12 @@ const Module = ({ setNavbar }) => {
           <div className=" fw-semibold ps-2 pt-3 pb-3 d-flex justify-content-between ">
             <div className="fs-5">All Modules</div>
             <div className="pe-4">
-              <Button className="btn bg-success text-light px-3 rounded-2">
+              <Button
+                className="btn bg-success text-light px-3 rounded-2"
+                onClick={() => {
+                  setShow(true);
+                }}
+              >
                 Add new
               </Button>
             </div>
@@ -173,7 +242,13 @@ const Module = ({ setNavbar }) => {
                   <td className="tablecell text-center">{row.semester}</td>
                   <td>
                     <div className="d-flex justify-content-center">
-                      <span className="text-success" role="button">
+                      <span
+                        className="text-success"
+                        role="button"
+                        onClick={() => {
+                          handleEditClick(row.moduleCode);
+                        }}
+                      >
                         <FaEdit class="me-2" size={25} />
                       </span>
                       <span className="text-danger" role="button">
