@@ -1,17 +1,29 @@
-import React from "react";
-import LecturerDashboardLargeCard from "../../components/LecturerDashboardLargeCard/LecturerDashboardLargeCard";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import React, { useState } from "react";
+import logo from "../../assets/IMSSALOGO.png";
+import EditStatus from "../../components/EditStatus/EditStatus";
 import LecturerDashboardSmallCard from "../../components/LecturerDashboardSmallCard/LecturerDashboardSmallCard";
 import ModuleCard from "../../components/ModuleCard/ModuleCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import logo from "../../assets/IMSSALOGO.png";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import StatusDetails from "../../components/StatusDetails/StatusDetails";
 
 function DashboardLecturer({ setNavbar }) {
   setNavbar("Dashboard");
+
+  const [show, setShow] = useState(false);
+  const [showStatusDetails, setShowStatusDetails] = useState(true);
+  const handleClose = () => setShow(false);
+  const handleCloseStatusDetails = () => setShowStatusDetails(false);
+  const handleShow = () => setShow(true);
+
   return (
     <div className="col-12">
+      <EditStatus show={show} handleClose={handleClose} />
+      <StatusDetails
+        show={showStatusDetails}
+        handleClose={handleCloseStatusDetails}
+      />
       <div className="d-flex justify-content-between bg-success py-2">
         <div className="d-flex ps-3 align-items-center">
           <div>

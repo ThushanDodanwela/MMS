@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Modal } from "react-bootstrap";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { Button, Form, Modal } from "react-bootstrap";
 import EnhancedTable from "../../components/Table/EnhancedTable";
-import FloatingButton from "../../components/FloatingButton/FloatingButton";
-import { Button, Paper } from "@mui/material";
 
 const Lecturer = ({ setNavbar }) => {
   const tableRows = [
     {
+      id: "asdfdsfsd1",
       name: "Prof. Janaka Wijayanayake",
       position: "Head of the Department",
       room: "A4.201",
@@ -16,6 +13,7 @@ const Lecturer = ({ setNavbar }) => {
       email: "janaka@kln.ac.lk",
     },
     {
+      id: "asdfdsfsd2",
       name: "Prof. Janaka Wijayanayake",
       position: "Head of the Department",
       room: "A4.201",
@@ -23,6 +21,7 @@ const Lecturer = ({ setNavbar }) => {
       email: "janaka@kln.ac.lk",
     },
     {
+      id: "asdfdsfsd3",
       name: "Prof. Janaka Wijayanayake",
       position: "Head of the Department",
       room: "A4.201",
@@ -30,6 +29,7 @@ const Lecturer = ({ setNavbar }) => {
       email: "janaka@kln.ac.lk",
     },
     {
+      id: "asdfdsfsd4",
       name: "Prof. Janaka Wijayanayake",
       position: "Head of the Department",
       room: "A4.201",
@@ -37,6 +37,7 @@ const Lecturer = ({ setNavbar }) => {
       email: "janaka@kln.ac.lk",
     },
     {
+      id: "asdfdsfsd5",
       name: "Prof. Janaka Wijayanayake",
       position: "Head of the Department",
       room: "A4.201",
@@ -45,8 +46,9 @@ const Lecturer = ({ setNavbar }) => {
     },
   ];
 
-  function createData(lec_name, position, room, phone, email) {
+  function createData(lec_id, lec_name, position, room, phone, email) {
     return {
+      lec_id,
       lec_name,
       position,
       room,
@@ -110,8 +112,12 @@ const Lecturer = ({ setNavbar }) => {
     },
   ];
 
-  const editClickHandler = (userId) => {
-    console.log(userId);
+  const editClickHandler = (leecturerId) => {
+    let lecturerToEdit = tableRows.filter(
+      (lecturer) => lecturer.id === leecturerId
+    );
+    console.log(lecturerToEdit);
+    handleShow();
   };
 
   // Data retriving
@@ -119,6 +125,7 @@ const Lecturer = ({ setNavbar }) => {
     setRows(
       tableRows.map((lecturer) => {
         return createData(
+          lecturer.id,
           lecturer.name,
           lecturer.position,
           lecturer.room,
@@ -127,6 +134,7 @@ const Lecturer = ({ setNavbar }) => {
         );
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage]);
 
   const [show, setShow] = useState(false);
@@ -164,10 +172,12 @@ const Lecturer = ({ setNavbar }) => {
                   />
 
                   <Form.Label className="pt-3">Position</Form.Label>
-                  <Form.Control type="text" placeholder="Senior Lecturer" />
-
-                  <Form.Label className="pt-3">Room</Form.Label>
-                  <Form.Control type="text" placeholder="A4.201" />
+                  <Form.Select>
+                    <option>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
 
                   <Form.Label className="pt-3">Phone</Form.Label>
                   <Form.Control
@@ -177,6 +187,13 @@ const Lecturer = ({ setNavbar }) => {
 
                   <Form.Label className="pt-3">Email</Form.Label>
                   <Form.Control type="text" placeholder="janaka@kln.ac.lk" />
+
+                  <Form.Label className="pt-3">Qualifications</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    placeholder="ACA MSc"
+                    style={{ height: "80px" }}
+                  />
                 </Form.Group>
               </Form>
             </Modal.Body>
@@ -189,43 +206,6 @@ const Lecturer = ({ setNavbar }) => {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          {/* <Table striped bordered hover>
-              <thead>
-                <tr>
-                  {columns.map((column, index) => {
-                    return (
-                      <th key={index} className="tablecell text-center">
-                        {column}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={index}>
-                    <td className="tablecell text-center">{row.name}</td>
-                    <td className="tablecell text-center">{row.position}</td>
-                    <td className="tablecell text-center">{row.room}</td>
-                    <td className="tablecell text-center">{row.phone}</td>
-                    <td className="tablecell text-center">
-                      <a href={`mailto:${row.email}`}>{row.email}</a>
-                    </td>
-                    <td>
-                      <div className="d-flex justify-content-center">
-                        <span className="text-success" role="button">
-                          <FaEdit className="me-2" size={25} />
-                        </span>
-                        <span className="text-danger" role="button">
-                          <MdDelete className="ms-2" size={28} />
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table> */}
 
           <div className="shadow mt-3">
             <EnhancedTable
@@ -241,7 +221,7 @@ const Lecturer = ({ setNavbar }) => {
               ]}
               isToolbarVisible={true}
               optionalButton={
-                <Button onClick={handleShow} variant="contained">
+                <Button variant="success" className="pb-2" onClick={handleShow}>
                   Add new
                 </Button>
               }

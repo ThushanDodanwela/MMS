@@ -1,18 +1,16 @@
-import { Button } from "@mui/material";
 import React from "react";
+import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function ActionButton({ text, actionClickHandler }) {
   return (
-    <span
-      className="bg-btns px-3 rounded-pill py-1 text-light"
-      style={{
-        cursor: "pointer",
-      }}
+    <Button
+      variant="outlined"
+      className="p-1 px-3 text-primary"
       onClick={() => actionClickHandler()}
     >
       {text}
-    </span>
+    </Button>
   );
 }
 
