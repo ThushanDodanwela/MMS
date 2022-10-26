@@ -12,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import Badge from "react-bootstrap/Badge";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
+import EnhancedTable from "../../components/Table/EnhancedTable";
 
 function stringToColor(string) {
   let hash = 0;
@@ -50,7 +51,7 @@ function createData(
   LevelYear,
   Semester,
   Demonstrator,
-  Coordinator,
+  SecondExaminer,
   Status
 ) {
   return {
@@ -61,7 +62,7 @@ function createData(
     LevelYear,
     Semester,
     Demonstrator,
-    Coordinator,
+    SecondExaminer,
     Status,
   };
 }
@@ -104,7 +105,7 @@ function AllocationsView({ setNavbar }) {
             <TableCell> Module</TableCell>
             <TableCell>Level</TableCell>
             <TableCell>Demonstrator</TableCell>
-            <TableCell>Coordinator</TableCell>
+            <TableCell>2nd Examiner</TableCell>
             <TableCell align="center">Status</TableCell>
             <TableCell align="center">Action</TableCell>
           </TableRow>
@@ -147,7 +148,7 @@ function AllocationsView({ setNavbar }) {
 
               <TableCell component="th" scope="row">
                 <Col>
-                  <p className="fw-bold mb-1">{row.Coordinator}</p>
+                  <p className="fw-bold mb-1">{row.SecondExaminer}</p>
                 </Col>
               </TableCell>
 
@@ -167,6 +168,24 @@ function AllocationsView({ setNavbar }) {
             </TableRow>
           ))}
         </TableBody>
+        <div className="shadow mt-3">
+          {/* <EnhancedTable
+            headCells={headCells}
+            rows={rows}
+            page={page}
+            setPage={setPage}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            numOfRows={numOfRows}
+            actionButtons={[{ btnName: "Edit", actionFunc: editClickHandler }]}
+            isToolbarVisible={true}
+            optionalButton={
+              <Button onClick={handleShow} variant="contained">
+                Add new
+              </Button>
+            }
+          /> */}
+        </div>
       </Table>
     </TableContainer>
   );

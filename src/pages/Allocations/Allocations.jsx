@@ -3,6 +3,10 @@ import AutoComplete from "../../components/AutoComplete/AutoComplete";
 import IMBatchSelect from "../../components/IMBatchSelect/IMBatchSelect";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import TimetableCard from "../../components/TimetableCard/TimetableCard";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import { Row } from "react-bootstrap";
 
 const Allocations = ({ setNavbar }) => {
   useEffect(() => {
@@ -25,7 +29,7 @@ const Allocations = ({ setNavbar }) => {
           <div className="py-2 fs-5">: INTE-22339</div>
           <div className="py-2 fs-5">: Mobile Application Development</div>
           <div className="py-2 fs-5">: 2nd Semester</div>
-          <div className="py-2 fs-5">: 2 credits</div>
+          <div className="py-2 fs-5">: 2 Credits</div>
           <div className="py-2 fs-5">: Level 03</div>
         </div>
         <div className="col">
@@ -39,9 +43,12 @@ const Allocations = ({ setNavbar }) => {
       <div className="d-flex gap-2 mt-3">
         <div className="pt-3 col">
           <AutoComplete dataset={datasetLecturers} title={"Lectures"} />
+          <label className="mt-3">Janaka Wijenayake</label>
+          <input type="number" className="form-control mt-1 " />
         </div>
+
         <div className=" pt-3 col">
-          <AutoComplete dataset={datasetCoordinators} title={"Coordinators"} />
+          <AutoComplete dataset={datasetCoordinators} title={"2nd Examiner"} />
         </div>
         <div className="pt-3 col">
           <AutoComplete
