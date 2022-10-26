@@ -15,7 +15,7 @@ function EnhancedTableRow({ index, data = [], actionButtons = [] }) {
       })}
       {/* render buttons if defined */}
       {actionButtons.length > 0 && (
-        <TableCell component="th" scope="row">
+        <TableCell align="center" component="th" scope="row">
           {actionButtons.map((action, id) => {
             return (
               <ActionButton

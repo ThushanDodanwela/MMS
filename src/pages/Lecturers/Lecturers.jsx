@@ -1,57 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { getAllLecturers } from "../../App/LecturerServices";
 import EnhancedTable from "../../components/Table/EnhancedTable";
 
 const Lecturer = ({ setNavbar }) => {
-  const tableRows = [
-    {
-      id: "asdfdsfsd1",
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      id: "asdfdsfsd2",
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      id: "asdfdsfsd3",
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      id: "asdfdsfsd4",
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-    {
-      id: "asdfdsfsd5",
-      name: "Prof. Janaka Wijayanayake",
-      position: "Head of the Department",
-      room: "A4.201",
-      phone: "+94 (0)11 2914482(ext204)",
-      email: "janaka@kln.ac.lk",
-    },
-  ];
-
-  function createData(lec_id, lec_name, position, room, phone, email) {
+  function createData(lec_id, lec_name, position, phone, email) {
     return {
       lec_id,
       lec_name,
       position,
-      room,
       phone,
       email,
     };
@@ -59,8 +16,8 @@ const Lecturer = ({ setNavbar }) => {
 
   const [numOfRows, setNumOfRows] = useState(0);
   const [page, setPage] = useState(0);
-  const [rows, setRows] = React.useState([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const headCells = [
     {
@@ -78,14 +35,7 @@ const Lecturer = ({ setNavbar }) => {
 
       label: "Position",
     },
-    {
-      id: "room",
-      numeric: true,
-      disablePadding: false,
-      align: "center",
 
-      label: "Room",
-    },
     {
       id: "phone",
       numeric: true,
@@ -112,28 +62,32 @@ const Lecturer = ({ setNavbar }) => {
     },
   ];
 
-  const editClickHandler = (leecturerId) => {
-    let lecturerToEdit = tableRows.filter(
-      (lecturer) => lecturer.id === leecturerId
+  const editClickHandler = (lecturerId) => {
+    let lecturerToEdit = rows.filter(
+      (lecturer) => lecturer.lec_id === lecturerId
     );
     console.log(lecturerToEdit);
     handleShow();
   };
 
-  // Data retriving
-  useEffect(() => {
+  const onSuccessRetrive = (data) => {
     setRows(
-      tableRows.map((lecturer) => {
+      data.lecturers.map((lecturer) => {
         return createData(
-          lecturer.id,
+          lecturer._id,
           lecturer.name,
           lecturer.position,
-          lecturer.room,
-          lecturer.phone,
+          lecturer.phoneNumber,
           lecturer.email
         );
       })
     );
+  };
+
+  // Data retriving
+  useEffect(() => {
+    getAllLecturers(onSuccessRetrive);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage]);
 
@@ -152,7 +106,7 @@ const Lecturer = ({ setNavbar }) => {
 
   useEffect(() => {
     setNavbar("Lecturers");
-  });
+  }, []);
 
   return (
     <div className="module">

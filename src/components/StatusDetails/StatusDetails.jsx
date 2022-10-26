@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import RowItem from "./RowItem";
 
 const StatusDetails = ({ show, handleClose, handleSave }) => {
