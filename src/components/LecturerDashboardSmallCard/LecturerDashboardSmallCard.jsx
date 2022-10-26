@@ -1,6 +1,10 @@
 import React from "react";
 
-function LecturerDashboardSmallCard() {
+function LecturerDashboardSmallCard({
+  title = "Total modules",
+  count = "99",
+  icon = "icon",
+}) {
   return (
     <div
       className="col-2 p-3 rounded-3"
@@ -8,10 +12,10 @@ function LecturerDashboardSmallCard() {
     >
       <div className="d-flex">
         <div>
-          <div className="text-white fs-4 text-nowrap">Total modules</div>
-          <div className="fs-2">99</div>
+          <div className="text-white fs-5 text-nowrap">{title}</div>
+          <div className="fs-2">{count}</div>
         </div>
-        <div className="d-flex align-items-center px-2">icon</div>
+        <div className="d-flex align-items-center px-2">{icon}</div>
       </div>
     </div>
   );

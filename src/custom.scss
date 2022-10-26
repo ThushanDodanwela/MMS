@@ -18,4 +18,7 @@ $input-focus-border-color:tint-color(#38aa75, 50%);
 $input-focus-border-color:#38aa75;
 $input-focus-box-shadow:none;
 
+.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows{
+    margin-bottom: 0px;
+}
 @import "~bootstrap/scss/bootstrap";
