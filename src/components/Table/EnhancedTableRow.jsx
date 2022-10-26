@@ -3,9 +3,10 @@ import React from "react";
 import ActionButton from "./ActionButton";
 
 function EnhancedTableRow({ index, data = [], actionButtons = [] }) {
+  let rowData = data.slice(1, data.length);
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-      {data.map((item, id) => {
+      {rowData.map((item, id) => {
         return (
           <TableCell component="th" key={id} scope="row" align="center">
             {item}
