@@ -5,8 +5,39 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import RecentModulesCard from "../../components/RecentModulesCard/RecentModulesCard";
 import Button from "@mui/material/Button";
+import { getAllModules } from "../../App/ModuleServices";
 
 const Module = ({ setNavbar }) => {
+  function createData(
+    module_id,
+    module_code,
+    module_name,
+    level,
+    credit,
+    semester
+  ) {
+    return {
+      module_id,
+      module_code,
+      module_name,
+      level,
+      credit,
+      semester,
+    };
+  }
+
+  const [rows, setRows] = useState([]);
+
+  const onSuccessRetrive = (data) => {
+    setRows(data.modules);
+  };
+
+  // Data retriving
+  useEffect(() => {
+    getAllModules(onSuccessRetrive);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -22,32 +53,52 @@ const Module = ({ setNavbar }) => {
 
   const rows = [
     {
-      moduleCode: "INTE2223",
-      moduleName: "Advanced Web Appplication Development",
-      level: "Level 2",
-      credits: "2",
-      semester: "Semester 2",
+      id: "module_code",
+      numeric: false,
+      disablePadding: true,
+      label: "Module Code",
+      align: "center",
     },
     {
-      moduleCode: "INTE2122",
-      moduleName: "Advanced Web Appplication Development",
-      level: "Level 2",
-      credits: "2",
-      semester: "Semester 2",
+      id: "module_name",
+      numeric: true,
+      disablePadding: false,
+      align: "center",
+
+      label: "Module Name",
+    },
+
+    {
+      id: "level",
+      numeric: true,
+      disablePadding: false,
+      align: "center",
+
+      label: "Level",
     },
     {
-      moduleCode: "INTE2722",
-      moduleName: "Advanced Web Appplication Development",
-      level: "Level 2",
-      credits: "2",
-      semester: "Semester 2",
+      id: "credit",
+      numeric: true,
+      disablePadding: false,
+      align: "center",
+      label: "No of Credits",
     },
+
     {
-      moduleCode: "INTE2228",
-      moduleName: "Advanced Web Appplication Development",
-      level: "Level 2",
-      credits: "2",
-      semester: "Semester 2",
+      id: "semester",
+      numeric: true,
+      disablePadding: false,
+      label: "Semester",
+      align: "center",
+    },
+
+    {
+      id: "action",
+      numeric: true,
+      disablePadding: false,
+      label: "Action",
+      align: "center",
+      sorting: false,
     },
   ];
 
