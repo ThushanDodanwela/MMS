@@ -26,10 +26,10 @@ const Module = ({ setNavbar }) => {
     };
   }
 
-  const [rows, setRows] = useState([]);
+  const [rowsRetrived, setRowsRetrived] = useState([]);
 
   const onSuccessRetrive = (data) => {
-    setRows(data.modules);
+    setRowsRetrived(data.modules);
   };
 
   // Data retriving
@@ -37,7 +37,8 @@ const Module = ({ setNavbar }) => {
     getAllModules(onSuccessRetrive);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
+  //modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -284,7 +285,7 @@ const Module = ({ setNavbar }) => {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, index) => (
+              {rowsRetrived.map((row, index) => (
                 <tr key={index} className="border border-0">
                   <td className="tablecell text-center">{row.moduleCode}</td>
                   <td className="tablecell text-center">{row.moduleName}</td>
@@ -297,7 +298,7 @@ const Module = ({ setNavbar }) => {
                         className="text-success"
                         role="button"
                         onClick={() => {
-                          handleEditClick(row.moduleCode);
+                          handleEditClick(row._id);
                         }}
                       >
                         <FaEdit class="me-2" size={25} />

@@ -1,23 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { getAllLecturers } from "../../App/LecturerServices";
+import {
+  getAllLecturers,
+  newLecturer,
+  updateLecturer,
+} from "../../App/LecturerServices";
 import EnhancedTable from "../../components/Table/EnhancedTable";
 
 const Lecturer = ({ setNavbar }) => {
-  function createData(lec_id, lec_name, position, phone, email) {
-    return {
-      lec_id,
-      lec_name,
-      position,
-      phone,
-      email,
-    };
-  }
-
   const [numOfRows, setNumOfRows] = useState(0);
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [lecturerInfo, setLecturerInfo] = useState({
+    name: "",
+    position: "",
+    email: "",
+    phoneNumber: "",
+    qualifications: "",
+  });
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [shoudRefresh, setShoudRefresh] = useState(false);
+
+  const [retrivedLectures, setRetrivedLecturers] = useState();
+
+  function createData(_id, name, position, phoneNumber, email) {
+    return {
+      _id,
+      name,
+      position,
+      phoneNumber,
+      email,
+    };
+  }
 
   const headCells = [
     {
@@ -63,14 +83,38 @@ const Lecturer = ({ setNavbar }) => {
   ];
 
   const editClickHandler = (lecturerId) => {
-    let lecturerToEdit = rows.filter(
-      (lecturer) => lecturer.lec_id === lecturerId
+    setIsUpdating(true);
+    console.log(retrivedLectures);
+    let lecturerToEdit = retrivedLectures.filter(
+      (lecturer) => lecturer._id === lecturerId
     );
-    console.log(lecturerToEdit);
+    setLecturerInfo({ ...lecturerToEdit[0] });
     handleShow();
   };
 
+  const onSuccessSaveUpdate = () => {
+    setLecturerInfo({
+      name: "",
+      position: "",
+      email: "",
+      phoneNumber: "",
+      qualifications: "",
+    });
+    handleClose();
+    setIsUpdating(false);
+    setShoudRefresh((prev) => !prev);
+  };
+
+  const handleUpdate = () => {
+    updateLecturer(lecturerInfo, onSuccessSaveUpdate);
+  };
+
+  const handleSave = () => {
+    newLecturer(lecturerInfo, onSuccessSaveUpdate);
+  };
+
   const onSuccessRetrive = (data) => {
+    setRetrivedLecturers(data.lecturers);
     setRows(
       data.lecturers.map((lecturer) => {
         return createData(
@@ -89,23 +133,11 @@ const Lecturer = ({ setNavbar }) => {
     getAllLecturers(onSuccessRetrive);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage]);
-
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const columns = [
-    "Lecturer Name",
-    "Position",
-    "Room",
-    "Phone",
-    "Email",
-    "Actions",
-  ];
+  }, [page, rowsPerPage, shoudRefresh]);
 
   useEffect(() => {
     setNavbar("Lecturers");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -121,29 +153,66 @@ const Lecturer = ({ setNavbar }) => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Lecturer Name</Form.Label>
                   <Form.Control
+                    value={lecturerInfo.name}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        name: event.target.value,
+                      });
+                    }}
                     type="text"
                     placeholder="Prof. Janaka Wijayanayake"
                   />
-
                   <Form.Label className="pt-3">Position</Form.Label>
-                  <Form.Select>
-                    <option>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <Form.Select
+                    value={lecturerInfo.position}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        position: event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="PROFESSOR">Professor</option>
+                    <option value="SENIOR_LECTURER">Senior Lecturer</option>
+                    <option value="VISITING_LECTURER">Visiting Lecturer</option>
                   </Form.Select>
 
                   <Form.Label className="pt-3">Phone</Form.Label>
                   <Form.Control
+                    value={lecturerInfo.phoneNumber}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        phoneNumber: event.target.value,
+                      });
+                    }}
                     type="text"
                     placeholder="+94 (0)11 2914482(ext204)"
                   />
 
                   <Form.Label className="pt-3">Email</Form.Label>
-                  <Form.Control type="text" placeholder="janaka@kln.ac.lk" />
+                  <Form.Control
+                    value={lecturerInfo.email}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        email: event.target.value,
+                      });
+                    }}
+                    type="text"
+                    placeholder="janaka@kln.ac.lk"
+                  />
 
                   <Form.Label className="pt-3">Qualifications</Form.Label>
                   <Form.Control
+                    value={lecturerInfo.qualifications}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        qualifications: event.target.value,
+                      });
+                    }}
                     as="textarea"
                     placeholder="ACA MSc"
                     style={{ height: "80px" }}
@@ -155,7 +224,10 @@ const Lecturer = ({ setNavbar }) => {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="success" onClick={handleClose}>
+              <Button
+                variant="success"
+                onClick={isUpdating ? handleUpdate : handleSave}
+              >
                 Save Changes
               </Button>
             </Modal.Footer>

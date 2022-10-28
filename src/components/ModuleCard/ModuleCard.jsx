@@ -1,7 +1,16 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
-function ModuleCard({ moduleCode, moduleName, level, semester, state }) {
+function ModuleCard({
+  moduleCode,
+  moduleName,
+  level,
+  semester,
+  state,
+  onClick,
+  editClick,
+  handleCloseStatusDetails,
+}) {
   return (
     <div className="p-2">
       <Card
@@ -13,6 +22,7 @@ function ModuleCard({ moduleCode, moduleName, level, semester, state }) {
             : ""
         } ps-4 rounded-4 shadow-sm`}
         style={{ minWidth: "18rem" }}
+        onClick={onClick}
       >
         <div className="d-flex">
           <div>
@@ -24,7 +34,12 @@ function ModuleCard({ moduleCode, moduleName, level, semester, state }) {
           <div className="col text-end">
             <span
               onClick={() => {
-                console.log("State changed");
+                setTimeout(() => {
+                  handleCloseStatusDetails();
+                }, 10);
+                setTimeout(() => {
+                  editClick();
+                }, 200);
               }}
               role="button"
               className="rounded-5 px-2 pb-1 border border-1 border-red-100 text-red-100 pointer-cursor user-select-none"

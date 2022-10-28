@@ -11,15 +11,16 @@ import StatusDetails from "../../components/StatusDetails/StatusDetails";
 function DashboardLecturer({ setNavbar }) {
   setNavbar("Dashboard");
 
-  const [show, setShow] = useState(false);
+  const [editStatusShow, setEditStatusShow] = useState(false);
   const [showStatusDetails, setShowStatusDetails] = useState(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => setEditStatusShow(false);
   const handleCloseStatusDetails = () => setShowStatusDetails(false);
-  const handleShow = () => setShow(true);
+  const handleShowEditStatus = () => setEditStatusShow(true);
+  const handleShowStatusDetails = () => setShowStatusDetails(true);
 
   return (
     <div className="col-12">
-      <EditStatus show={show} handleClose={handleClose} />
+      <EditStatus show={editStatusShow} handleClose={handleClose} />
       <StatusDetails
         show={showStatusDetails}
         handleClose={handleCloseStatusDetails}
@@ -67,6 +68,9 @@ function DashboardLecturer({ setNavbar }) {
             level="2"
             semester="2"
             state=" Exams ongoing"
+            onClick={handleShowStatusDetails}
+            editClick={handleShowEditStatus}
+            handleCloseStatusDetails={handleCloseStatusDetails}
           />
           <ModuleCard
             moduleCode="MGTE"
@@ -74,41 +78,9 @@ function DashboardLecturer({ setNavbar }) {
             level="2"
             semester="2"
             state=" Exams ongoing"
-          />
-          <ModuleCard
-            moduleCode="MGTE"
-            moduleName="WEB APPLICAIRON"
-            level="2"
-            semester="2"
-            state=" Exams ongoing"
-          />
-          <ModuleCard
-            moduleCode="MGTE"
-            moduleName="WEB APPLICAIRON"
-            level="2"
-            semester="2"
-            state=" Exams ongoing"
-          />
-          <ModuleCard
-            moduleCode="MGTE"
-            moduleName="WEB APPLICAIRON"
-            level="2"
-            semester="2"
-            state=" Exams ongoing"
-          />
-          <ModuleCard
-            moduleCode="MGTE"
-            moduleName="WEB APPLICAIRON"
-            level="2"
-            semester="2"
-            state=" Exams ongoing"
-          />
-          <ModuleCard
-            moduleCode="MGTE"
-            moduleName="WEB APPLICAIRON"
-            level="2"
-            semester="2"
-            state=" Exams ongoing"
+            onClick={handleShowStatusDetails}
+            editClick={handleShowEditStatus}
+            handleCloseStatusDetails={handleCloseStatusDetails}
           />
         </div>
       </div>

@@ -6,15 +6,16 @@ const EditStatus = ({ show, handleClose, handleSave }) => {
     <div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Change status [Current Status]</Modal.Title>
+          <Modal.Title>Change status [Results Relased]</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Label>Status</Form.Label>
           <Form.Select>
-            <option>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option value="ONGOING_LECTURES">Lectures Ongoing</option>
+            <option value="EXAMS_ONGOING">Exams Ongoing</option>
+            <option value="PAPER_MARKING_I">Paper Marking I</option>
+            <option value="PAPER_MARKING_II">Paper Marking II</option>
+            <option value="RESULTS_RELEASED">Results Released</option>
           </Form.Select>
 
           <Form.Label className="pt-3">Date</Form.Label>
