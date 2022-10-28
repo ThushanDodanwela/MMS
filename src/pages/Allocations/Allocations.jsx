@@ -1,125 +1,194 @@
-import React, { useEffect } from "react";
-import AutoComplete from "../../components/AutoComplete/AutoComplete";
-import IMBatchSelect from "../../components/IMBatchSelect/IMBatchSelect";
-import StatusBadge from "../../components/StatusBadge/StatusBadge";
-import TimetableCard from "../../components/TimetableCard/TimetableCard";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import { Row } from "react-bootstrap";
+import React from "react";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import { Row, Col } from "react-bootstrap";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Badge from "react-bootstrap/Badge";
+import { Button } from "@mui/material";
+import { useEffect } from "react";
+import EnhancedTable from "../../components/Table/EnhancedTable";
 
-const Allocations = ({ setNavbar }) => {
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
+
+function createData(
+  LecturerName,
+  LecturerType,
+  ModuleName,
+  ModuleCode,
+  LevelYear,
+  Semester,
+  Demonstrator,
+  SecondExaminer,
+  Status
+) {
+  return {
+    LecturerName,
+    LecturerType,
+    ModuleName,
+    ModuleCode,
+    LevelYear,
+    Semester,
+    Demonstrator,
+    SecondExaminer,
+    Status,
+  };
+}
+
+const rows = [
+  createData(
+    "Janaka Wijenayake",
+    "Lecturer",
+    "Web Development",
+    "INTE31222",
+    "Level 03",
+    "Semester 2",
+    "Ms.Dinesha",
+    "Dr.Shantha Jayalal",
+    "Lectures Finished"
+  ),
+  createData(
+    "Janaka Wijenayake",
+    "Lecturer",
+    "Web Development",
+    "INTE31222",
+    "Level 03",
+    "Semester 2",
+    "Ms.Dinesha",
+    "Dr.Shantha Jayalal",
+    "Lectures Finished"
+  ),
+];
+
+function Allocations({ setNavbar }) {
   useEffect(() => {
     setNavbar("Allocations");
   });
   return (
-    <div className="ps-3 pt-3">
-      {/* course details section */}
-      <div className="d-flex">
-        <div className="col-3">
-          {/* course details goes here */}
-          <div className="py-2 fw-semibold fs-5 pe-3">Code</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Name</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Semester</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Credits</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Level</div>
-        </div>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Lecturer</TableCell>
+            <TableCell> Module</TableCell>
+            <TableCell>Level</TableCell>
+            <TableCell>Demonstrator</TableCell>
+            <TableCell>2nd Examiner</TableCell>
+            <TableCell align="center">Status</TableCell>
+            <TableCell align="center">Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.LecturerName}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                <div className="d-flex  gap-3">
+                  <Avatar {...stringAvatar(row.LecturerName)} />
+                  <Col>
+                    <p className="fw-bold mb-1">{row.LecturerName}</p>
+                    <p className="text-muted mb-0">{row.LecturerType}</p>
+                  </Col>
+                </div>
+              </TableCell>
 
-        <div className="col-4">
-          <div className="py-2 fs-5">: INTE-22339</div>
-          <div className="py-2 fs-5">: Mobile Application Development</div>
-          <div className="py-2 fs-5">: 2nd Semester</div>
-          <div className="py-2 fs-5">: 2 Credits</div>
-          <div className="py-2 fs-5">: Level 03</div>
-        </div>
-        <div className="col">
-          <div className="d-flex justify-content-end">
-            <IMBatchSelect options={["IM 2018", "IM 2017"]} />
-            <StatusBadge title={"Ongoing Exams"} />
-          </div>
-        </div>
-      </div>
-      {/* */}
-      <div className="d-flex gap-2 mt-3">
-        <div className="pt-3 col">
-          <AutoComplete dataset={datasetLecturers} title={"Lectures"} />
-          <label className="mt-3">Janaka Wijenayake</label>
-          <input type="number" className="form-control mt-1 " />
-        </div>
+              <TableCell component="th" scope="row">
+                <Col>
+                  <p className="fw-bold mb-1">{row.ModuleCode}</p>
+                  <p className="text-muted mb-0">{row.ModuleName}</p>
+                </Col>
+              </TableCell>
 
-        <div className=" pt-3 col">
-          <AutoComplete dataset={datasetCoordinators} title={"2nd Examiner"} />
+              <TableCell component="th" scope="row">
+                <Col>
+                  <p className="fw-bold mb-1">{row.LevelYear}</p>
+                  <p className="text-muted mb-0">{row.Semester}</p>
+                </Col>
+              </TableCell>
+
+              <TableCell component="th" scope="row">
+                <Col>
+                  <p className="fw-bold mb-1">{row.Demonstrator}</p>
+                </Col>
+              </TableCell>
+
+              <TableCell component="th" scope="row">
+                <Col>
+                  <p className="fw-bold mb-1">{row.SecondExaminer}</p>
+                </Col>
+              </TableCell>
+
+              <TableCell component="th" scope="row">
+                <Col align="center">
+                  <Badge pill bg="primary">
+                    Ongoing Lectures
+                  </Badge>{" "}
+                </Col>
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <Col align="center">
+                  <Button color="secondary">Edit</Button>
+                  <Button color="error">Delete</Button>
+                </Col>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <div className="shadow mt-3">
+          {/* <EnhancedTable
+            headCells={headCells}
+            rows={rows}
+            page={page}
+            setPage={setPage}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            numOfRows={numOfRows}
+            actionButtons={[{ btnName: "Edit", actionFunc: editClickHandler }]}
+            isToolbarVisible={true}
+            optionalButton={
+              <Button onClick={handleShow} variant="contained">
+                Add new
+              </Button>
+            }
+          /> */}
         </div>
-        <div className="pt-3 col">
-          <AutoComplete
-            dataset={datasetDemonstrators}
-            title={"Demonstrators"}
-          />
-        </div>
-      </div>
-      <div
-        className="position-absolute"
-        style={{ bottom: "15px", right: "35px" }}
-      >
-        <button className="btn btn-secondary me-3 px-4"> Back </button>
-        <button className="btn btn-primary px-3"> Update </button>
-      </div>
-    </div>
+      </Table>
+    </TableContainer>
   );
-};
+}
 
 export default Allocations;
-
-const datasetCoordinators = [
-  {
-    title: "Buddhika jayawardhana",
-  },
-  {
-    title: "Janaka Wijenayaka",
-  },
-  {
-    title: "Dilani Wickramaarachchi",
-  },
-  {
-    title: "Ruwan Wickramarachchi",
-  },
-  {
-    title: "Shantha Jayalal",
-  },
-];
-
-const datasetLecturers = [
-  {
-    title: "Buddhika jayawardhana",
-  },
-  {
-    title: "Janaka Wijenayaka",
-  },
-  {
-    title: "Dilani Wickramaarachchi",
-  },
-  {
-    title: "Ruwan Wickramarachchi",
-  },
-  {
-    title: "Shantha Jayalal",
-  },
-];
-
-const datasetDemonstrators = [
-  {
-    title: "Buddhika jayawardhana",
-  },
-  {
-    title: "Janaka Wijenayaka",
-  },
-  {
-    title: "Dilani Wickramaarachchi",
-  },
-  {
-    title: "Ruwan Wickramarachchi",
-  },
-  {
-    title: "Shantha Jayalal",
-  },
-];

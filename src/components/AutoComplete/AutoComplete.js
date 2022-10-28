@@ -7,7 +7,11 @@ import { autocompleteClasses } from "@mui/material/Autocomplete";
 
 const Root = styled("div")(
   ({ theme }) => `
-    color: ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,.85)"};
+    color: ${
+      theme.palette.mode === "dark"
+        ? "rgba(255,255,255,0.65)"
+        : "rgba(0,0,0,.85)"
+    };
     font-size: 14px;
 
   `
@@ -42,7 +46,11 @@ const InputWrapper = styled("div")(
   
     & input {
       background-color: ${theme.palette.mode === "dark" ? "#141414" : "#fff"};
-      color: ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,.85)"};
+      color: ${
+        theme.palette.mode === "dark"
+          ? "rgba(255,255,255,0.65)"
+          : "rgba(0,0,0,.85)"
+      };
       height: 30px;
       box-sizing: border-box;
       padding: 4px 6px;
@@ -78,7 +86,9 @@ const StyledTag = styled(Tag)(
     height: 24px;
     margin: 2px;
     line-height: 22px;
-    background-color: ${theme.palette.mode === "dark" ? "rgba(255,255,255,0.08)" : "#fafafa"};
+    background-color: ${
+      theme.palette.mode === "dark" ? "rgba(255,255,255,0.08)" : "#fafafa"
+    };
     border: 1px solid ${theme.palette.mode === "dark" ? "#303030" : "#e8e8e8"};
     border-radius: 2px;
     box-sizing: content-box;
@@ -88,7 +98,9 @@ const StyledTag = styled(Tag)(
   
     &:focus {
       border-color: ${theme.palette.mode === "dark" ? "#177ddc" : "#40a9ff"};
-      background-color: ${theme.palette.mode === "dark" ? "#003b57" : "#e6f7ff"};
+      background-color: ${
+        theme.palette.mode === "dark" ? "#003b57" : "#e6f7ff"
+      };
     }
   
     & span {
@@ -133,7 +145,9 @@ const Listbox = styled("ul")(
     }
   
     & li[aria-selected='true'] {
-      background-color: ${theme.palette.mode === "dark" ? "#2b2b2b" : "#fafafa"};
+      background-color: ${
+        theme.palette.mode === "dark" ? "#2b2b2b" : "#fafafa"
+      };
       font-weight: 600;
   
       & svg {
@@ -142,7 +156,9 @@ const Listbox = styled("ul")(
     }
   
     & li.${autocompleteClasses.focused} {
-      background-color: ${theme.palette.mode === "dark" ? "#003b57" : "#e6f7ff"};
+      background-color: ${
+        theme.palette.mode === "dark" ? "#003b57" : "#e6f7ff"
+      };
       cursor: pointer;
   
       & svg {
@@ -152,23 +168,42 @@ const Listbox = styled("ul")(
   `
 );
 
-export default function AutoComplete({ dataset, title }) {
-  const { getRootProps, getInputProps, getTagProps, getListboxProps, getOptionProps, groupedOptions, value, focused, setAnchorEl } = useAutocomplete({
+export default function AutoComplete({
+  dataset,
+  title,
+  selected,
+  setSelected,
+}) {
+  const {
+    getRootProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
     id: "customized-hook-demo",
-    defaultValue: [dataset[1]],
+    defaultValue: [],
     multiple: true,
     options: dataset,
     getOptionLabel: (option) => option.title,
   });
+  setSelected(value);
 
   return (
     <Root>
       <div {...getRootProps()}>
         <div className="py-2 fs-5 fw-semibold">{title}</div>
         <InputWrapper ref={setAnchorEl} className={focused ? "focused" : ""}>
-          {value.map((option, index) => (
-            <StyledTag label={option.title} {...getTagProps({ index })} />
-          ))}
+          {selected.map((option, index) => {
+            console.log(option);
+            return (
+              <StyledTag label={option.title} {...getTagProps({ index })} />
+            );
+          })}
 
           <input {...getInputProps()} />
         </InputWrapper>
@@ -186,5 +221,3 @@ export default function AutoComplete({ dataset, title }) {
     </Root>
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top

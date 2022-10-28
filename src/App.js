@@ -1,12 +1,12 @@
 import "./custom.scss";
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Allocations from "./pages/Allocations/Allocations";
 import DashboardLecturer from "./pages/DashboardLecturer/DashboardLecturer";
 import Home from "./pages/Home/Home";
 import Lecturers from "./pages/Lecturers/Lecturers";
 import Modules from "./pages/Modules/Modules";
 import SidebarAndNavbar from "./shared/SidebarAndNavbar";
+import Allocations from "./pages/Allocations/Allocations";
 import AllocationsView from "./pages/AllocationsView/AllocationsView";
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
             path="/allocations/view"
             element={
               <SidebarAndNavbar section={navbar}>
-                <Allocations setNavbar={setNavbar} />
+                <AllocationsView setNavbar={setNavbar} />
               </SidebarAndNavbar>
             }
           />
@@ -57,7 +57,7 @@ function App() {
             path="/allocations"
             element={
               <SidebarAndNavbar section={navbar}>
-                <AllocationsView setNavbar={setNavbar} />
+                <Allocations setNavbar={setNavbar} />
               </SidebarAndNavbar>
             }
           />

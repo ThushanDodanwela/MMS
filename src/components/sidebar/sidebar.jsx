@@ -10,7 +10,7 @@ import "./Sidebar.scss";
 
 function Sidebar({ section }) {
   return (
-    <Col lg={2} className="sidebar bg-success vh-100 position-sticky top-0">
+    <Col lg={2} className="sidebar bg-success vh-100 position-sticky top-0 ">
       <div className="top d-flex justify-content-start pt-1">
         <span className="logo">
           <img src={logo} alt="" height={70} width={70} />
