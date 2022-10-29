@@ -189,7 +189,7 @@ export default function AutoComplete({
     defaultValue: [],
     multiple: true,
     options: dataset,
-    getOptionLabel: (option) => option.title,
+    getOptionLabel: (option) => option._id,
   });
   setSelected(value);
 
@@ -201,7 +201,7 @@ export default function AutoComplete({
           {selected.map((option, index) => {
             console.log(option);
             return (
-              <StyledTag label={option.title} {...getTagProps({ index })} />
+              <StyledTag label={option.name} {...getTagProps({ index })} />
             );
           })}
 
@@ -212,7 +212,7 @@ export default function AutoComplete({
         <Listbox {...getListboxProps()}>
           {groupedOptions.map((option, index) => (
             <li {...getOptionProps({ option, index })}>
-              <span>{option.title}</span>
+              <span>{option.name}</span>
               <CheckIcon fontSize="small" />
             </li>
           ))}
