@@ -1,7 +1,7 @@
 import React from "react";
 import { BsPlusLg } from "react-icons/bs";
 
-function FloatingButton({ handleShow }) {
+function FloatingButton({ handleClick }) {
   return (
     <div
       className="bg-success rounded-circle d-flex align-items-center justify-content-center position-fixed "
@@ -12,7 +12,7 @@ function FloatingButton({ handleShow }) {
         bottom: "40px",
         right: "40px",
       }}
-      onClick={handleShow}
+      onClick={handleClick}
     >
       <BsPlusLg className="text-white" size={25} />
     </div>

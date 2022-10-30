@@ -13,6 +13,8 @@ import Badge from "react-bootstrap/Badge";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
 import EnhancedTable from "../../components/Table/EnhancedTable";
+import FloatingButton from "../../components/FloatingButton/FloatingButton";
+import { useNavigate } from "react-router-dom";
 
 function stringToColor(string) {
   let hash = 0;
@@ -93,101 +95,92 @@ const rows = [
 ];
 
 function Allocations({ setNavbar }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     setNavbar("Allocations");
   });
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Lecturer</TableCell>
-            <TableCell> Module</TableCell>
-            <TableCell>Level</TableCell>
-            <TableCell>Demonstrator</TableCell>
-            <TableCell>2nd Examiner</TableCell>
-            <TableCell align="center">Status</TableCell>
-            <TableCell align="center">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.LecturerName}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <div className="d-flex  gap-3">
-                  <Avatar {...stringAvatar(row.LecturerName)} />
-                  <Col>
-                    <p className="fw-bold mb-1">{row.LecturerName}</p>
-                    <p className="text-muted mb-0">{row.LecturerType}</p>
-                  </Col>
-                </div>
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-                <Col>
-                  <p className="fw-bold mb-1">{row.ModuleCode}</p>
-                  <p className="text-muted mb-0">{row.ModuleName}</p>
-                </Col>
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-                <Col>
-                  <p className="fw-bold mb-1">{row.LevelYear}</p>
-                  <p className="text-muted mb-0">{row.Semester}</p>
-                </Col>
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-                <Col>
-                  <p className="fw-bold mb-1">{row.Demonstrator}</p>
-                </Col>
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-                <Col>
-                  <p className="fw-bold mb-1">{row.SecondExaminer}</p>
-                </Col>
-              </TableCell>
-
-              <TableCell component="th" scope="row">
-                <Col align="center">
-                  <Badge pill bg="primary">
-                    Ongoing Lectures
-                  </Badge>{" "}
-                </Col>
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Col align="center">
-                  <Button color="secondary">Edit</Button>
-                  <Button color="error">Delete</Button>
-                </Col>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Lecturer</TableCell>
+              <TableCell> Module</TableCell>
+              <TableCell>Level</TableCell>
+              <TableCell>Demonstrator</TableCell>
+              <TableCell>2nd Examiner</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-        <div className="shadow mt-3">
-          {/* <EnhancedTable
-            headCells={headCells}
-            rows={rows}
-            page={page}
-            setPage={setPage}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            numOfRows={numOfRows}
-            actionButtons={[{ btnName: "Edit", actionFunc: editClickHandler }]}
-            isToolbarVisible={true}
-            optionalButton={
-              <Button onClick={handleShow} variant="contained">
-                Add new
-              </Button>
-            }
-          /> */}
-        </div>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.LecturerName}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <div className="d-flex  gap-3">
+                    <Avatar {...stringAvatar(row.LecturerName)} />
+                    <Col>
+                      <p className="fw-bold mb-1">{row.LecturerName}</p>
+                      <p className="text-muted mb-0">{row.LecturerType}</p>
+                    </Col>
+                  </div>
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  <Col>
+                    <p className="fw-bold mb-1">{row.ModuleCode}</p>
+                    <p className="text-muted mb-0">{row.ModuleName}</p>
+                  </Col>
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  <Col>
+                    <p className="fw-bold mb-1">{row.LevelYear}</p>
+                    <p className="text-muted mb-0">{row.Semester}</p>
+                  </Col>
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  <Col>
+                    <p className="fw-bold mb-1">{row.Demonstrator}</p>
+                  </Col>
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  <Col>
+                    <p className="fw-bold mb-1">{row.SecondExaminer}</p>
+                  </Col>
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  <Col align="center">
+                    <Badge pill bg="primary">
+                      Ongoing Lectures
+                    </Badge>{" "}
+                  </Col>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <Col align="center">
+                    <Button color="secondary">Edit</Button>
+                    <Button color="error">Delete</Button>
+                  </Col>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <FloatingButton
+        handleClick={() => {
+          navigate("view");
+        }}
+      />
+    </>
   );
 }
 

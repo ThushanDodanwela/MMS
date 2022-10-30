@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from "react";
-import AutoComplete from "../../components/AutoComplete/AutoComplete";
-import IMBatchSelect from "../../components/IMBatchSelect/IMBatchSelect";
-import StatusBadge from "../../components/StatusBadge/StatusBadge";
-import TimetableCard from "../../components/TimetableCard/TimetableCard";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import { Button, Row } from "react-bootstrap";
-import { getAllLecturers } from "../../App/LecturerServices";
-import { newAllocation } from "../../App/AllocationsServices";
+import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import React, { useEffect, useState } from "react";
+import { Button } from "@mui/material";
+import { isAllocated, newAllocation } from "../../App/AllocationsServices";
+import { getAllLecturers } from "../../App/LecturerServices";
 import { getAllModules } from "../../App/ModuleServices";
-import { OutlinedInput } from "@mui/material";
+import AutoComplete from "../../components/AutoComplete/AutoComplete";
+import EditStatus from "../../components/EditStatus/EditStatus";
+import StatusBadge from "../../components/StatusBadge/StatusBadge";
+import { useNavigate } from "react-router-dom";
 
 const AllocationsView = ({ setNavbar }) => {
+  const navigate = useNavigate();
   useEffect(() => {
     setNavbar("Allocations");
   });
+  const [batch, setBatch] = useState("");
+
   const [allLecturers, setAllLecturers] = useState([]);
   const [allModules, setAllModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState({});
   const [selectedLecturers, setSelectedLecturers] = useState([]);
   const [selectedSecondExaminer, setSelectedSecondExaminer] = useState([]);
   const [selectedDemonstrators, setSelectedDemonstrators] = useState([]);
+  const [statusInfo, setStatusInfo] = useState({
+    name: "Set State",
+    date: "",
+  });
 
   const onSuccessGetAllLecturers = (data) => {
     setAllLecturers(data.lecturers);
@@ -49,14 +53,22 @@ const AllocationsView = ({ setNavbar }) => {
         name: "Ongoing",
         date: "2022-10-21",
       },
+      batch: batch,
       secondExaminar: selectedSecondExaminer[0]._id,
       demonstrators: selectedDemonstrators.map(
         (demonstrator) => demonstrator._id
       ),
     };
 
-    console.log(reqBody);
-    newAllocation(reqBody, onSuccessAllocation);
+    //check whether already allocated
+
+    isAllocated({ moduleId: selectedModule._id, batch: batch }, (data) => {
+      if (data.message === "ALLOCATED") {
+        alert("allocated already");
+      } else {
+        newAllocation(reqBody, onSuccessAllocation);
+      }
+    });
   };
   useEffect(() => {
     //set all lecturers on load
@@ -65,12 +77,16 @@ const AllocationsView = ({ setNavbar }) => {
     getAllModules(onSuccessGetAllModules);
   }, []);
 
-  useEffect(() => {
-    console.log(selectedModule);
-  }, [selectedModule]);
+  const [showEditStatus, setShowEditStatus] = useState(false);
 
   return (
     <div className="ps-3 pt-3">
+      <EditStatus
+        show={showEditStatus}
+        setShowEditStatus={setShowEditStatus}
+        statusInfo={statusInfo}
+        setStatusInfo={setStatusInfo}
+      />
       {/* course details section */}
       <div className="d-flex">
         <div className="col-3">
@@ -112,7 +128,13 @@ const AllocationsView = ({ setNavbar }) => {
                 />
               )}
             />
-            <Button className="mx-2">Set</Button>
+            <Button
+              variant="contained"
+              color="success"
+              className="mx-2 fw-semibold"
+            >
+              GO
+            </Button>
           </div>
           <div className="py-2 fs-5">: {selectedModule.moduleName}</div>
           <div className="py-2 fs-5">
@@ -123,8 +145,21 @@ const AllocationsView = ({ setNavbar }) => {
         </div>
         <div className="col">
           <div className="d-flex justify-content-end">
-            <IMBatchSelect options={["IM 2018", "IM 2017"]} />
-            <StatusBadge title={"Ongoing Exams"} />
+            <TextField
+              sx={{ width: "10rem", mr: 1 }}
+              placeholder="IM 2018"
+              size="small"
+              value={batch}
+              onChange={(event) => {
+                setBatch(event.target.value);
+              }}
+            ></TextField>
+            <StatusBadge
+              title={statusInfo.name}
+              onClick={() => {
+                setShowEditStatus(true);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -178,10 +213,23 @@ const AllocationsView = ({ setNavbar }) => {
         className="position-absolute"
         style={{ bottom: "15px", right: "35px" }}
       >
-        <button className="btn btn-secondary me-3 px-4"> Back </button>
-        <button className="btn btn-primary px-3" onClick={onClickSaveUpdate}>
+        <Button
+          variant="contained"
+          className=" me-3 px-4"
+          onClick={() => {
+            navigate("/allocations");
+          }}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          className="px-3"
+          onClick={onClickSaveUpdate}
+        >
           Update
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -174,6 +174,7 @@ export default function AutoComplete({
   selected,
   setSelected,
 }) {
+  console.log("Auto complete:", selected);
   const {
     getRootProps,
     getInputProps,
