@@ -15,7 +15,6 @@ const Lecturer = ({ setNavbar }) => {
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const [lecturerInfo, setLecturerInfo] = useState({
     name: "",
@@ -24,6 +23,17 @@ const Lecturer = ({ setNavbar }) => {
     phoneNumber: "",
     qualifications: "",
   });
+
+  const handleShow = () => {
+    setLecturerInfo({
+      name: "",
+      position: "",
+      email: "",
+      phoneNumber: "",
+      qualifications: "",
+    });
+    setShow(true);
+  };
   const [isUpdating, setIsUpdating] = useState(false);
   const [shoudRefresh, setShoudRefresh] = useState(false);
 
@@ -89,7 +99,7 @@ const Lecturer = ({ setNavbar }) => {
       (lecturer) => lecturer._id === lecturerId
     );
     setLecturerInfo({ ...lecturerToEdit[0] });
-    handleShow();
+    setShow(true);
   };
 
   const onSuccessSaveUpdate = () => {
