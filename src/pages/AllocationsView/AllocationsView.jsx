@@ -26,6 +26,19 @@ const AllocationsView = ({ setNavbar }) => {
   const [allModules, setAllModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState({});
   const [selectedLecturers, setSelectedLecturers] = useState([]);
+  const [lecturersToUpdate, setLecturersToUpdate] = useState(
+    allocationToUpdate?.lecturers
+      ? allocationToUpdate.lecturers.map((lecturer) => lecturer.lecturer)
+      : []
+  );
+  const [secondExaminerToUpdate, setSecondExaminerToUpdate] = useState(
+    allocationToUpdate?.secondExaminar
+      ? [allocationToUpdate.secondExaminar]
+      : []
+  );
+  const [demonstratorsToUpdate, setDemonstratorsToUpdate] = useState(
+    allocationToUpdate?.demonstrators ? allocationToUpdate.demonstrators : []
+  );
   const [selectedSecondExaminer, setSelectedSecondExaminer] = useState([]);
   const [selectedDemonstrators, setSelectedDemonstrators] = useState([]);
   const [statusInfo, setStatusInfo] = useState({
@@ -172,9 +185,19 @@ const AllocationsView = ({ setNavbar }) => {
             dataset={allLecturers}
             selected={selectedLecturers}
             setSelected={setSelectedLecturers}
+            defaultValues={lecturersToUpdate}
             title={"Lectures"}
           />
           {selectedLecturers.map((lecturer) => {
+            console.log(lecturer);
+
+            allocationToUpdate &&
+              allocationToUpdate.lecturers.map((lec) => {
+                if (lecturer._id === lec.lecturer._id) {
+                  console.log(lec.workload);
+                  lecturer.workload = lec.workload;
+                }
+              });
             return (
               <>
                 <label className="mt-3">
@@ -184,9 +207,10 @@ const AllocationsView = ({ setNavbar }) => {
                   type="number"
                   placeholder="5"
                   className="form-control mt-1 "
+                  value={lecturer.workload}
                   onChange={(event) => {
                     lecturer.workload = Number(event.target.value);
-                    console.log(selectedLecturers);
+                    // console.log(selectedLecturers);
                   }}
                 />
               </>
@@ -200,6 +224,7 @@ const AllocationsView = ({ setNavbar }) => {
             selected={selectedSecondExaminer}
             setSelected={setSelectedSecondExaminer}
             title={"2nd Examiner"}
+            defaultValues={secondExaminerToUpdate}
           />
         </div>
         <div className="pt-3 col">
@@ -208,6 +233,7 @@ const AllocationsView = ({ setNavbar }) => {
             selected={selectedDemonstrators}
             setSelected={setSelectedDemonstrators}
             title={"Demonstrators"}
+            defaultValues={demonstratorsToUpdate}
           />
         </div>
       </div>

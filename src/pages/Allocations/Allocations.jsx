@@ -107,7 +107,7 @@ function Allocations({ setNavbar }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    console.log(allAllocations);
+    // console.log(allAllocations);
   }, [allAllocations]);
   return (
     <>

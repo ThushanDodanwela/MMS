@@ -4,6 +4,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 import { autocompleteClasses } from "@mui/material/Autocomplete";
+import { useEffect } from "react";
 
 const Root = styled("div")(
   ({ theme }) => `
@@ -173,8 +174,9 @@ export default function AutoComplete({
   title,
   selected,
   setSelected,
+  defaultValues,
 }) {
-  console.log("Auto complete:", selected);
+  // console.log("Auto complete:", selected);
   const {
     getRootProps,
     getInputProps,
@@ -187,20 +189,23 @@ export default function AutoComplete({
     setAnchorEl,
   } = useAutocomplete({
     id: "customized-hook-demo",
-    defaultValue: [],
+    defaultValue: defaultValues ? defaultValues : [],
     multiple: true,
     options: dataset,
-    getOptionLabel: (option) => option._id,
+    getOptionLabel: (option) => option.name,
+    isOptionEqualToValue: (option, value) => option.name === value.name,
   });
-  setSelected(value);
+
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
 
   return (
     <Root>
       <div {...getRootProps()}>
         <div className="py-2 fs-5 fw-semibold">{title}</div>
         <InputWrapper ref={setAnchorEl} className={focused ? "focused" : ""}>
-          {selected.map((option, index) => {
-            console.log(option);
+          {value.map((option, index) => {
             return (
               <StyledTag label={option.name} {...getTagProps({ index })} />
             );
