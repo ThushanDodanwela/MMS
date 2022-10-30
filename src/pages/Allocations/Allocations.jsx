@@ -1,20 +1,19 @@
-import React from "react";
+import { Button } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
-import { Row, Col } from "react-bootstrap";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { Col } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
-import { Button } from "@mui/material";
-import { useEffect } from "react";
-import EnhancedTable from "../../components/Table/EnhancedTable";
+import { Link, useNavigate } from "react-router-dom";
+import { getAllocations } from "../../App/AllocationsServices";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
-import { useNavigate } from "react-router-dom";
 
 function stringToColor(string) {
   let hash = 0;
@@ -95,11 +94,21 @@ const rows = [
 ];
 
 function Allocations({ setNavbar }) {
+  const [allAllocations, setAllAllocations] = useState([]);
+
   const navigate = useNavigate();
 
+  const onSuccessRetriveAllAllocations = (data) => {
+    setAllAllocations(data.allocations);
+  };
   useEffect(() => {
     setNavbar("Allocations");
-  });
+    getAllocations(onSuccessRetriveAllAllocations);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    console.log(allAllocations);
+  }, [allAllocations]);
   return (
     <>
       <TableContainer component={Paper}>
@@ -116,57 +125,86 @@ function Allocations({ setNavbar }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {allAllocations.map((row, index) => (
               <TableRow
-                key={row.LecturerName}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   <div className="d-flex  gap-3">
-                    <Avatar {...stringAvatar(row.LecturerName)} />
                     <Col>
-                      <p className="fw-bold mb-1">{row.LecturerName}</p>
-                      <p className="text-muted mb-0">{row.LecturerType}</p>
+                      {row.lecturers.map((row, index) => {
+                        return (
+                          <div className="d-flex" key={index}>
+                            <Avatar
+                              {...stringAvatar(row?.lecturer?.name + " x")}
+                            />
+                            <div className="ps-2">
+                              <p className="fw-bold mb-1">
+                                {row?.lecturer?.name}
+                              </p>
+                              <p className="text-muted mb-0">
+                                {row?.lecturer?.position}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </Col>
                   </div>
                 </TableCell>
 
                 <TableCell component="th" scope="row">
                   <Col>
-                    <p className="fw-bold mb-1">{row.ModuleCode}</p>
-                    <p className="text-muted mb-0">{row.ModuleName}</p>
+                    <p className="fw-bold mb-1">{row.module?.moduleCode}</p>
+                    <p className="text-muted mb-0">{row.module?.moduleName}</p>
                   </Col>
                 </TableCell>
 
                 <TableCell component="th" scope="row">
                   <Col>
-                    <p className="fw-bold mb-1">{row.LevelYear}</p>
-                    <p className="text-muted mb-0">{row.Semester}</p>
+                    <p className="fw-bold mb-1">Level {row.module?.level}</p>
+                    <p className="text-muted mb-0">
+                      Semester {row.module?.semester}
+                    </p>
                   </Col>
                 </TableCell>
 
                 <TableCell component="th" scope="row">
                   <Col>
-                    <p className="fw-bold mb-1">{row.Demonstrator}</p>
+                    {row?.demonstrators.map((demonstrator, index) => {
+                      return (
+                        <p className="fw-bold mb-1" key={index}>
+                          {demonstrator?.name}
+                        </p>
+                      );
+                    })}
                   </Col>
                 </TableCell>
 
                 <TableCell component="th" scope="row">
                   <Col>
-                    <p className="fw-bold mb-1">{row.SecondExaminer}</p>
+                    <p className="fw-bold mb-1">{row.secondExaminar?.name}</p>
                   </Col>
                 </TableCell>
 
                 <TableCell component="th" scope="row">
                   <Col align="center">
                     <Badge pill bg="primary">
-                      Ongoing Lectures
-                    </Badge>{" "}
+                      {row.state[row.state?.length - 1]?.name}
+                    </Badge>
                   </Col>
                 </TableCell>
                 <TableCell component="th" scope="row">
                   <Col align="center">
-                    <Button color="secondary">Edit</Button>
+                    <Button
+                      color="secondary"
+                      onClick={() => {
+                        navigate("view", { state: row });
+                      }}
+                    >
+                      Edit
+                    </Button>
                     <Button color="error">Delete</Button>
                   </Col>
                 </TableCell>

@@ -8,9 +8,14 @@ import { getAllModules } from "../../App/ModuleServices";
 import AutoComplete from "../../components/AutoComplete/AutoComplete";
 import EditStatus from "../../components/EditStatus/EditStatus";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AllocationsView = ({ setNavbar }) => {
+  const location = useLocation();
+
+  const allocationToUpdate = location.state;
+  console.log(allocationToUpdate);
+
   const navigate = useNavigate();
   useEffect(() => {
     setNavbar("Allocations");
@@ -49,10 +54,7 @@ const AllocationsView = ({ setNavbar }) => {
         workload: lecturer.workload,
       })),
       module: selectedModule._id,
-      state: {
-        name: "Ongoing",
-        date: "2022-10-21",
-      },
+      state: statusInfo,
       batch: batch,
       secondExaminar: selectedSecondExaminer[0]._id,
       demonstrators: selectedDemonstrators.map(
