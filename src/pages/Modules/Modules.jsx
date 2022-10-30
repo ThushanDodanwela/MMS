@@ -5,7 +5,12 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import RecentModulesCard from "../../components/RecentModulesCard/RecentModulesCard";
 import Button from "@mui/material/Button";
-import { getAllModules } from "../../App/ModuleServices";
+import {
+  getAllModules,
+  newModule,
+  updateModule,
+} from "../../App/ModuleServices";
+import { BiCycling } from "react-icons/bi";
 
 const Module = ({ setNavbar }) => {
   function createData(
@@ -27,6 +32,10 @@ const Module = ({ setNavbar }) => {
   }
 
   const [rowsRetrived, setRowsRetrived] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [shoudRefresh, setShoudRefresh] = useState(false);
+
+  const [retrivedModules, setRetrivedModules] = useState();
 
   const onSuccessRetrive = (data) => {
     setRowsRetrived(data.modules);
@@ -51,6 +60,16 @@ const Module = ({ setNavbar }) => {
     "Semester",
     "Actions",
   ];
+
+  const editClickHandler = (moduleId) => {
+    setIsUpdating(true);
+    console.log(retrivedModules);
+    let moduleToEdit = retrivedModules.filter(
+      (module) => module._id === moduleId
+    );
+    setModuleInfo({ ...moduleToEdit[0] });
+    handleShow();
+  };
 
   const rows = [
     {
@@ -122,14 +141,31 @@ const Module = ({ setNavbar }) => {
     });
   };
 
-  const handleEditClick = (moduleCode) => {
-    let selectedModule = rows.find((module) => {
-      if (module.moduleCode === moduleCode) {
-        return module;
-      }
+  const onSuccessSaveUpdate = () => {
+    setModuleInfo({
+      moduleCode: "",
+      moduleName: "",
+      level: "",
+      credits: "",
+      semester: "",
     });
-    setModuleInfo({ ...selectedModule });
+    handleClose();
+    setIsUpdating(false);
+    setShoudRefresh((prev) => !prev);
+  };
+
+  const handleUpdate = () => {
+    updateModule(moduleInfo, onSuccessSaveUpdate);
+  };
+
+  const handleEditClick = (module) => {
+    setModuleInfo({ ...module });
     setShow(true);
+  };
+
+  const handleSave = () => {
+    console.log("Fuck");
+    newModule(moduleInfo, onSuccessSaveUpdate);
   };
 
   return (
@@ -181,56 +217,72 @@ const Module = ({ setNavbar }) => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Module Code</Form.Label>
                   <Form.Control
-                    name="moduleCode"
-                    type="text"
-                    placeholder="INTE 12212"
                     value={moduleInfo.moduleCode}
-                    onChange={onChangeInput}
+                    onChange={(event) => {
+                      setModuleInfo({
+                        ...moduleInfo,
+                        moduleCode: event.target.value,
+                      });
+                    }}
+                    type="text"
+                    placeholder="INTE12212"
                   />
                   <Form.Label className="pt-3">Module Name</Form.Label>
                   <Form.Control
-                    name="moduleName"
-                    type="text"
-                    placeholder="Web Development"
                     value={moduleInfo.moduleName}
-                    onChange={onChangeInput}
+                    onChange={(event) => {
+                      setModuleInfo({
+                        ...moduleInfo,
+                        moduleName: event.target.value,
+                      });
+                    }}
+                    type="text"
+                    placeholder="Programming Concepts"
                   />
                   <Form.Label className="pt-3">Credits</Form.Label>
                   <Form.Control
-                    type="number"
-                    placeholder="2"
-                    min={1}
-                    max={6}
                     value={moduleInfo.credits}
-                    onChange={onChangeInput}
-                    name="credits"
+                    onChange={(event) => {
+                      setModuleInfo({
+                        ...moduleInfo,
+                        credits: event.target.value,
+                      });
+                    }}
+                    type="text"
+                    placeholder="3"
                   />
 
                   <div className="d-flex">
                     <div className="col pe-2 pt-4">
                       <Form.Select
-                        aria-label="Default select example"
                         value={moduleInfo.level}
-                        onChange={onChangeInput}
-                        name="level"
+                        onChange={(event) => {
+                          setModuleInfo({
+                            ...moduleInfo,
+                            level: event.target.value,
+                          });
+                        }}
                       >
                         <option value="Select Level">Select Level</option>
-                        <option value="Level 1">Level 01</option>
-                        <option value="Level 2">Level 02</option>
-                        <option value="Level 3">Level 03</option>
-                        <option value="Level 4">Level 04</option>
+                        <option value="1">Level 01</option>
+                        <option value="2">Level 02</option>
+                        <option value="3">Level 03</option>
+                        <option value="4">Level 04</option>
                       </Form.Select>
                     </div>
                     <div className="col ps-2 pt-4">
                       <Form.Select
-                        aria-label="Default select example"
                         value={moduleInfo.semester}
-                        onChange={onChangeInput}
-                        name="semester"
+                        onChange={(event) => {
+                          setModuleInfo({
+                            ...moduleInfo,
+                            semester: event.target.value,
+                          });
+                        }}
                       >
                         <option value="Select Semester">Select Semester</option>
-                        <option value="Semester 1">Semester 01</option>
-                        <option value="Semester 2">Semester 02</option>
+                        <option value="1">Semester 01</option>
+                        <option value="2">Semester 02</option>
                       </Form.Select>
                     </div>
                   </div>
@@ -249,7 +301,7 @@ const Module = ({ setNavbar }) => {
                 sx={{ ml: 1 }}
                 variant="contained"
                 className="bg-success"
-                onClick={handleClose}
+                onClick={isUpdating ? handleUpdate : handleSave}
               >
                 Save Changes
               </Button>
@@ -261,6 +313,13 @@ const Module = ({ setNavbar }) => {
               <Button
                 className="btn bg-success text-light px-3 rounded-2"
                 onClick={() => {
+                  setModuleInfo({
+                    moduleCode: "",
+                    moduleName: "",
+                    level: "",
+                    credits: "",
+                    semester: "",
+                  });
                   setShow(true);
                 }}
               >
@@ -298,7 +357,7 @@ const Module = ({ setNavbar }) => {
                         className="text-success"
                         role="button"
                         onClick={() => {
-                          handleEditClick(row._id);
+                          handleEditClick(row);
                         }}
                       >
                         <FaEdit class="me-2" size={25} />
