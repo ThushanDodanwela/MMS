@@ -28,9 +28,13 @@ const AllocationsView = ({ setNavbar }) => {
   const [selectedLecturers, setSelectedLecturers] = useState([]);
   const [lecturersToUpdate, setLecturersToUpdate] = useState(
     allocationToUpdate?.lecturers
-      ? allocationToUpdate.lecturers.map((lecturer) => lecturer.lecturer)
+      ? allocationToUpdate.lecturers.map((lecturer) => ({
+          ...lecturer.lecturer,
+          workload: lecturer.workload,
+        }))
       : []
   );
+  const [lecturerObjectToSave, setLecturersObjectToSave] = useState([]);
   const [secondExaminerToUpdate, setSecondExaminerToUpdate] = useState(
     allocationToUpdate?.secondExaminar
       ? [allocationToUpdate.secondExaminar]
@@ -45,6 +49,32 @@ const AllocationsView = ({ setNavbar }) => {
     name: "Set State",
     date: "",
   });
+
+  // error handling
+
+  const [invalidModule, setInvalidModule] = useState();
+
+  // error handling
+
+  useEffect(() => {
+    selectedLecturers.map((selected) => {
+      //check whether the lecturer is not exists in the current list
+      let isNotExist = lecturerObjectToSave.filter(
+        (object) => object.lecturer._id === selected._id
+      );
+      console.log(isNotExist);
+      if (isNotExist) {
+        setLecturersObjectToSave([
+          ...lecturerObjectToSave,
+          { lecturer: selected, workload: "" },
+        ]);
+      }
+    });
+  }, [selectedLecturers]);
+
+  useEffect(() => {
+    console.log("LecturerObj:", lecturerObjectToSave);
+  }, [lecturerObjectToSave]);
 
   const onSuccessGetAllLecturers = (data) => {
     setAllLecturers(data.lecturers);
@@ -90,6 +120,13 @@ const AllocationsView = ({ setNavbar }) => {
     getAllLecturers(onSuccessGetAllLecturers);
     //set all modules on load
     getAllModules(onSuccessGetAllModules);
+    if (allocationToUpdate) {
+      setSelectedModule(allocationToUpdate?.module);
+      setBatch(allocationToUpdate?.batch);
+      setStatusInfo(
+        allocationToUpdate?.state[allocationToUpdate?.state.length - 1]
+      );
+    }
   }, []);
 
   const [showEditStatus, setShowEditStatus] = useState(false);
@@ -123,21 +160,39 @@ const AllocationsView = ({ setNavbar }) => {
               options={allModules.map(
                 (option) => option.moduleCode + " - " + option.moduleName
               )}
+              {...(allocationToUpdate && { disabled: true })}
               renderInput={(params) => (
                 <TextField
-                  {...params}
+                  {...{
+                    ...params,
+                    ...(allocationToUpdate && {
+                      inputProps: {
+                        ...params.inputProps,
+                        value:
+                          selectedModule.moduleCode +
+                          " - " +
+                          selectedModule.moduleName,
+                      },
+                    }),
+                  }}
                   size={"small"}
                   fullWidth
                   InputLabelProps={{ shrink: false }}
                   label=" "
+                  {...(invalidModule && { error: true })}
                   onBlur={(event) => {
-                    setSelectedModule(
-                      allModules.filter(
-                        (module) =>
-                          module.moduleCode + " - " + module.moduleName ===
-                          event.target.value
-                      )[0]
-                    );
+                    if (event.target.value.length > 0) {
+                      setInvalidModule(false);
+                      setSelectedModule(
+                        allModules.filter(
+                          (module) =>
+                            module.moduleCode + " - " + module.moduleName ===
+                            event.target.value
+                        )[0]
+                      );
+                    } else {
+                      setInvalidModule(true);
+                    }
                   }}
                   sx={{ borderWidth: 1 }}
                 />
@@ -153,10 +208,21 @@ const AllocationsView = ({ setNavbar }) => {
           </div>
           <div className="py-2 fs-5">: {selectedModule.moduleName}</div>
           <div className="py-2 fs-5">
-            : {selectedModule.semester}nd Semester
+            :{" "}
+            {selectedModule.semester === "1"
+              ? `${selectedModule.semester} st Semester`
+              : null}
+            {selectedModule.semester === "2"
+              ? `${selectedModule.semester} nd Semester`
+              : null}
           </div>
-          <div className="py-2 fs-5">: 0{selectedModule.credits} Credits</div>
-          <div className="py-2 fs-5">: Level 0{selectedModule.level}</div>
+          <div className="py-2 fs-5">
+            :{" "}
+            {selectedModule.credits ? `0${selectedModule.credits} Credits` : ""}
+          </div>
+          <div className="py-2 fs-5">
+            : {selectedModule.level ? `Level 0${selectedModule.level}` : ""}
+          </div>
         </div>
         <div className="col">
           <div className="d-flex justify-content-end">
@@ -188,29 +254,27 @@ const AllocationsView = ({ setNavbar }) => {
             defaultValues={lecturersToUpdate}
             title={"Lectures"}
           />
+          {console.log(selectedLecturers)}
           {selectedLecturers.map((lecturer) => {
-            console.log(lecturer);
-
-            allocationToUpdate &&
-              allocationToUpdate.lecturers.map((lec) => {
-                if (lecturer._id === lec.lecturer._id) {
-                  console.log(lec.workload);
-                  lecturer.workload = lec.workload;
-                }
-              });
             return (
               <>
                 <label className="mt-3">
-                  {lecturer.name} - Workload(Weeks)
+                  {lecturer?.name} - Workload(Weeks)
                 </label>
                 <input
                   type="number"
                   placeholder="5"
                   className="form-control mt-1 "
-                  value={lecturer.workload}
+                  value={lecturer.workload ? lecturer.workload : ""}
                   onChange={(event) => {
-                    lecturer.workload = Number(event.target.value);
-                    // console.log(selectedLecturers);
+                    setSelectedLecturers((prev) =>
+                      prev.map((setWorkload) => {
+                        if (setWorkload._id === lecturer._id) {
+                          setWorkload.workload = event.target.value;
+                        }
+                        return setWorkload;
+                      })
+                    );
                   }}
                 />
               </>
@@ -256,7 +320,7 @@ const AllocationsView = ({ setNavbar }) => {
           className="px-3"
           onClick={onClickSaveUpdate}
         >
-          Update
+          {allocationToUpdate ? "Update" : "Save"}
         </Button>
       </div>
     </div>
