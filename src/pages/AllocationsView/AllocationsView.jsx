@@ -2,7 +2,11 @@ import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import { isAllocated, newAllocation } from "../../App/AllocationsServices";
+import {
+  isAllocated,
+  newAllocation,
+  updateAllocation,
+} from "../../App/AllocationsServices";
 import { getAllLecturers } from "../../App/LecturerServices";
 import { getAllModules } from "../../App/ModuleServices";
 import AutoComplete from "../../components/AutoComplete/AutoComplete";
@@ -92,11 +96,12 @@ const AllocationsView = ({ setNavbar }) => {
     //TODO: validate all data before sending
     //make the object
     const reqBody = {
+      ...(allocationToUpdate && { _id: allocationToUpdate._id }),
       lecturers: selectedLecturers.map((lecturer) => ({
         lecturer: lecturer._id,
         workload: lecturer.workload,
       })),
-      module: selectedModule._id,
+      module: selectedModule?._id,
       state: statusInfo,
       batch: batch,
       secondExaminar: selectedSecondExaminer[0]._id,
@@ -105,15 +110,19 @@ const AllocationsView = ({ setNavbar }) => {
       ),
     };
 
+    if (allocationToUpdate) {
+      console.log("Updating");
+      updateAllocation(reqBody, onSuccessAllocation);
+    } else {
+      isAllocated({ moduleId: selectedModule?._id, batch: batch }, (data) => {
+        if (data.message === "ALLOCATED") {
+          alert("allocated already");
+        } else {
+          newAllocation(reqBody, onSuccessAllocation);
+        }
+      });
+    }
     //check whether already allocated
-
-    isAllocated({ moduleId: selectedModule._id, batch: batch }, (data) => {
-      if (data.message === "ALLOCATED") {
-        alert("allocated already");
-      } else {
-        newAllocation(reqBody, onSuccessAllocation);
-      }
-    });
   };
   useEffect(() => {
     //set all lecturers on load
@@ -169,9 +178,9 @@ const AllocationsView = ({ setNavbar }) => {
                       inputProps: {
                         ...params.inputProps,
                         value:
-                          selectedModule.moduleCode +
+                          selectedModule?.moduleCode +
                           " - " +
-                          selectedModule.moduleName,
+                          selectedModule?.moduleName,
                       },
                     }),
                   }}
@@ -206,22 +215,24 @@ const AllocationsView = ({ setNavbar }) => {
               GO
             </Button>
           </div>
-          <div className="py-2 fs-5">: {selectedModule.moduleName}</div>
+          <div className="py-2 fs-5">: {selectedModule?.moduleName}</div>
           <div className="py-2 fs-5">
             :{" "}
-            {selectedModule.semester === "1"
-              ? `${selectedModule.semester} st Semester`
+            {selectedModule?.semester === "1"
+              ? `${selectedModule?.semester} st Semester`
               : null}
-            {selectedModule.semester === "2"
-              ? `${selectedModule.semester} nd Semester`
+            {selectedModule?.semester === "2"
+              ? `${selectedModule?.semester} nd Semester`
               : null}
           </div>
           <div className="py-2 fs-5">
             :{" "}
-            {selectedModule.credits ? `0${selectedModule.credits} Credits` : ""}
+            {selectedModule?.credits
+              ? `0${selectedModule?.credits} Credits`
+              : ""}
           </div>
           <div className="py-2 fs-5">
-            : {selectedModule.level ? `Level 0${selectedModule.level}` : ""}
+            : {selectedModule?.level ? `Level 0${selectedModule?.level}` : ""}
           </div>
         </div>
         <div className="col">
