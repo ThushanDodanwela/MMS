@@ -46,7 +46,7 @@ const Module = ({ setNavbar }) => {
     getAllModules(onSuccessRetrive);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [shoudRefresh]);
   //modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -61,15 +61,15 @@ const Module = ({ setNavbar }) => {
     "Actions",
   ];
 
-  const editClickHandler = (moduleId) => {
-    setIsUpdating(true);
-    console.log(retrivedModules);
-    let moduleToEdit = retrivedModules.filter(
-      (module) => module._id === moduleId
-    );
-    setModuleInfo({ ...moduleToEdit[0] });
-    handleShow();
-  };
+  // const editClickHandler = (moduleId) => {
+  //   setIsUpdating(true);
+  //   console.log(retrivedModules);
+  //   let moduleToEdit = retrivedModules.filter(
+  //     (module) => module._id === moduleId
+  //   );
+  //   setModuleInfo({ ...moduleToEdit[0] });
+  //   handleShow();
+  // };
 
   const rows = [
     {
@@ -134,12 +134,12 @@ const Module = ({ setNavbar }) => {
     semester: "",
   });
 
-  const onChangeInput = (event) => {
-    setModuleInfo({
-      ...moduleInfo,
-      [event.target.name]: event.target.value,
-    });
-  };
+  // const onChangeInput = (event) => {
+  //   setModuleInfo({
+  //     ...moduleInfo,
+  //     [event.target.name]: event.target.value,
+  //   });
+  // };
 
   const onSuccessSaveUpdate = () => {
     setModuleInfo({
@@ -159,12 +159,12 @@ const Module = ({ setNavbar }) => {
   };
 
   const handleEditClick = (module) => {
+    setIsUpdating(true);
     setModuleInfo({ ...module });
     setShow(true);
   };
 
   const handleSave = () => {
-    console.log("Fuck");
     newModule(moduleInfo, onSuccessSaveUpdate);
   };
 
@@ -303,7 +303,7 @@ const Module = ({ setNavbar }) => {
                 className="bg-success"
                 onClick={isUpdating ? handleUpdate : handleSave}
               >
-                Save Changes
+                {isUpdating ? " Update " : "Save"}
               </Button>
             </Modal.Footer>
           </Modal>
