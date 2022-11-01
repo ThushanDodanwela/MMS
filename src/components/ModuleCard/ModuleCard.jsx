@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 import { Card } from "react-bootstrap";
 
@@ -22,31 +23,41 @@ function ModuleCard({
             : ""
         } ps-4 rounded-4 shadow-sm`}
         style={{ minWidth: "18rem" }}
-        onClick={onClick}
       >
-        <div className="d-flex">
-          <div>
+        <div className="">
+          <div className="d-flex col justify-content-between">
+            <div className="fw-bold">{moduleCode}</div>
+
+            <span
+              onClick={() => {
+                editClick();
+              }}
+              role="button"
+              style={{ fontSize: "12px", alignItems: "center" }}
+              className="d-flex rounded-5 px-2 border border-1 border-red-100 text-red-100 pointer-cursor user-select-none"
+            >
+              {state[state.length - 1].name}
+            </span>
+          </div>
+          <div className="fw-semibold pt-1" style={{ fontSize: "15px" }}>
+            {moduleName}
+          </div>
+          <div className="text-secondary">Semester 0{semester}</div>
+          <div className="d-flex justify-content-between">
+            <div className="text-secondary">Level 0{level}</div>
+            <div>
+              <Button onClick={onClick}>View Summery</Button>
+            </div>
+          </div>
+          {/* <div>
             <div className="fw-bold">{moduleCode}</div>
             <div className="mt-2">{moduleName}</div>
             <div>Semester {semester}</div>
             <div>Level {level}</div>
           </div>
           <div className="col text-end">
-            <span
-              onClick={() => {
-                setTimeout(() => {
-                  handleCloseStatusDetails();
-                }, 10);
-                setTimeout(() => {
-                  editClick();
-                }, 200);
-              }}
-              role="button"
-              className="rounded-5 px-2 pb-1 border border-1 border-red-100 text-red-100 pointer-cursor user-select-none"
-            >
-              {state}
-            </span>
-          </div>
+           
+          </div> */}
         </div>
       </Card>
     </div>

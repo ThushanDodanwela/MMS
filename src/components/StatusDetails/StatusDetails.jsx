@@ -5,7 +5,7 @@ import RowItem from "./RowItem";
 const StatusDetails = ({ show, handleClose, handleSave }) => {
   return (
     <div>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Status History</Modal.Title>
         </Modal.Header>

@@ -14,3 +14,6 @@ export const updateAllocation = (body, onSuccess) => {
 export const isAllocated = (body, onSuccess) => {
   post("allocations/is-allocated", body, onSuccess);
 };
+export const getAllocationsByLecturer = (body, onSuccess) => {
+  post("allocations/get-allocations-by-lecturer", body, onSuccess);
+};

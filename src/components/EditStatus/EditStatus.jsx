@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { STATES } from "../../const";
 
 const EditStatus = ({ show, setShowEditStatus, statusInfo, setStatusInfo }) => {
   return (
@@ -9,6 +10,7 @@ const EditStatus = ({ show, setShowEditStatus, statusInfo, setStatusInfo }) => {
         onHide={() => {
           setShowEditStatus(false);
         }}
+        centered
       >
         <Modal.Header closeButton>
           <Modal.Title>Change status [Results Relased]</Modal.Title>
@@ -23,11 +25,13 @@ const EditStatus = ({ show, setShowEditStatus, statusInfo, setStatusInfo }) => {
               });
             }}
           >
-            <option value="ONGOING_LECTURES">Lectures Ongoing</option>
-            <option value="EXAMS_ONGOING">Exams Ongoing</option>
-            <option value="PAPER_MARKING_I">Paper Marking I</option>
-            <option value="PAPER_MARKING_II">Paper Marking II</option>
-            <option value="RESULTS_RELEASED">Results Released</option>
+            {STATES.map((state, index) => {
+              return (
+                <option key={index} value={state.value}>
+                  {state.label}
+                </option>
+              );
+            })}
           </Form.Select>
 
           <Form.Label className="pt-3">Date</Form.Label>
