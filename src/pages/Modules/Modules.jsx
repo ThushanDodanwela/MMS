@@ -1,44 +1,85 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Table } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import RecentModulesCard from "../../components/RecentModulesCard/RecentModulesCard";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import React, { useEffect, useState } from "react";
+import { Col, Form, Modal, Table } from "react-bootstrap";
+import Badge from "react-bootstrap/Badge";
 import {
   getAllModules,
   newModule,
   updateModule,
 } from "../../App/ModuleServices";
-import { BiCycling } from "react-icons/bi";
+import FloatingButton from "../../components/FloatingButton/FloatingButton";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Add, AddBox } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 
 const Module = ({ setNavbar }) => {
-  function createData(
-    module_id,
-    module_code,
-    module_name,
-    level,
-    credit,
-    semester
-  ) {
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name = "") {
+    const derivedName = name.substring(0, 2);
     return {
-      module_id,
-      module_code,
-      module_name,
-      level,
-      credit,
-      semester,
+      sx: {
+        bgcolor: stringToColor(derivedName),
+      },
+      children: `${derivedName}`,
     };
   }
 
-  const [rowsRetrived, setRowsRetrived] = useState([]);
+  // function createData(
+  //   module_id,
+  //   module_code,
+  //   module_name,
+  //   level,
+  //   credit,
+  //   semester
+  // ) {
+  //   return {
+  //     module_id,
+  //     module_code,
+  //     module_name,
+  //     level,
+  //     credit,
+  //     semester,
+  //   };
+  // }
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filterBy, setFilterBy] = useState("NONE");
+
+  // const [rowsRetrived, setRowsRetrived] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [shoudRefresh, setShoudRefresh] = useState(false);
 
-  const [retrivedModules, setRetrivedModules] = useState();
+  const [retrivedModules, setRetrivedModules] = useState([]);
+  const [filteredModules, setFilteredModules] = useState([]);
 
   const onSuccessRetrive = (data) => {
-    setRowsRetrived(data.modules);
+    setRetrivedModules(data.modules);
   };
 
   // Data retriving
@@ -47,6 +88,28 @@ const Module = ({ setNavbar }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shoudRefresh]);
+  useEffect(() => {
+    if (searchKeyword.length > 0) {
+      let keyword = searchKeyword.toLowerCase();
+      setFilteredModules(
+        retrivedModules.filter(
+          (module) =>
+            module.moduleName.toLowerCase().match(keyword) ||
+            module.moduleCode.toLowerCase().match(keyword)
+        )
+      );
+    } else {
+      setFilteredModules(retrivedModules.slice(0, 5));
+    }
+    // if (filterBy !== "NONE") {
+    //   console.log("filterign");
+    //   setFilteredModules((prev) =>
+    //     prev.filter(
+    //       (module) => module.state[module.state.length - 1].name === filterBy
+    //     )
+    //   );
+    // }
+  }, [searchKeyword, retrivedModules, filterBy]);
   //modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -71,56 +134,56 @@ const Module = ({ setNavbar }) => {
   //   handleShow();
   // };
 
-  const rows = [
-    {
-      id: "module_code",
-      numeric: false,
-      disablePadding: true,
-      label: "Module Code",
-      align: "center",
-    },
-    {
-      id: "module_name",
-      numeric: true,
-      disablePadding: false,
-      align: "center",
+  // const rows = [
+  //   {
+  //     id: "module_code",
+  //     numeric: false,
+  //     disablePadding: true,
+  //     label: "Module Code",
+  //     align: "center",
+  //   },
+  //   {
+  //     id: "module_name",
+  //     numeric: true,
+  //     disablePadding: false,
+  //     align: "center",
 
-      label: "Module Name",
-    },
+  //     label: "Module Name",
+  //   },
 
-    {
-      id: "level",
-      numeric: true,
-      disablePadding: false,
-      align: "center",
+  //   {
+  //     id: "level",
+  //     numeric: true,
+  //     disablePadding: false,
+  //     align: "center",
 
-      label: "Level",
-    },
-    {
-      id: "credit",
-      numeric: true,
-      disablePadding: false,
-      align: "center",
-      label: "No of Credits",
-    },
+  //     label: "Level",
+  //   },
+  //   {
+  //     id: "credit",
+  //     numeric: true,
+  //     disablePadding: false,
+  //     align: "center",
+  //     label: "No of Credits",
+  //   },
 
-    {
-      id: "semester",
-      numeric: true,
-      disablePadding: false,
-      label: "Semester",
-      align: "center",
-    },
+  //   {
+  //     id: "semester",
+  //     numeric: true,
+  //     disablePadding: false,
+  //     label: "Semester",
+  //     align: "center",
+  //   },
 
-    {
-      id: "action",
-      numeric: true,
-      disablePadding: false,
-      label: "Action",
-      align: "center",
-      sorting: false,
-    },
-  ];
+  //   {
+  //     id: "action",
+  //     numeric: true,
+  //     disablePadding: false,
+  //     label: "Action",
+  //     align: "center",
+  //     sorting: false,
+  //   },
+  // ];
 
   useEffect(() => {
     setNavbar("Modules");
@@ -169,149 +232,132 @@ const Module = ({ setNavbar }) => {
   };
 
   return (
-    <div className="col-12">
-      <div className="listContainer ">
-        <div className="table pt-1 ">
-          <div className="mb-4">
-            <div className="d-flex justify-content-between fw-semibold ">
-              <div className="fs-5">Recent Modules</div>
-              <div>&lt; &gt;</div>
-            </div>
+    <>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Module</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Module Code</Form.Label>
+              <Form.Control
+                value={moduleInfo.moduleCode}
+                onChange={(event) => {
+                  setModuleInfo({
+                    ...moduleInfo,
+                    moduleCode: event.target.value,
+                  });
+                }}
+                type="text"
+                placeholder="INTE12212"
+              />
+              <Form.Label className="pt-3">Module Name</Form.Label>
+              <Form.Control
+                value={moduleInfo.moduleName}
+                onChange={(event) => {
+                  setModuleInfo({
+                    ...moduleInfo,
+                    moduleName: event.target.value,
+                  });
+                }}
+                type="text"
+                placeholder="Programming Concepts"
+              />
+              <Form.Label className="pt-3">Credits</Form.Label>
+              <Form.Control
+                value={moduleInfo.credits}
+                onChange={(event) => {
+                  setModuleInfo({
+                    ...moduleInfo,
+                    credits: event.target.value,
+                  });
+                }}
+                type="text"
+                placeholder="3"
+              />
 
-            <div
-              className="d-flex gap-4 ps-3 pt-2"
-              style={{ maxWidth: "70rem", overflowX: "hidden" }}
-            >
-              <RecentModulesCard
-                moduleCode="MGTE 31222"
-                moduleName="Advanced Statistics Techniques"
-                level="02"
-                semester="02"
-              />
-              <RecentModulesCard
-                moduleCode="INTE 31222"
-                moduleName="Advanced Statistics Techniques"
-                level="02"
-                semester="02"
-              />
-              <RecentModulesCard
-                moduleCode="INTE 31222"
-                moduleName="Advanced Statistics Techniques"
-                level="02"
-                semester="02"
-              />
-              <RecentModulesCard
-                moduleCode="INTE 31222"
-                moduleName="Advanced Statistics Techniques"
-                level="02"
-                semester="02"
+              <div className="d-flex">
+                <div className="col pe-2 pt-4">
+                  <Form.Select
+                    value={moduleInfo.level}
+                    onChange={(event) => {
+                      setModuleInfo({
+                        ...moduleInfo,
+                        level: event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="Select Level">Select Level</option>
+                    <option value="1">Level 01</option>
+                    <option value="2">Level 02</option>
+                    <option value="3">Level 03</option>
+                    <option value="4">Level 04</option>
+                  </Form.Select>
+                </div>
+                <div className="col ps-2 pt-4">
+                  <Form.Select
+                    value={moduleInfo.semester}
+                    onChange={(event) => {
+                      setModuleInfo({
+                        ...moduleInfo,
+                        semester: event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="Select Semester">Select Semester</option>
+                    <option value="1">Semester 01</option>
+                    <option value="2">Semester 02</option>
+                  </Form.Select>
+                </div>
+              </div>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="contained"
+            className="bg-secondary"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+          <Button
+            sx={{ ml: 1 }}
+            variant="contained"
+            className="bg-success"
+            onClick={isUpdating ? handleUpdate : handleSave}
+          >
+            {isUpdating ? " Update " : "Save"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <div className="px-3 pb-5 mb-5">
+        <TableContainer
+          component={Paper}
+          sx={{ pt: 1, mt: 2 }}
+          elevation={1}
+          className="px-2"
+        >
+          <div className=" py-2 d-flex ">
+            <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
+              All Modules
+            </div>
+            <div className="col-5">
+              <SearchBar
+                searchKeyword={searchKeyword}
+                setSearchKeyword={setSearchKeyword}
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                hideFilter={true}
               />
             </div>
-          </div>
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Add New Module</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Module Code</Form.Label>
-                  <Form.Control
-                    value={moduleInfo.moduleCode}
-                    onChange={(event) => {
-                      setModuleInfo({
-                        ...moduleInfo,
-                        moduleCode: event.target.value,
-                      });
-                    }}
-                    type="text"
-                    placeholder="INTE12212"
-                  />
-                  <Form.Label className="pt-3">Module Name</Form.Label>
-                  <Form.Control
-                    value={moduleInfo.moduleName}
-                    onChange={(event) => {
-                      setModuleInfo({
-                        ...moduleInfo,
-                        moduleName: event.target.value,
-                      });
-                    }}
-                    type="text"
-                    placeholder="Programming Concepts"
-                  />
-                  <Form.Label className="pt-3">Credits</Form.Label>
-                  <Form.Control
-                    value={moduleInfo.credits}
-                    onChange={(event) => {
-                      setModuleInfo({
-                        ...moduleInfo,
-                        credits: event.target.value,
-                      });
-                    }}
-                    type="text"
-                    placeholder="3"
-                  />
-
-                  <div className="d-flex">
-                    <div className="col pe-2 pt-4">
-                      <Form.Select
-                        value={moduleInfo.level}
-                        onChange={(event) => {
-                          setModuleInfo({
-                            ...moduleInfo,
-                            level: event.target.value,
-                          });
-                        }}
-                      >
-                        <option value="Select Level">Select Level</option>
-                        <option value="1">Level 01</option>
-                        <option value="2">Level 02</option>
-                        <option value="3">Level 03</option>
-                        <option value="4">Level 04</option>
-                      </Form.Select>
-                    </div>
-                    <div className="col ps-2 pt-4">
-                      <Form.Select
-                        value={moduleInfo.semester}
-                        onChange={(event) => {
-                          setModuleInfo({
-                            ...moduleInfo,
-                            semester: event.target.value,
-                          });
-                        }}
-                      >
-                        <option value="Select Semester">Select Semester</option>
-                        <option value="1">Semester 01</option>
-                        <option value="2">Semester 02</option>
-                      </Form.Select>
-                    </div>
-                  </div>
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
+            <div className="col d-flex justify-content-end align-items-center">
               <Button
                 variant="contained"
-                className="bg-secondary"
-                onClick={handleClose}
-              >
-                Close
-              </Button>
-              <Button
-                sx={{ ml: 1 }}
-                variant="contained"
-                className="bg-success"
-                onClick={isUpdating ? handleUpdate : handleSave}
-              >
-                {isUpdating ? " Update " : "Save"}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <div className=" fw-semibold ps-2 pt-3 pb-3 d-flex justify-content-between ">
-            <div className="fs-5">All Modules</div>
-            <div className="pe-4">
-              <Button
-                className="btn bg-success text-light px-3 rounded-2"
+                size="small"
+                endIcon={<Add />}
                 onClick={() => {
                   setModuleInfo({
                     moduleCode: "",
@@ -322,58 +368,98 @@ const Module = ({ setNavbar }) => {
                   });
                   setShow(true);
                 }}
+                sx={{ paddingY: 1.2, fontWeight: "bold" }}
               >
-                Add new
+                ADD
               </Button>
             </div>
           </div>
-          <Table borderless hover>
-            <thead>
-              <tr>
-                {columns.map((column, index) => {
-                  return (
-                    <th
-                      key={index}
-                      className="tablecell text-center pb-3"
-                      style={{ color: "#B5B7C0" }}
-                    >
-                      {column}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {rowsRetrived.map((row, index) => (
-                <tr key={index} className="border border-0">
-                  <td className="tablecell text-center">{row.moduleCode}</td>
-                  <td className="tablecell text-center">{row.moduleName}</td>
-                  <td className="tablecell text-center">{row.level}</td>
-                  <td className="tablecell text-center">{row.credits}</td>
-                  <td className="tablecell text-center">{row.semester}</td>
-                  <td>
-                    <div className="d-flex justify-content-center">
-                      <span
-                        className="text-success"
-                        role="button"
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead sx={{ backgroundColor: "#E6E6E6", borderRadius: "50%" }}>
+              <TableRow>
+                <TableCell className="fw-bold">Module Code</TableCell>
+                <TableCell className="fw-bold"> Module Name</TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Level
+                </TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Credits
+                </TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Semester
+                </TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredModules.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <div className="d-flex  gap-3">
+                      <Col>
+                        <div className="d-flex align-items-center" key={index}>
+                          <Avatar {...stringAvatar(row?.moduleCode)} />
+                          <div className="ps-2">
+                            <p className="fw-semibold mb-1 ">
+                              {row?.moduleCode}
+                            </p>
+                          </div>
+                        </div>
+                      </Col>
+                    </div>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className=" mb-1">{row.moduleName}</p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className=" mb-1  text-center">Level {row?.level}</p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className=" mb-1  text-center">
+                        0{row?.credits} Credits
+                      </p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className=" mb-1 text-center">{row.semester}</p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col align="center">
+                      <Button
+                        color="secondary"
                         onClick={() => {
                           handleEditClick(row);
                         }}
                       >
-                        <FaEdit class="me-2" size={25} />
-                      </span>
-                      <span className="text-danger" role="button">
-                        <MdDelete class="ms-2" size={28} />
-                      </span>
-                    </div>
-                  </td>
-                </tr>
+                        Edit
+                      </Button>
+                      <Button color="error">Delete</Button>
+                    </Col>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
+            </TableBody>
           </Table>
-        </div>
+        </TableContainer>
       </div>
-    </div>
+    </>
   );
 };
 

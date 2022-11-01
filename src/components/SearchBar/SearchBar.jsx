@@ -8,6 +8,7 @@ const SearchBar = ({
   setSearchKeyword,
   filterBy,
   setFilterBy,
+  hideFilter = false,
 }) => {
   const STATE = [
     {
@@ -31,24 +32,28 @@ const SearchBar = ({
           setSearchKeyword(e.target.value);
         }}
       />
-      <div className="mx-2 col text-nowrap">Group by :</div>
-      <div className="col-2 ">
-        <select
-          className="form-control border-0"
-          value={filterBy}
-          onChange={(e) => {
-            setFilterBy(e.target.value);
-          }}
-        >
-          {STATE.map((state, index) => {
-            return (
-              <option key={index} value={state.value}>
-                {state.label}
-              </option>
-            );
-          })}
-        </select>
-      </div>
+      {!hideFilter && (
+        <>
+          <div className="mx-2 col text-nowrap">Group by :</div>
+          <div className="col-2 ">
+            <select
+              className="form-control border-0"
+              value={filterBy}
+              onChange={(e) => {
+                setFilterBy(e.target.value);
+              }}
+            >
+              {STATE.map((state, index) => {
+                return (
+                  <option key={index} value={state.value}>
+                    {state.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -119,7 +119,7 @@ function Allocations({ setNavbar }) {
           setFilterBy={setFilterBy}
         />
       </div>
-      <TableContainer component={Paper} className="px-4">
+      <TableContainer component={Paper} className="px-4 pb-5 mb-5">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
