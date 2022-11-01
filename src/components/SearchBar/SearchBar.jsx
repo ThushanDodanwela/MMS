@@ -9,6 +9,15 @@ const SearchBar = ({
   filterBy,
   setFilterBy,
 }) => {
+  const STATE = [
+    {
+      label: "All Modules",
+      value: "NONE",
+    },
+    ...STATES.slice(1),
+  ];
+
+  console.log(STATE);
   return (
     <div className="d-flex align-items-center col border border-1 rounded-pill p-1 shadow-sm">
       <div className="ms-2 col">
@@ -31,7 +40,7 @@ const SearchBar = ({
             setFilterBy(e.target.value);
           }}
         >
-          {STATES.map((state, index) => {
+          {STATE.map((state, index) => {
             return (
               <option key={index} value={state.value}>
                 {state.label}

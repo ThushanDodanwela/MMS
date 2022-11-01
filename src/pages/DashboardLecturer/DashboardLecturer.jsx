@@ -15,7 +15,7 @@ function DashboardLecturer({ setNavbar }) {
   const [filteredAllocations, setFilteredAllocations] = useState([]);
   const [batch, setBatch] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filterBy, setFilterBy] = useState("");
+  const [filterBy, setFilterBy] = useState("NONE");
 
   const lectureId = "635eb42ff99324c6bd6484b5";
   const module = {
@@ -64,7 +64,7 @@ function DashboardLecturer({ setNavbar }) {
   }, [allocations, batch]);
 
   useEffect(() => {
-    if (searchKeyword.length > 1) {
+    if (searchKeyword.length > 0) {
       let keyword = searchKeyword.toLowerCase();
       setFilteredAllocations(
         allocations.filter(
@@ -76,7 +76,15 @@ function DashboardLecturer({ setNavbar }) {
     } else {
       setFilteredAllocations(allocations);
     }
-  }, [searchKeyword]);
+    if (filterBy !== "NONE") {
+      console.log("filterign");
+      setFilteredAllocations((prev) =>
+        prev.filter(
+          (module) => module.state[module.state.length - 1].name === filterBy
+        )
+      );
+    }
+  }, [searchKeyword, allocations, filterBy]);
 
   const CoursesView = ({ title, modules }) => {
     return (

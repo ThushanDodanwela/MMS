@@ -14,6 +14,7 @@ import Badge from "react-bootstrap/Badge";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllocations } from "../../App/AllocationsServices";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 function stringToColor(string) {
   let hash = 0;
@@ -68,33 +69,11 @@ function createData(
   };
 }
 
-const rows = [
-  createData(
-    "Janaka Wijenayake",
-    "Lecturer",
-    "Web Development",
-    "INTE31222",
-    "Level 03",
-    "Semester 2",
-    "Ms.Dinesha",
-    "Dr.Shantha Jayalal",
-    "Lectures Finished"
-  ),
-  createData(
-    "Janaka Wijenayake",
-    "Lecturer",
-    "Web Development",
-    "INTE31222",
-    "Level 03",
-    "Semester 2",
-    "Ms.Dinesha",
-    "Dr.Shantha Jayalal",
-    "Lectures Finished"
-  ),
-];
-
 function Allocations({ setNavbar }) {
   const [allAllocations, setAllAllocations] = useState([]);
+  const [filteredAllocations, setFilteredAllocations] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filterBy, setFilterBy] = useState("NONE");
 
   const navigate = useNavigate();
 
@@ -106,12 +85,41 @@ function Allocations({ setNavbar }) {
     getAllocations(onSuccessRetriveAllAllocations);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
-    // console.log(allAllocations);
-  }, [allAllocations]);
+    if (searchKeyword.length > 0) {
+      let keyword = searchKeyword.toLowerCase();
+      setFilteredAllocations(
+        allAllocations.filter(
+          (module) =>
+            module.module.moduleName.toLowerCase().match(keyword) ||
+            module.module.moduleCode.toLowerCase().match(keyword)
+        )
+      );
+    } else {
+      setFilteredAllocations(allAllocations.slice(0, 5));
+    }
+    if (filterBy !== "NONE") {
+      console.log("filterign");
+      setFilteredAllocations((prev) =>
+        prev.filter(
+          (module) => module.state[module.state.length - 1].name === filterBy
+        )
+      );
+    }
+  }, [searchKeyword, allAllocations, filterBy]);
+
   return (
     <>
-      <TableContainer component={Paper}>
+      <div className="px-3 py-2 ">
+        <SearchBar
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+        />
+      </div>
+      <TableContainer component={Paper} className="px-4">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -125,7 +133,7 @@ function Allocations({ setNavbar }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allAllocations.map((row, index) => (
+            {filteredAllocations.map((row, index) => (
               <TableRow
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
