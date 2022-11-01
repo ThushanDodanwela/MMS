@@ -18,7 +18,7 @@ import FloatingButton from "../../components/FloatingButton/FloatingButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Add, AddBox } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Chip, IconButton } from "@mui/material";
 
 const Module = ({ setNavbar }) => {
   function stringToColor(string) {
@@ -343,6 +343,21 @@ const Module = ({ setNavbar }) => {
           <div className=" py-2 d-flex ">
             <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
               All Modules
+              <Chip
+                title={
+                  "Showing only 5 modules. Search by module code or module name for other modules"
+                }
+                label={`Showing ${filteredModules.length} of ${retrivedModules.length} modules`}
+                size="small"
+                sx={{
+                  ml: { xs: 0, lg: 1 },
+                  mr: { xs: 3, lg: 0 },
+                  marginY: { xs: 1, lg: 0 },
+                  fontWeight: "bold",
+                  backgroundColor: "#198754;",
+                  color: "white",
+                }}
+              />
             </div>
             <div className="col-5">
               <SearchBar
@@ -357,6 +372,7 @@ const Module = ({ setNavbar }) => {
               <Button
                 variant="contained"
                 size="small"
+                color="success"
                 endIcon={<Add />}
                 onClick={() => {
                   setModuleInfo({

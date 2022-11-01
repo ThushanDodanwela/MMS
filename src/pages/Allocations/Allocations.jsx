@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { Button, Chip } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -111,15 +112,50 @@ function Allocations({ setNavbar }) {
 
   return (
     <>
-      <div className="px-3 py-2 ">
-        <SearchBar
-          searchKeyword={searchKeyword}
-          setSearchKeyword={setSearchKeyword}
-          filterBy={filterBy}
-          setFilterBy={setFilterBy}
-        />
-      </div>
       <TableContainer component={Paper} className="px-4 pb-5 mb-5">
+        <div className=" py-2 d-flex ">
+          <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
+            All Allocations
+            <Chip
+              title={
+                "Showing only 5 allocations. Search by module code or module name for other allocations"
+              }
+              label={`Showing ${filteredAllocations.length} of ${allAllocations.length} allocations`}
+              size="small"
+              sx={{
+                ml: { xs: 0, lg: 1 },
+                mr: { xs: 3, lg: 0 },
+                marginY: { xs: 1, lg: 0 },
+                fontWeight: "bold",
+                backgroundColor: "#198754;",
+                color: "white",
+              }}
+            />
+          </div>
+          <div className="col-5">
+            <SearchBar
+              searchKeyword={searchKeyword}
+              setSearchKeyword={setSearchKeyword}
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+              hideFilter={true}
+            />
+          </div>
+          <div className="col d-flex justify-content-end align-items-center">
+            <Button
+              variant="contained"
+              size="small"
+              color="success"
+              endIcon={<Add />}
+              onClick={() => {
+                navigate("view");
+              }}
+              sx={{ paddingY: 1.2, fontWeight: "bold" }}
+            >
+              NEW
+            </Button>
+          </div>
+        </div>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -221,11 +257,6 @@ function Allocations({ setNavbar }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <FloatingButton
-        handleClick={() => {
-          navigate("view");
-        }}
-      />
     </>
   );
 }
