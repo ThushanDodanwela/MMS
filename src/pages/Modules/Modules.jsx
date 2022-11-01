@@ -391,7 +391,12 @@ const Module = ({ setNavbar }) => {
             </div>
           </div>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead sx={{ backgroundColor: "#E6E6E6", borderRadius: "50%" }}>
+            <TableHead
+              sx={{
+                backgroundColor: "#E6E6E6",
+                borderRadius: "50%",
+              }}
+            >
               <TableRow>
                 <TableCell className="fw-bold">Module Code</TableCell>
                 <TableCell className="fw-bold"> Module Name</TableCell>

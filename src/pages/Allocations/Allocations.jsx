@@ -157,15 +157,24 @@ function Allocations({ setNavbar }) {
           </div>
         </div>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+          <TableHead
+            sx={{
+              backgroundColor: "#E6E6E6",
+              borderRadius: "50%",
+            }}
+          >
             <TableRow>
-              <TableCell>Lecturer</TableCell>
-              <TableCell> Module</TableCell>
-              <TableCell>Level</TableCell>
-              <TableCell>Demonstrator</TableCell>
-              <TableCell>2nd Examiner</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Action</TableCell>
+              <TableCell className="fw-bold">Lecturer</TableCell>
+              <TableCell className="fw-bold"> Module</TableCell>
+              <TableCell className="fw-bold">Level</TableCell>
+              <TableCell className="fw-bold">Demonstrator</TableCell>
+              <TableCell className="fw-bold">2nd Examiner</TableCell>
+              <TableCell className="fw-bold" align="center">
+                Status
+              </TableCell>
+              <TableCell className="fw-bold" align="center">
+                Action
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
