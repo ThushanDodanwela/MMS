@@ -8,6 +8,9 @@ const SearchBar = ({
   setSearchKeyword,
   filterBy,
   setFilterBy,
+  allbatches = [],
+  selectedBatch = "",
+  setSelectedBatch = () => {},
   hideFilter = false,
 }) => {
   const STATE = [
@@ -34,7 +37,33 @@ const SearchBar = ({
       />
       {!hideFilter && (
         <>
-          <div className="mx-2 col text-nowrap">Group by :</div>
+          <div className="mx-2 col text-nowrap">Batch :</div>
+          <div className="col-1 ">
+            <select
+              className="form-control border-0"
+              value={selectedBatch}
+              onChange={(e) => {
+                if (e.target.value === "ALL") {
+                  setSelectedBatch("");
+                  return;
+                }
+                setSelectedBatch(e.target.value);
+              }}
+            >
+              <option value={"ALL"} selected>
+                All Batches
+              </option>
+              {allbatches.map((batch, index) => {
+                return (
+                  <option key={index} value={batch}>
+                    {batch}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="mx-2 col text-nowrap">State:</div>
           <div className="col-2 ">
             <select
               className="form-control border-0"

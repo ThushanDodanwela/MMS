@@ -9,7 +9,7 @@ function Login() {
         <div className="fw-bold fs-4">Login</div>
         <div className="mt-1 fw-semibold ">Welcome back !</div>
         <div className=" mt-4">
-          <div>Username</div>
+          <div>Email Address</div>
           <TextField sx={{ mt: 1 }} variant="outlined" size="small" fullWidth />
         </div>
         <div className=" mt-2">

@@ -359,7 +359,7 @@ const Lecturer = ({ setNavbar }) => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ backgroundColor: "#E6E6E6" }}>
               <TableRow>
-                <TableCell className="fw-bold">Lecturer Name</TableCell>
+                <TableCell className="fw-bold ">Lecturer Name</TableCell>
                 <TableCell className="fw-bold"> Position</TableCell>
                 <TableCell className="fw-bold" align="center">
                   Phone

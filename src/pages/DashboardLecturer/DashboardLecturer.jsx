@@ -12,8 +12,9 @@ import StatusDetails from "../../components/StatusDetails/StatusDetails";
 
 function DashboardLecturer({ setNavbar }) {
   const [allocations, setAllocations] = useState([]);
-  const [filteredAllocations, setFilteredAllocations] = useState([]);
+  const [filteredAllocations, setFilteredAllocations] = useState([]); //filterd
   const [batch, setBatch] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState([]); //filtered
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filterBy, setFilterBy] = useState("NONE");
 
@@ -156,6 +157,9 @@ function DashboardLecturer({ setNavbar }) {
             setSearchKeyword={setSearchKeyword}
             filterBy={filterBy}
             setFilterBy={setFilterBy}
+            allbatches={batch}
+            selectedBatch={selectedBatch}
+            setSelectedBatch={setSelectedBatch}
           />
         </div>
 
@@ -166,13 +170,21 @@ function DashboardLecturer({ setNavbar }) {
           <LecturerDashboardSmallCard title="Pending Results" count="05" />
           <LecturerDashboardSmallCard title="Lectures ongoing" count="02" />
         </div>
-        {batch.map((batch, index) => {
-          let module = filteredAllocations.filter(
-            (module) => module.batch === batch
-          );
-          console.log("Modules:", module);
-          return <CoursesView key={index} title={batch} modules={module} />;
-        })}
+        {selectedBatch.length === 0 &&
+          batch.map((batch, index) => {
+            let module = filteredAllocations.filter(
+              (module) => module.batch === batch
+            );
+            return <CoursesView key={index} title={batch} modules={module} />;
+          })}
+        {selectedBatch.length > 0 ? (
+          <CoursesView
+            title={selectedBatch}
+            modules={filteredAllocations.filter(
+              (module) => module.batch === selectedBatch
+            )}
+          />
+        ) : null}
       </div>
     </div>
   );

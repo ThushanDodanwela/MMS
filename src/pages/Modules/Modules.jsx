@@ -1,3 +1,5 @@
+import { Add } from "@mui/icons-material";
+import { Chip } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -8,18 +10,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import React, { useEffect, useState } from "react";
 import { Col, Form, Modal, Table } from "react-bootstrap";
-import Badge from "react-bootstrap/Badge";
 import {
   getAllModules,
   newModule,
   updateModule,
 } from "../../App/ModuleServices";
-import FloatingButton from "../../components/FloatingButton/FloatingButton";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Add, AddBox } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
 import CustomButton from "../../components/CustomButton/CustomButton";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 const Module = ({ setNavbar }) => {
   function stringToColor(string) {
@@ -398,7 +395,7 @@ const Module = ({ setNavbar }) => {
               }}
             >
               <TableRow>
-                <TableCell className="fw-bold">Module Code</TableCell>
+                <TableCell className="fw-bold py-3">Module Code</TableCell>
                 <TableCell className="fw-bold"> Module Name</TableCell>
                 <TableCell className="fw-bold" align="center">
                   Level
@@ -420,7 +417,7 @@ const Module = ({ setNavbar }) => {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell className="py-3" component="th" scope="row">
                     <div className="d-flex  gap-3">
                       <Col>
                         <div className="d-flex align-items-center" key={index}>
@@ -437,7 +434,7 @@ const Module = ({ setNavbar }) => {
 
                   <TableCell component="th" scope="row">
                     <Col>
-                      <p className=" mb-1">{row.moduleName}</p>
+                      <p className=" mb-2">{row.moduleName}</p>
                     </Col>
                   </TableCell>
 

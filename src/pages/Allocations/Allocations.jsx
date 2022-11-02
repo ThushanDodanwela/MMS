@@ -113,7 +113,7 @@ function Allocations({ setNavbar }) {
 
   return (
     <>
-      <div className="px-3 pb-5 mb-5 pt-3">
+      <div className="px-3 pb-5 mb-5 pt-4">
         <TableContainer component={Paper} className="px-2 pb-5 mb-5">
           <div className=" py-2 d-flex ">
             <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
@@ -162,7 +162,6 @@ function Allocations({ setNavbar }) {
             <TableHead
               sx={{
                 backgroundColor: "#E6E6E6",
-                borderRadius: "50%",
               }}
             >
               <TableRow>
