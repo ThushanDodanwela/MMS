@@ -468,7 +468,7 @@ const Module = ({ setNavbar }) => {
                       >
                         Edit
                       </Button>
-                      <Button color="error">Delete</Button>
+                      {/* <Button color="error">Delete</Button> */}
                     </Col>
                   </TableCell>
                 </TableRow>
