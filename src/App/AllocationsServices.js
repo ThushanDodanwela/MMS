@@ -11,6 +11,10 @@ export const updateAllocation = (body, onSuccess) => {
   post("allocations/update-allocation", body, onSuccess);
 };
 
+export const updateAllocationState = (body, onSuccess) => {
+  post("allocations/update-allocation-state", body, onSuccess);
+};
+
 export const isAllocated = (body, onSuccess) => {
   post("allocations/is-allocated", body, onSuccess);
 };

@@ -101,8 +101,8 @@ const AllocationsView = ({ setNavbar }) => {
         lecturer: lecturer._id,
         workload: lecturer.workload,
       })),
-      module: selectedModule?._id,
       state: statusInfo,
+      module: selectedModule?._id,
       batch: batch,
       secondExaminar: selectedSecondExaminer[0]._id,
       demonstrators: selectedDemonstrators.map(
@@ -132,9 +132,15 @@ const AllocationsView = ({ setNavbar }) => {
     if (allocationToUpdate) {
       setSelectedModule(allocationToUpdate?.module);
       setBatch(allocationToUpdate?.batch);
-      setStatusInfo(
-        allocationToUpdate?.state[allocationToUpdate?.state.length - 1]
-      );
+      setStatusInfo({
+        _id: allocationToUpdate ? allocationToUpdate._id : "",
+        name: allocationToUpdate
+          ? allocationToUpdate.state[allocationToUpdate?.state.length - 1].name
+          : "",
+        lastUpdatedOn: allocationToUpdate
+          ? allocationToUpdate.state[allocationToUpdate?.state.length - 1].date
+          : "",
+      });
     }
   }, []);
 
@@ -147,6 +153,7 @@ const AllocationsView = ({ setNavbar }) => {
         setShowEditStatus={setShowEditStatus}
         statusInfo={statusInfo}
         setStatusInfo={setStatusInfo}
+        {...(allocationToUpdate && { update: true })}
       />
       {/* course details section */}
       <div className="d-flex">

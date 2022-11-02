@@ -1,8 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { login, loginMMS } from "../../reducers/loginSlice";
 
 function Login() {
+  const dispatch = useDispatch();
+
   return (
     <div className="w-100 vh-100 bg-success d-flex justify-content-center align-items-center">
       <div className="col-4 bg-white p-4">
@@ -23,7 +27,19 @@ function Login() {
           </Button>
         </div>
         <div className=" mt-4 d-flex justify-content-end  ">
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              dispatch(
+                login({
+                  isLoggedIn: true,
+                  lecturerId: "63629c2bab0639a909672f2e",
+                  position: "HOD",
+                })
+              );
+            }}
+          >
             Login
           </Button>
         </div>

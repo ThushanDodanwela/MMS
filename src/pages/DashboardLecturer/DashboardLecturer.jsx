@@ -1,8 +1,11 @@
-import { ViewModuleSharp } from "@mui/icons-material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import React, { useEffect, useState } from "react";
-import { getAllocationsByLecturer } from "../../App/AllocationsServices";
+import { useSelector } from "react-redux";
+import {
+  getAllocations,
+  getAllocationsByLecturer,
+} from "../../App/AllocationsServices";
 import logo from "../../assets/IMSSALOGO.png";
 import EditStatus from "../../components/EditStatus/EditStatus";
 import LecturerDashboardSmallCard from "../../components/LecturerDashboardSmallCard/LecturerDashboardSmallCard";
@@ -11,30 +14,18 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import StatusDetails from "../../components/StatusDetails/StatusDetails";
 
 function DashboardLecturer({ setNavbar }) {
+  const lectureId = useSelector((state) => state.loginMMS.lectureId);
+  const position = useSelector((state) => state.loginMMS.position);
+
   const [allocations, setAllocations] = useState([]);
   const [filteredAllocations, setFilteredAllocations] = useState([]); //filterd
   const [batch, setBatch] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState([]); //filtered
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filterBy, setFilterBy] = useState("NONE");
-
-  const lectureId = "635eb42ff99324c6bd6484b5";
-  const module = {
-    _id: "636029f234ff61c36e3f33ca",
-    moduleCode: "GNCT 32216",
-    moduleName: "Internship (2019/2022)",
-    level: "1",
-    credits: "5",
-    semester: "1",
-    __v: 0,
-  };
-  const state = [
-    {
-      name: "PAPER_MARKING_II",
-      date: "2022-11-23T00:00:00.000Z",
-      _id: "63602f36f5f9b517d87aae00",
-    },
-  ];
+  const [statusInfo, setStatusInfo] = useState("");
+  const [editStatusShow, setEditStatusShow] = useState(false);
+  const [showStatusDetails, setShowStatusDetails] = useState(false);
 
   setNavbar("Dashboard");
 
@@ -53,11 +44,17 @@ function DashboardLecturer({ setNavbar }) {
   };
 
   useEffect(() => {
-    let reqObj = {
-      lecturerId: lectureId,
-    };
-    getAllocationsByLecturer(reqObj, onSuccess);
-  }, []);
+    if (position === "HOD") {
+      getAllocations(onSuccess);
+    } else {
+      let reqObj = {
+        lecturerId: lectureId,
+      };
+      getAllocationsByLecturer(reqObj, onSuccess);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editStatusShow]);
 
   useEffect(() => {
     console.log(allocations);
@@ -95,10 +92,12 @@ function DashboardLecturer({ setNavbar }) {
             <div className="mt-3 fs-5 fw-semibold">{title}</div>
             <div className="mt-3 d-flex flex-wrap gap-1">
               {modules.map((oneModule, index) => {
+                console.log("one module", oneModule._id);
                 return (
                   <ModuleCard
                     key={index}
                     {...oneModule.module}
+                    allocationId={oneModule._id}
                     state={oneModule.state}
                     onClick={handleShowStatusDetails}
                     editClick={handleShowEditStatus}
@@ -113,16 +112,27 @@ function DashboardLecturer({ setNavbar }) {
     );
   };
 
-  const [editStatusShow, setEditStatusShow] = useState(false);
-  const [showStatusDetails, setShowStatusDetails] = useState(false);
   const handleClose = () => setEditStatusShow(false);
   const handleCloseStatusDetails = () => setShowStatusDetails(false);
-  const handleShowEditStatus = () => setEditStatusShow(true);
+  const handleShowEditStatus = (_id, currentStatus, lastUpdatedOn) => {
+    setStatusInfo({
+      _id: _id,
+      currentStatus: currentStatus,
+      lastUpdatedOn: lastUpdatedOn,
+    });
+    setEditStatusShow(true);
+  };
   const handleShowStatusDetails = () => setShowStatusDetails(true);
 
   return (
     <div className="col-12">
-      <EditStatus show={editStatusShow} setShowEditStatus={handleClose} />
+      <EditStatus
+        show={editStatusShow}
+        setShowEditStatus={handleClose}
+        setStatusInfo={setStatusInfo}
+        statusInfo={statusInfo}
+        update={true}
+      />
       <StatusDetails
         show={showStatusDetails}
         handleClose={handleCloseStatusDetails}

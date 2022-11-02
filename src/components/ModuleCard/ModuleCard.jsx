@@ -3,6 +3,7 @@ import React from "react";
 import { Card } from "react-bootstrap";
 
 function ModuleCard({
+  allocationId,
   moduleCode,
   moduleName,
   level,
@@ -30,13 +31,24 @@ function ModuleCard({
 
             <span
               onClick={() => {
-                editClick();
+                console.log(state.length);
+                if (state.length > 0) {
+                  editClick(
+                    allocationId,
+                    state[state.length - 1].name,
+                    state[state.length - 1].date
+                  );
+                } else {
+                  editClick(allocationId, "", "");
+                }
               }}
               role="button"
               style={{ fontSize: "12px", alignItems: "center" }}
               className="d-flex rounded-5 px-2 border border-1 border-red-100 text-red-100 pointer-cursor user-select-none"
             >
-              {state[state.length - 1].name}
+              {state[state.length - 1]
+                ? state[state.length - 1].name
+                : "ERROR_LOADIND"}
             </span>
           </div>
           <div className="fw-semibold pt-1" style={{ fontSize: "15px" }}>

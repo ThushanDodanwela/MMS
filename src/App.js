@@ -9,63 +9,85 @@ import SidebarAndNavbar from "./shared/SidebarAndNavbar";
 import Allocations from "./pages/Allocations/Allocations";
 import AllocationsView from "./pages/AllocationsView/AllocationsView";
 import Login from "./pages/Login/Login";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./App/store";
+import { Provider } from "react-redux";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 function App() {
   const [navbar, setNavbar] = useState("Dashboard");
 
   return (
-    <div className="App d-flex">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <SidebarAndNavbar section={navbar}>
-                <Home setNavbar={setNavbar} />
-              </SidebarAndNavbar>
-            }
-          />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <div className="App d-flex">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoutes>
+                    <SidebarAndNavbar section={navbar}>
+                      <Home setNavbar={setNavbar} />
+                    </SidebarAndNavbar>
+                  </ProtectedRoutes>
+                }
+              />
 
-          <Route
-            path="/modules"
-            element={
-              <SidebarAndNavbar section={navbar}>
-                <Modules setNavbar={setNavbar} />
-              </SidebarAndNavbar>
-            }
-          />
-          <Route
-            path="/lecturers"
-            element={
-              <SidebarAndNavbar section={navbar}>
-                <Lecturers setNavbar={setNavbar} />
-              </SidebarAndNavbar>
-            }
-          />
-          <Route
-            path="/allocations/view"
-            element={
-              <SidebarAndNavbar section={navbar}>
-                <AllocationsView setNavbar={setNavbar} />
-              </SidebarAndNavbar>
-            }
-          />
-          <Route
-            path="/lecturer/dashboard"
-            element={<DashboardLecturer setNavbar={setNavbar} />}
-          />
-          <Route
-            path="/allocations"
-            element={
-              <SidebarAndNavbar section={navbar}>
-                <Allocations setNavbar={setNavbar} />
-              </SidebarAndNavbar>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+              <Route
+                path="/modules"
+                element={
+                  <ProtectedRoutes>
+                    <SidebarAndNavbar section={navbar}>
+                      <Modules setNavbar={setNavbar} />
+                    </SidebarAndNavbar>
+                  </ProtectedRoutes>
+                }
+              />
+              <Route
+                path="/lecturers"
+                element={
+                  <ProtectedRoutes>
+                    <SidebarAndNavbar section={navbar}>
+                      <Lecturers setNavbar={setNavbar} />
+                    </SidebarAndNavbar>
+                  </ProtectedRoutes>
+                }
+              />
+              <Route
+                path="/allocations/view"
+                element={
+                  <ProtectedRoutes>
+                    <SidebarAndNavbar section={navbar}>
+                      <AllocationsView setNavbar={setNavbar} />
+                    </SidebarAndNavbar>
+                  </ProtectedRoutes>
+                }
+              />
+              <Route
+                path="/lecturer/dashboard"
+                element={
+                  <ProtectedRoutes>
+                    <DashboardLecturer setNavbar={setNavbar} />
+                  </ProtectedRoutes>
+                }
+              />
+              <Route
+                path="/allocations"
+                element={
+                  <ProtectedRoutes>
+                    <SidebarAndNavbar section={navbar}>
+                      <Allocations setNavbar={setNavbar} />
+                    </SidebarAndNavbar>
+                  </ProtectedRoutes>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </PersistGate>
+    </Provider>
   );
 }
 
