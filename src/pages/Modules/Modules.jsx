@@ -19,6 +19,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Add, AddBox } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
+import CustomButton from "../../components/CustomButton/CustomButton";
 
 const Module = ({ setNavbar }) => {
   function stringToColor(string) {
@@ -359,7 +360,7 @@ const Module = ({ setNavbar }) => {
                 }}
               />
             </div>
-            <div className="col-5">
+            <div className="col-5 pe-1">
               <SearchBar
                 searchKeyword={searchKeyword}
                 setSearchKeyword={setSearchKeyword}
@@ -369,7 +370,7 @@ const Module = ({ setNavbar }) => {
               />
             </div>
             <div className="col d-flex justify-content-end align-items-center">
-              <Button
+              <CustomButton
                 variant="contained"
                 size="small"
                 color="success"
@@ -387,14 +388,13 @@ const Module = ({ setNavbar }) => {
                 sx={{ paddingY: 1.2, fontWeight: "bold" }}
               >
                 ADD
-              </Button>
+              </CustomButton>
             </div>
           </div>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead
               sx={{
                 backgroundColor: "#E6E6E6",
-                borderRadius: "50%",
               }}
             >
               <TableRow>

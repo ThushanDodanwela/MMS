@@ -8,6 +8,7 @@ import Modules from "./pages/Modules/Modules";
 import SidebarAndNavbar from "./shared/SidebarAndNavbar";
 import Allocations from "./pages/Allocations/Allocations";
 import AllocationsView from "./pages/AllocationsView/AllocationsView";
+import Login from "./pages/Login/Login";
 
 function App() {
   const [navbar, setNavbar] = useState("Dashboard");
@@ -16,6 +17,7 @@ function App() {
     <div className="App d-flex">
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route
             path="/"
             element={

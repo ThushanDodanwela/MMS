@@ -14,6 +14,7 @@ import { Col } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllocations } from "../../App/AllocationsServices";
+import CustomButton from "../../components/CustomButton/CustomButton";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
@@ -112,160 +113,164 @@ function Allocations({ setNavbar }) {
 
   return (
     <>
-      <TableContainer component={Paper} className="px-4 pb-5 mb-5">
-        <div className=" py-2 d-flex ">
-          <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
-            All Allocations
-            <Chip
-              title={
-                "Showing only 5 allocations. Search by module code or module name for other allocations"
-              }
-              label={`Showing ${filteredAllocations.length} of ${allAllocations.length} allocations`}
-              size="small"
-              sx={{
-                ml: { xs: 0, lg: 1 },
-                mr: { xs: 3, lg: 0 },
-                marginY: { xs: 1, lg: 0 },
-                fontWeight: "bold",
-                backgroundColor: "#198754;",
-                color: "white",
-              }}
-            />
-          </div>
-          <div className="col-5">
-            <SearchBar
-              searchKeyword={searchKeyword}
-              setSearchKeyword={setSearchKeyword}
-              filterBy={filterBy}
-              setFilterBy={setFilterBy}
-              hideFilter={true}
-            />
-          </div>
-          <div className="col d-flex justify-content-end align-items-center">
-            <Button
-              variant="contained"
-              size="small"
-              color="success"
-              endIcon={<Add />}
-              onClick={() => {
-                navigate("view");
-              }}
-              sx={{ paddingY: 1.2, fontWeight: "bold" }}
-            >
-              NEW
-            </Button>
-          </div>
-        </div>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead
-            sx={{
-              backgroundColor: "#E6E6E6",
-              borderRadius: "50%",
-            }}
-          >
-            <TableRow>
-              <TableCell className="fw-bold">Lecturer</TableCell>
-              <TableCell className="fw-bold"> Module</TableCell>
-              <TableCell className="fw-bold">Level</TableCell>
-              <TableCell className="fw-bold">Demonstrator</TableCell>
-              <TableCell className="fw-bold">2nd Examiner</TableCell>
-              <TableCell className="fw-bold" align="center">
-                Status
-              </TableCell>
-              <TableCell className="fw-bold" align="center">
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredAllocations.map((row, index) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      <div className="px-3 pb-5 mb-5 pt-3">
+        <TableContainer component={Paper} className="px-2 pb-5 mb-5">
+          <div className=" py-2 d-flex ">
+            <div className="col-6 ps-1 fs-5 fw-bold d-flex justify-content-start align-items-center">
+              All Allocations
+              <Chip
+                title={
+                  "Showing only 5 allocations. Search by module code or module name for other allocations"
+                }
+                label={`Showing ${filteredAllocations.length} of ${allAllocations.length} allocations`}
+                size="small"
+                sx={{
+                  ml: { xs: 0, lg: 1 },
+                  mr: { xs: 3, lg: 0 },
+                  marginY: { xs: 1, lg: 0 },
+                  fontWeight: "bold",
+                  backgroundColor: "#198754;",
+                  color: "white",
+                }}
+              />
+            </div>
+            <div className="col-5 pe-1">
+              <SearchBar
+                searchKeyword={searchKeyword}
+                setSearchKeyword={setSearchKeyword}
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                hideFilter={true}
+              />
+            </div>
+            <div className="col d-flex justify-content-end align-items-center">
+              <CustomButton
+                variant="contained"
+                size="small"
+                color="success"
+                endIcon={<Add />}
+                onClick={() => {
+                  navigate("view");
+                }}
+                sx={{ paddingY: 1.2, fontWeight: "bold" }}
               >
-                <TableCell component="th" scope="row">
-                  <div className="d-flex  gap-3">
-                    <Col>
-                      {row.lecturers.map((row, index) => {
-                        return (
-                          <div className="d-flex" key={index}>
-                            <Avatar
-                              {...stringAvatar(row?.lecturer?.name + " x")}
-                            />
-                            <div className="ps-2">
-                              <p className="fw-bold mb-1">
-                                {row?.lecturer?.name}
-                              </p>
-                              <p className="text-muted mb-0">
-                                {row?.lecturer?.position}
-                              </p>
+                NEW
+              </CustomButton>
+            </div>
+          </div>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead
+              sx={{
+                backgroundColor: "#E6E6E6",
+                borderRadius: "50%",
+              }}
+            >
+              <TableRow>
+                <TableCell className="fw-bold">Lecturer</TableCell>
+                <TableCell className="fw-bold"> Module</TableCell>
+                <TableCell className="fw-bold">Level</TableCell>
+                <TableCell className="fw-bold">Demonstrator</TableCell>
+                <TableCell className="fw-bold">2nd Examiner</TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Status
+                </TableCell>
+                <TableCell className="fw-bold" align="center">
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredAllocations.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <div className="d-flex  gap-3">
+                      <Col>
+                        {row.lecturers.map((row, index) => {
+                          return (
+                            <div className="d-flex" key={index}>
+                              <Avatar
+                                {...stringAvatar(row?.lecturer?.name + " x")}
+                              />
+                              <div className="ps-2">
+                                <p className="fw-bold mb-1">
+                                  {row?.lecturer?.name}
+                                </p>
+                                <p className="text-muted mb-0">
+                                  {row?.lecturer?.position}
+                                </p>
+                              </div>
                             </div>
-                          </div>
+                          );
+                        })}
+                      </Col>
+                    </div>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className="fw-bold mb-1">{row.module?.moduleCode}</p>
+                      <p className="text-muted mb-0">
+                        {row.module?.moduleName}
+                      </p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className="fw-bold mb-1">Level {row.module?.level}</p>
+                      <p className="text-muted mb-0">
+                        Semester {row.module?.semester}
+                      </p>
+                    </Col>
+                  </TableCell>
+
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      {row?.demonstrators.map((demonstrator, index) => {
+                        return (
+                          <p className="fw-bold mb-1" key={index}>
+                            {demonstrator?.name}
+                          </p>
                         );
                       })}
                     </Col>
-                  </div>
-                </TableCell>
+                  </TableCell>
 
-                <TableCell component="th" scope="row">
-                  <Col>
-                    <p className="fw-bold mb-1">{row.module?.moduleCode}</p>
-                    <p className="text-muted mb-0">{row.module?.moduleName}</p>
-                  </Col>
-                </TableCell>
+                  <TableCell component="th" scope="row">
+                    <Col>
+                      <p className="fw-bold mb-1">{row.secondExaminar?.name}</p>
+                    </Col>
+                  </TableCell>
 
-                <TableCell component="th" scope="row">
-                  <Col>
-                    <p className="fw-bold mb-1">Level {row.module?.level}</p>
-                    <p className="text-muted mb-0">
-                      Semester {row.module?.semester}
-                    </p>
-                  </Col>
-                </TableCell>
-
-                <TableCell component="th" scope="row">
-                  <Col>
-                    {row?.demonstrators.map((demonstrator, index) => {
-                      return (
-                        <p className="fw-bold mb-1" key={index}>
-                          {demonstrator?.name}
-                        </p>
-                      );
-                    })}
-                  </Col>
-                </TableCell>
-
-                <TableCell component="th" scope="row">
-                  <Col>
-                    <p className="fw-bold mb-1">{row.secondExaminar?.name}</p>
-                  </Col>
-                </TableCell>
-
-                <TableCell component="th" scope="row">
-                  <Col align="center">
-                    <Badge pill bg="primary">
-                      {row.state[row.state?.length - 1]?.name}
-                    </Badge>
-                  </Col>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <Col align="center">
-                    <Button
-                      color="secondary"
-                      onClick={() => {
-                        navigate("view", { state: row });
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button color="error">Delete</Button>
-                  </Col>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  <TableCell component="th" scope="row">
+                    <Col align="center">
+                      <Badge pill bg="primary">
+                        {row.state[row.state?.length - 1]?.name}
+                      </Badge>
+                    </Col>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <Col align="center">
+                      <Button
+                        color="secondary"
+                        onClick={() => {
+                          navigate("view", { state: row });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button color="error">Delete</Button>
+                    </Col>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </>
   );
 }

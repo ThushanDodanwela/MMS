@@ -15,6 +15,7 @@ import {
   newLecturer,
   updateLecturer,
 } from "../../App/LecturerServices";
+import CustomButton from "../../components/CustomButton/CustomButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
 const Lecturer = ({ setNavbar }) => {
@@ -333,7 +334,7 @@ const Lecturer = ({ setNavbar }) => {
                 }}
               />
             </div>
-            <div className="col-5">
+            <div className="col-5 pe-1">
               <SearchBar
                 searchKeyword={searchKeyword}
                 setSearchKeyword={setSearchKeyword}
@@ -343,7 +344,7 @@ const Lecturer = ({ setNavbar }) => {
               />
             </div>
             <div className="col d-flex justify-content-end align-items-center">
-              <Button
+              <CustomButton
                 variant="contained"
                 size="small"
                 color="success"
@@ -352,11 +353,11 @@ const Lecturer = ({ setNavbar }) => {
                 sx={{ paddingY: 1.2, fontWeight: "bold" }}
               >
                 ADD
-              </Button>
+              </CustomButton>
             </div>
           </div>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead sx={{ backgroundColor: "#E6E6E6", borderRadius: "50%" }}>
+            <TableHead sx={{ backgroundColor: "#E6E6E6" }}>
               <TableRow>
                 <TableCell className="fw-bold">Lecturer Name</TableCell>
                 <TableCell className="fw-bold"> Position</TableCell>
