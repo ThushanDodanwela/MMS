@@ -1,7 +1,9 @@
+import { Logout } from "@mui/icons-material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getAllocations,
   getAllocationsByLecturer,
@@ -12,9 +14,11 @@ import LecturerDashboardSmallCard from "../../components/LecturerDashboardSmallC
 import ModuleCard from "../../components/ModuleCard/ModuleCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import StatusDetails from "../../components/StatusDetails/StatusDetails";
+import { logout } from "../../reducers/loginSlice";
 
 function DashboardLecturer({ setNavbar }) {
-  const lectureId = useSelector((state) => state.loginMMS.lectureId);
+  const dispatch = useDispatch();
+  const lectureId = useSelector((state) => state.loginMMS.lecturerId);
   const position = useSelector((state) => state.loginMMS.position);
 
   const [allocations, setAllocations] = useState([]);
@@ -146,10 +150,15 @@ function DashboardLecturer({ setNavbar }) {
         </div>
         <div className="d-flex pe-2 align-items-center text-light">
           <div className=" me-3">
-            <NotificationsIcon />
-          </div>
-          <div className=" me-3">
-            <AccountCircleIcon />
+            <Button
+              onClick={() => {
+                dispatch(logout());
+              }}
+              sx={{ color: "white" }}
+              endIcon={<Logout />}
+            >
+              Logout
+            </Button>
           </div>
         </div>
       </div>
