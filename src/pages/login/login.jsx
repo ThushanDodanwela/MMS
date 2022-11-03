@@ -203,6 +203,7 @@ function Login() {
                 sx={{ mt: 1 }}
                 variant="outlined"
                 size="small"
+                type={"password"}
                 fullWidth
                 value={password}
                 onChange={(e) => {
@@ -216,6 +217,7 @@ function Login() {
                 sx={{ mt: 1 }}
                 variant="outlined"
                 size="small"
+                type={"password"}
                 fullWidth
                 value={retypedPassword}
                 onChange={(e) => {
@@ -234,6 +236,7 @@ function Login() {
                 variant="outlined"
                 size="small"
                 fullWidth
+                type={"password"}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
