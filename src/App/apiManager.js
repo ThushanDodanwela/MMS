@@ -8,7 +8,11 @@ export const post = (path, body, onSuccess = () => {}, onFailed = () => {}) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      onSuccess(data);
+      if (data.message === "success") {
+        onSuccess(data);
+      } else {
+        onFailed(data.message);
+      }
     })
     .catch((error) => {
       console.log(error);
