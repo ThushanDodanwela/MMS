@@ -17,13 +17,9 @@ import {
 } from "../../App/LecturerServices";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import { POSITIONS } from "../../const";
 
 const Lecturer = ({ setNavbar }) => {
-  // const [numOfRows, setNumOfRows] = useState(0);
-  // const [page, setPage] = useState(0);
-  // const [rows, setRows] = useState([]);
-  // const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
@@ -33,6 +29,15 @@ const Lecturer = ({ setNavbar }) => {
     email: "",
     phoneNumber: "",
     qualifications: "",
+  });
+
+  const [validation, setValidation] = useState({
+    //error states 0 - initial view 1-error 2-valid
+    name: { visibility: 0, message: "" },
+    email: { visibility: 0, message: "" },
+    phoneNumber: { visibility: 0, message: "" },
+    position: { visibility: 0, message: "" },
+    qualifications: { visibility: 0, message: "" },
   });
 
   const handleShow = () => {
@@ -64,68 +69,7 @@ const Lecturer = ({ setNavbar }) => {
     } else {
       setFilteredLecturers(retrivedLectures.slice(0, 5));
     }
-    // if (filterBy !== "NONE") {
-    //   console.log("filterign");
-    //   setFilteredModules((prev) =>
-    //     prev.filter(
-    //       (module) => module.state[module.state.length - 1].name === filterBy
-    //     )
-    //   );
-    // }
   }, [searchKeyword, retrivedLectures, filterBy]);
-
-  // function createData(_id, name, position, phoneNumber, email) {
-  //   return {
-  //     _id,
-  //     name,
-  //     position,
-  //     phoneNumber,
-  //     email,
-  //   };
-  // }
-
-  // const headCells = [
-  //   {
-  //     id: "lec_name",
-  //     numeric: false,
-  //     disablePadding: true,
-  //     label: "Lecturer Name",
-  //     align: "center",
-  //   },
-  //   {
-  //     id: "position",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-
-  //     label: "Position",
-  //   },
-
-  //   {
-  //     id: "phone",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-
-  //     label: "Phone",
-  //   },
-  //   {
-  //     id: "email",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-  //     label: "Email",
-  //   },
-
-  //   {
-  //     id: "Actions",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: "Actions",
-  //     align: "center",
-  //     sorting: false,
-  //   },
-  // ];
 
   const editClickHandler = (lecturerId) => {
     setIsUpdating(true);
@@ -160,17 +104,6 @@ const Lecturer = ({ setNavbar }) => {
 
   const onSuccessRetrive = (data) => {
     setRetrivedLecturers(data.lecturers);
-    // setRows(
-    //   data.lecturers.map((lecturer) => {
-    //     return createData(
-    //       lecturer._id,
-    //       lecturer.name,
-    //       lecturer.position,
-    //       lecturer.phoneNumber,
-    //       lecturer.email
-    //     );
-    //   })
-    // );
   };
 
   function stringToColor(string) {
@@ -215,6 +148,83 @@ const Lecturer = ({ setNavbar }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // ---------------------------------validation ------------------------------------------
+  const validateName = (name) => {
+    if (name.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        name: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        name: { visibility: 1, message: "Lecturer name is required" },
+      }));
+      return false;
+    }
+  };
+
+  const validatePoneNumber = (phoneNumber) => {
+    if (phoneNumber.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        phoneNumber: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        phoneNumber: {
+          visibility: 1,
+          message: "Phone Number is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validateEmail = (email) => {
+    //send request and check whether it exists
+    if (email.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        email: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        email: {
+          visibility: 1,
+          message: "Email is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validatePosition = (position) => {
+    if (position !== "NONE") {
+      setValidation((prev) => ({
+        ...prev,
+        position: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        position: {
+          visibility: 1,
+          message: "Position is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  // ---------------------------------validation ------------------------------------------
+
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -228,6 +238,7 @@ const Lecturer = ({ setNavbar }) => {
               <Form.Control
                 value={lecturerInfo.name}
                 onChange={(event) => {
+                  validateName(event.target.value);
                   setLecturerInfo({
                     ...lecturerInfo,
                     name: event.target.value,
@@ -235,26 +246,46 @@ const Lecturer = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="Prof. Janaka Wijayanayake"
+                {...(validation.name.visibility === 1 && { isInvalid: true })}
+                {...(validation.name.visibility === 2 && { isValid: true })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.name.message}
+              </Form.Control.Feedback>
+
               <Form.Label className="pt-3">Position</Form.Label>
               <Form.Select
                 value={lecturerInfo.position}
                 onChange={(event) => {
+                  validatePosition(event.target.value);
                   setLecturerInfo({
                     ...lecturerInfo,
                     position: event.target.value,
                   });
                 }}
+                {...(validation.position.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.position.visibility === 2 && {
+                  isValid: true,
+                })}
               >
-                <option value="PROFESSOR">Professor</option>
-                <option value="SENIOR_LECTURER">Senior Lecturer</option>
-                <option value="VISITING_LECTURER">Visiting Lecturer</option>
+                {POSITIONS.map((onePosition, index) => {
+                  return (
+                    <option value={onePosition.value} key={index}>
+                      {onePosition.label}
+                    </option>
+                  );
+                })}
               </Form.Select>
-
+              <Form.Control.Feedback type="invalid">
+                {validation.position.message}
+              </Form.Control.Feedback>
               <Form.Label className="pt-3">Phone</Form.Label>
               <Form.Control
                 value={lecturerInfo.phoneNumber}
                 onChange={(event) => {
+                  validatePoneNumber(event.target.value);
                   setLecturerInfo({
                     ...lecturerInfo,
                     phoneNumber: event.target.value,
@@ -262,12 +293,21 @@ const Lecturer = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="+94 (0)11 2914482(ext204)"
+                {...(validation.phoneNumber.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.phoneNumber.visibility === 2 && {
+                  isValid: true,
+                })}
               />
-
+              <Form.Control.Feedback type="invalid">
+                {validation.phoneNumber.message}
+              </Form.Control.Feedback>
               <Form.Label className="pt-3">Email</Form.Label>
               <Form.Control
                 value={lecturerInfo.email}
                 onChange={(event) => {
+                  validateEmail(event.target.value);
                   setLecturerInfo({
                     ...lecturerInfo,
                     email: event.target.value,
@@ -275,21 +315,33 @@ const Lecturer = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="janaka@kln.ac.lk"
+                {...(validation.email.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.email.visibility === 2 && {
+                  isValid: true,
+                })}
               />
-
-              <Form.Label className="pt-3">Qualifications</Form.Label>
-              <Form.Control
-                value={lecturerInfo.qualifications}
-                onChange={(event) => {
-                  setLecturerInfo({
-                    ...lecturerInfo,
-                    qualifications: event.target.value,
-                  });
-                }}
-                as="textarea"
-                placeholder="ACA MSc"
-                style={{ height: "80px" }}
-              />
+              <Form.Control.Feedback type="invalid">
+                {validation.email.message}
+              </Form.Control.Feedback>
+              {lecturerInfo.position === "VISITING_LECTURER" && (
+                <>
+                  <Form.Label className="pt-3">Qualifications</Form.Label>
+                  <Form.Control
+                    value={lecturerInfo.qualifications}
+                    onChange={(event) => {
+                      setLecturerInfo({
+                        ...lecturerInfo,
+                        qualifications: event.target.value,
+                      });
+                    }}
+                    as="textarea"
+                    placeholder="ACA MSc"
+                    style={{ height: "80px" }}
+                  />
+                </>
+              )}
             </Form.Group>
           </Form>
         </Modal.Body>

@@ -26,11 +26,13 @@ const EditStatus = ({
           {update && (
             <div className="mb-3">
               <div className="d-flex mb-2">
-                <div className="col-3 fw-semibold me-2">Current </div>
+                <div className="col-5 col-lg-3 fw-semibold me-2">Current </div>
                 <div>: {statusInfo ? statusInfo.currentStatus : ""}</div>
               </div>
               <div className="d-flex">
-                <div className="col-3 fw-semibold me-2">Last updated on </div>
+                <div className="col-5 col-lg-3 fw-semibold me-2">
+                  Last updated on{" "}
+                </div>
                 <div>
                   :{" "}
                   {statusInfo

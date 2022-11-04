@@ -29,3 +29,18 @@ export const STATES = [
     color: "",
   },
 ];
+
+export const POSITIONS = [
+  {
+    label: "Please Select",
+    value: "NONE",
+  },
+  {
+    label: "Visiting Lecturer",
+    value: "VISITING_LECTURER",
+  },
+  {
+    label: "Senior Lecturer",
+    value: "SENIOR_LECTURER",
+  },
+];

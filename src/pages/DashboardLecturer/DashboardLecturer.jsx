@@ -188,7 +188,7 @@ function DashboardLecturer({ setNavbar }) {
           />
         </div>
 
-        <div className="d-flex justify-content-between mt-3 ">
+        <div className="d-none d-lg-flex justify-content-between mt-3 ">
           <LecturerDashboardSmallCard count="27" />
           <LecturerDashboardSmallCard title="Exams ongoing" count="10" />
           <LecturerDashboardSmallCard title="Paper marking" count="10" />
