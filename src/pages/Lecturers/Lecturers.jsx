@@ -128,7 +128,10 @@ const Lecturer = ({ setNavbar }) => {
       validation.phoneNumber.visibility === 2 &&
       validation.email.visibility === 2
     ) {
-      newLecturer(lecturerInfo, onSuccessSaveUpdate);
+      newLecturer(
+        { ...lecturerInfo, password: (Math.random() * 100000).toFixed() },
+        onSuccessSaveUpdate
+      );
     }
   };
 
