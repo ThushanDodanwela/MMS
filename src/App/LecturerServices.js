@@ -27,3 +27,10 @@ export const resetPasswordAPI = (body, onSuccess, onFailed) => {
   post("lecturer/reset-password", body, onSuccess, onFailed);
 };
 //-----------------password reset ---------------------
+
+//-----------------Email Exist ?  ---------------------
+export const isEmailExists = (body, onSuccess, onFailed) => {
+  post("lecturer/check-email", body, onSuccess, onFailed);
+};
+
+//-----------------Email Exist ?  ---------------------

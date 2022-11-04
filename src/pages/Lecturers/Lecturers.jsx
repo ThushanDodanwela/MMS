@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Form, Modal } from "react-bootstrap";
 import {
   getAllLecturers,
+  isEmailExists,
   newLecturer,
   updateLecturer,
 } from "../../App/LecturerServices";
@@ -72,6 +73,14 @@ const Lecturer = ({ setNavbar }) => {
   }, [searchKeyword, retrivedLectures, filterBy]);
 
   const editClickHandler = (lecturerId) => {
+    //assume that db contains valid data only
+    setValidation({
+      name: { visibility: 2, message: "" },
+      email: { visibility: 2, message: "" },
+      phoneNumber: { visibility: 2, message: "" },
+      position: { visibility: 2, message: "" },
+      qualifications: { visibility: 2, message: "" },
+    });
     setIsUpdating(true);
     console.log(retrivedLectures);
     let lecturerToEdit = retrivedLectures.filter(
@@ -89,17 +98,38 @@ const Lecturer = ({ setNavbar }) => {
       phoneNumber: "",
       qualifications: "",
     });
+    setValidation({
+      name: { visibility: 0, message: "" },
+      email: { visibility: 0, message: "" },
+      phoneNumber: { visibility: 0, message: "" },
+      position: { visibility: 0, message: "" },
+      qualifications: { visibility: 0, message: "" },
+    });
     handleClose();
     setIsUpdating(false);
     setShoudRefresh((prev) => !prev);
   };
 
   const handleUpdate = () => {
-    updateLecturer(lecturerInfo, onSuccessSaveUpdate);
+    if (
+      validation.name.visibility === 2 &&
+      validation.position.visibility === 2 &&
+      validation.phoneNumber.visibility === 2 &&
+      validation.email.visibility === 2
+    ) {
+      updateLecturer(lecturerInfo, onSuccessSaveUpdate);
+    }
   };
 
   const handleSave = () => {
-    newLecturer(lecturerInfo, onSuccessSaveUpdate);
+    if (
+      validation.name.visibility === 2 &&
+      validation.position.visibility === 2 &&
+      validation.phoneNumber.visibility === 2 &&
+      validation.email.visibility === 2
+    ) {
+      newLecturer(lecturerInfo, onSuccessSaveUpdate);
+    }
   };
 
   const onSuccessRetrive = (data) => {
@@ -203,6 +233,27 @@ const Lecturer = ({ setNavbar }) => {
       return false;
     }
   };
+  const validateIsEmailExists = (email) => {
+    if (validateEmail(email)) {
+      return isEmailExists(
+        { email: email },
+        function onSuccess(data) {
+          setValidation((prev) => ({
+            ...prev,
+            email: { visibility: 2, message: "" },
+          }));
+          return true;
+        },
+        function onFailed(data) {
+          setValidation((prev) => ({
+            ...prev,
+            email: { visibility: 1, message: data },
+          }));
+          return false;
+        }
+      );
+    }
+  };
 
   const validatePosition = (position) => {
     if (position !== "NONE") {
@@ -245,12 +296,39 @@ const Lecturer = ({ setNavbar }) => {
                   });
                 }}
                 type="text"
-                placeholder="Prof. Janaka Wijayanayake"
+                placeholder="Janaka Wijayanayake"
                 {...(validation.name.visibility === 1 && { isInvalid: true })}
                 {...(validation.name.visibility === 2 && { isValid: true })}
               />
               <Form.Control.Feedback type="invalid">
                 {validation.name.message}
+              </Form.Control.Feedback>
+              <Form.Label className="pt-3">Email</Form.Label>
+              <Form.Control
+                value={lecturerInfo.email}
+                onBlur={(event) => {
+                  if (!isUpdating) {
+                    validateIsEmailExists(event.target.value);
+                  }
+                }}
+                onChange={(event) => {
+                  validateEmail(event.target.value);
+                  setLecturerInfo({
+                    ...lecturerInfo,
+                    email: event.target.value,
+                  });
+                }}
+                type="text"
+                placeholder="janaka@kln.ac.lk"
+                {...(validation.email.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.email.visibility === 2 && {
+                  isValid: true,
+                })}
+              />
+              <Form.Control.Feedback type="invalid">
+                {validation.email.message}
               </Form.Control.Feedback>
 
               <Form.Label className="pt-3">Position</Form.Label>
@@ -292,7 +370,7 @@ const Lecturer = ({ setNavbar }) => {
                   });
                 }}
                 type="text"
-                placeholder="+94 (0)11 2914482(ext204)"
+                placeholder="011 2914482(ext204)"
                 {...(validation.phoneNumber.visibility === 1 && {
                   isInvalid: true,
                 })}
@@ -303,28 +381,7 @@ const Lecturer = ({ setNavbar }) => {
               <Form.Control.Feedback type="invalid">
                 {validation.phoneNumber.message}
               </Form.Control.Feedback>
-              <Form.Label className="pt-3">Email</Form.Label>
-              <Form.Control
-                value={lecturerInfo.email}
-                onChange={(event) => {
-                  validateEmail(event.target.value);
-                  setLecturerInfo({
-                    ...lecturerInfo,
-                    email: event.target.value,
-                  });
-                }}
-                type="text"
-                placeholder="janaka@kln.ac.lk"
-                {...(validation.email.visibility === 1 && {
-                  isInvalid: true,
-                })}
-                {...(validation.email.visibility === 2 && {
-                  isValid: true,
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {validation.email.message}
-              </Form.Control.Feedback>
+
               {lecturerInfo.position === "VISITING_LECTURER" && (
                 <>
                   <Form.Label className="pt-3">Qualifications</Form.Label>
