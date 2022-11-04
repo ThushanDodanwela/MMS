@@ -30,6 +30,7 @@ function DashboardLecturer({ setNavbar }) {
   const [statusInfo, setStatusInfo] = useState("");
   const [editStatusShow, setEditStatusShow] = useState(false);
   const [showStatusDetails, setShowStatusDetails] = useState(false);
+  const [moduleDetails, setModuleDetails] = useState(false);
 
   setNavbar("Dashboard");
 
@@ -96,14 +97,15 @@ function DashboardLecturer({ setNavbar }) {
             <div className="mt-3 fs-5 fw-semibold">{title}</div>
             <div className="mt-3 d-flex flex-wrap gap-1">
               {modules.map((oneModule, index) => {
-                console.log("one module", oneModule._id);
+                console.log("one module", oneModule);
                 return (
                   <ModuleCard
                     key={index}
                     {...oneModule.module}
+                    module={oneModule}
                     allocationId={oneModule._id}
                     state={oneModule.state}
-                    onClick={handleShowStatusDetails}
+                    viewSummeryClick={handleShowStatusDetails}
                     editClick={handleShowEditStatus}
                     handleCloseStatusDetails={handleCloseStatusDetails}
                   />
@@ -126,7 +128,10 @@ function DashboardLecturer({ setNavbar }) {
     });
     setEditStatusShow(true);
   };
-  const handleShowStatusDetails = () => setShowStatusDetails(true);
+  const handleShowStatusDetails = (module) => {
+    setModuleDetails(module);
+    setShowStatusDetails(true);
+  };
 
   return (
     <div className="col-12">
@@ -138,6 +143,7 @@ function DashboardLecturer({ setNavbar }) {
         update={true}
       />
       <StatusDetails
+        module={moduleDetails}
         show={showStatusDetails}
         handleClose={handleCloseStatusDetails}
       />

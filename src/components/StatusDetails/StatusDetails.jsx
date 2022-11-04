@@ -2,7 +2,8 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import RowItem from "./RowItem";
 
-const StatusDetails = ({ show, handleClose, handleSave }) => {
+const StatusDetails = ({ show, handleClose, module }) => {
+  console.log("module", module);
   return (
     <div>
       <Modal show={show} onHide={handleClose} centered>
@@ -10,11 +11,16 @@ const StatusDetails = ({ show, handleClose, handleSave }) => {
           <Modal.Title>Status History</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <RowItem title={"Ongoing Lectures"} date={"22/10/2022"} />
-          <RowItem title={"Ongoing Exams"} date={"22/11/2022"} />
-          <RowItem title={"Paper Marking I "} date={"22/12/2022"} />
-          <RowItem title={"Paper Marking II "} date={"22/01/2023"} />
-          <RowItem title={"Results Released"} date={"22/02/2023"} />
+          <div className="mb-3">
+            <div className="d-flex mb-2">
+              <div className="col-3 fw-semibold me-2">Current </div>
+              <div>: ksdjfjds</div>
+            </div>
+            <div className="d-flex">
+              <div className="col-3 fw-semibold me-2">Last updated on </div>
+              <div>: ksdjfnbjkds</div>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" className="px-4" onClick={handleClose}>

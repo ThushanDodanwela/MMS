@@ -4,12 +4,13 @@ import { Card } from "react-bootstrap";
 
 function ModuleCard({
   allocationId,
+  module,
   moduleCode,
   moduleName,
   level,
   semester,
   state,
-  onClick,
+  viewSummeryClick,
   editClick,
   handleCloseStatusDetails,
 }) {
@@ -58,7 +59,13 @@ function ModuleCard({
           <div className="d-flex justify-content-between">
             <div className="text-secondary">Level 0{level}</div>
             <div>
-              <Button onClick={onClick}>View Summery</Button>
+              <Button
+                onClick={() => {
+                  viewSummeryClick(module);
+                }}
+              >
+                View Summery
+              </Button>
             </div>
           </div>
           {/* <div>
