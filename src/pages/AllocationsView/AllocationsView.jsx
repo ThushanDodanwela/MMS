@@ -194,26 +194,15 @@ const AllocationsView = ({ setNavbar }) => {
     //shows validatoion errors
 
     if (
-      validation.lecturers.visibility ||
-      validation.secondExaminer.visibility ||
-      validation.demonstrators.visibility ||
-      validation.state.name.visibility ||
-      validation.state.date.visibility
+      validation.lecturers.visibility === 1 ||
+      validation.secondExaminer.visibility === 1 ||
+      validation.demonstrators.visibility === 1 ||
+      validation.state.name.visibility === 1 ||
+      validation.state.date.visibility === 1
     ) {
-      dispatcher(
-        showAlert({
-          isVisible: true,
-          message: `Some fields have incorrect information`,
-          btnText: "Detailed View",
-          btnAction: () => {
-            setShowDetailedView(true);
-          },
-        })
-      );
+      //FIXME:something is wrong with the validations
     }
-    console.log(
-      `${validation.lecturers.message},${validation.secondExaminer.message} ,${validation.demonstrators.message},${validation.state.name.message},${validation.state.date.message}`
-    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showValidationErrors]);
 
@@ -383,6 +372,19 @@ const AllocationsView = ({ setNavbar }) => {
           },
         },
       }));
+    }
+
+    if (!allCorrect) {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: `Some fields have incorrect information`,
+          btnText: "Detailed View",
+          btnAction: () => {
+            setShowDetailedView(true);
+          },
+        })
+      );
     }
 
     setShowValidationErrors((prev) => !prev);

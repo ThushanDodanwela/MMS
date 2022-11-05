@@ -274,8 +274,8 @@ function Login() {
             }}
             {...(sending && {
               endIcon: (
-                <div class="spinner-border spinner-border-sm" role="status">
-                  <span class="visually-hidden"></span>
+                <div className="spinner-border spinner-border-sm" role="status">
+                  <span className="visually-hidden"></span>
                 </div>
               ),
             })}

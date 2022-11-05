@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { updateAllocationState } from "../../App/AllocationsServices";
 import { STATES } from "../../const";
+import { showAlert } from "../../reducers/alertSlice";
 
 const EditStatus = ({
   show,
@@ -12,6 +14,8 @@ const EditStatus = ({
   setCurrentInfo,
   update = false,
 }) => {
+  const dispatcher = useDispatch();
+
   return (
     <div>
       <Modal
@@ -88,15 +92,35 @@ const EditStatus = ({
                     date: statusInfo.date,
                   },
                 };
-                updateAllocationState(req, (data) => {
-                  if (data.message === "success") {
-                    setCurrentInfo(statusInfo);
+                updateAllocationState(
+                  req,
+                  (data) => {
+                    if (data.message === "success") {
+                      setCurrentInfo(statusInfo);
+                      setShowEditStatus(false);
+                      dispatcher(
+                        showAlert({
+                          isVisible: true,
+                          message: `State updated successfully`,
+                          btnText: "",
+                          btnAction: () => {},
+                        })
+                      );
+                    }
+                  },
+                  (error) => {
                     setShowEditStatus(false);
-                    alert(data.message ? data.message : "");
-                  } else {
-                    alert(data.message ? data.message : "");
+
+                    dispatcher(
+                      showAlert({
+                        isVisible: true,
+                        message: error,
+                        btnText: "",
+                        btnAction: () => {},
+                      })
+                    );
                   }
-                });
+                );
                 //send request
                 console.log(statusInfo);
               } else {
