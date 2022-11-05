@@ -11,3 +11,7 @@ export const newModule = (body, onSuccess) => {
 export const updateModule = (body, onsuccess) => {
   post("module/update-module", body, onsuccess);
 };
+
+export const isModuleExists = (body, onSuccess, onFailed) => {
+  post("module/check-modulecode", body, onSuccess, onFailed);
+};

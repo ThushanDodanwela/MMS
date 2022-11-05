@@ -156,7 +156,7 @@ function Login() {
 
   return (
     <div className="w-100 vh-100 bg-success d-flex justify-content-center align-items-center">
-      <div className="col-4 bg-white p-4">
+      <div className="col-11 col-md-7 col-lg-4 bg-white p-4">
         <div className="fw-bold fs-4">
           {resetPassword === 0 || resetPassword === 4
             ? "Login"

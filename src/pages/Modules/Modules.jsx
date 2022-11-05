@@ -12,11 +12,13 @@ import React, { useEffect, useState } from "react";
 import { Col, Form, Modal, Table } from "react-bootstrap";
 import {
   getAllModules,
+  isModuleExists,
   newModule,
   updateModule,
 } from "../../App/ModuleServices";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import { LEVELS, SEMESTER } from "../../const";
 
 const Module = ({ setNavbar }) => {
   function stringToColor(string) {
@@ -48,24 +50,15 @@ const Module = ({ setNavbar }) => {
       children: `${derivedName}`,
     };
   }
+  const [validation, setValidation] = useState({
+    //error states 0 - initial view 1-error 2-valid
+    moduleCode: { visibility: 0, message: "" },
+    moduleName: { visibility: 0, message: "" },
+    credits: { visibility: 0, message: "" },
+    level: { visibility: 0, message: "" },
+    semester: { visibility: 0, message: "" },
+  });
 
-  // function createData(
-  //   module_id,
-  //   module_code,
-  //   module_name,
-  //   level,
-  //   credit,
-  //   semester
-  // ) {
-  //   return {
-  //     module_id,
-  //     module_code,
-  //     module_name,
-  //     level,
-  //     credit,
-  //     semester,
-  //   };
-  // }
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filterBy, setFilterBy] = useState("NONE");
 
@@ -99,14 +92,6 @@ const Module = ({ setNavbar }) => {
     } else {
       setFilteredModules(retrivedModules.slice(0, 5));
     }
-    // if (filterBy !== "NONE") {
-    //   console.log("filterign");
-    //   setFilteredModules((prev) =>
-    //     prev.filter(
-    //       (module) => module.state[module.state.length - 1].name === filterBy
-    //     )
-    //   );
-    // }
   }, [searchKeyword, retrivedModules, filterBy]);
   //modal
   const [show, setShow] = useState(false);
@@ -122,67 +107,6 @@ const Module = ({ setNavbar }) => {
     "Actions",
   ];
 
-  // const editClickHandler = (moduleId) => {
-  //   setIsUpdating(true);
-  //   console.log(retrivedModules);
-  //   let moduleToEdit = retrivedModules.filter(
-  //     (module) => module._id === moduleId
-  //   );
-  //   setModuleInfo({ ...moduleToEdit[0] });
-  //   handleShow();
-  // };
-
-  // const rows = [
-  //   {
-  //     id: "module_code",
-  //     numeric: false,
-  //     disablePadding: true,
-  //     label: "Module Code",
-  //     align: "center",
-  //   },
-  //   {
-  //     id: "module_name",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-
-  //     label: "Module Name",
-  //   },
-
-  //   {
-  //     id: "level",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-
-  //     label: "Level",
-  //   },
-  //   {
-  //     id: "credit",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     align: "center",
-  //     label: "No of Credits",
-  //   },
-
-  //   {
-  //     id: "semester",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: "Semester",
-  //     align: "center",
-  //   },
-
-  //   {
-  //     id: "action",
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: "Action",
-  //     align: "center",
-  //     sorting: false,
-  //   },
-  // ];
-
   useEffect(() => {
     setNavbar("Modules");
   });
@@ -194,13 +118,6 @@ const Module = ({ setNavbar }) => {
     credits: "",
     semester: "",
   });
-
-  // const onChangeInput = (event) => {
-  //   setModuleInfo({
-  //     ...moduleInfo,
-  //     [event.target.name]: event.target.value,
-  //   });
-  // };
 
   const onSuccessSaveUpdate = () => {
     setModuleInfo({
@@ -216,18 +133,158 @@ const Module = ({ setNavbar }) => {
   };
 
   const handleUpdate = () => {
-    updateModule(moduleInfo, onSuccessSaveUpdate);
+    if (
+      validation.moduleCode.visibility === 2 &&
+      validation.moduleName.visibility === 2 &&
+      validation.credits.visibility === 2 &&
+      validation.level.visibility === 2 &&
+      validation.semester.visibility === 2
+    ) {
+      updateModule(moduleInfo, onSuccessSaveUpdate);
+    }
   };
 
   const handleEditClick = (module) => {
+    setValidation({
+      moduleCode: { visibility: 2, message: "" },
+      moduleName: { visibility: 2, message: "" },
+      credits: { visibility: 2, message: "" },
+      level: { visibility: 2, message: "" },
+      semester: { visibility: 2, message: "" },
+    });
     setIsUpdating(true);
     setModuleInfo({ ...module });
     setShow(true);
   };
 
   const handleSave = () => {
-    newModule(moduleInfo, onSuccessSaveUpdate);
+    if (
+      validation.moduleCode.visibility === 2 &&
+      validation.moduleName.visibility === 2 &&
+      validation.credits.visibility === 2 &&
+      validation.level.visibility === 2 &&
+      validation.semester.visibility === 2
+    ) {
+      newModule(moduleInfo, onSuccessSaveUpdate);
+    }
   };
+
+  // ---------------------------------validation ------------------------------------------
+  const validateModuleName = (moduleName) => {
+    if (moduleName.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        moduleName: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        moduleName: { visibility: 1, message: "Module Name name is required" },
+      }));
+      return false;
+    }
+  };
+
+  const validateModuleCode = (moduleCode) => {
+    if (moduleCode.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        moduleCode: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        moduleCode: {
+          visibility: 1,
+          message: "Module code is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validateCredits = (credits) => {
+    //send request and check whether it exists
+    if (credits.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        credits: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        credits: {
+          visibility: 1,
+          message: "Number of credits is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validateIsModuleCodeExists = (moduleCode) => {
+    if (validateModuleCode(moduleCode)) {
+      return isModuleExists(
+        { moduleCode: moduleCode },
+        function onSuccess(data) {
+          setValidation((prev) => ({
+            ...prev,
+            moduleCode: { visibility: 2, message: "" },
+          }));
+          return true;
+        },
+        function onFailed(data) {
+          setValidation((prev) => ({
+            ...prev,
+            moduleCode: { visibility: 1, message: data },
+          }));
+          return false;
+        }
+      );
+    }
+  };
+
+  const validateLevel = (level) => {
+    if (level !== "NONE") {
+      setValidation((prev) => ({
+        ...prev,
+        level: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        level: {
+          visibility: 1,
+          message: "Level is required",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validateSemester = (semester) => {
+    if (semester !== "NONE") {
+      setValidation((prev) => ({
+        ...prev,
+        semester: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        semester: {
+          visibility: 1,
+          message: "Semester is required",
+        },
+      }));
+      return false;
+    }
+  };
+  // ---------------------------------validation ------------------------------------------
 
   return (
     <>
@@ -241,7 +298,11 @@ const Module = ({ setNavbar }) => {
               <Form.Label>Module Code</Form.Label>
               <Form.Control
                 value={moduleInfo.moduleCode}
+                onBlur={(event) => {
+                  validateIsModuleCodeExists(event.target.value);
+                }}
                 onChange={(event) => {
+                  validateModuleCode(event.target.value);
                   setModuleInfo({
                     ...moduleInfo,
                     moduleCode: event.target.value,
@@ -249,11 +310,21 @@ const Module = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="INTE12212"
+                {...(validation.moduleCode.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.moduleCode.visibility === 2 && {
+                  isValid: true,
+                })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.moduleCode.message}
+              </Form.Control.Feedback>
               <Form.Label className="pt-3">Module Name</Form.Label>
               <Form.Control
                 value={moduleInfo.moduleName}
                 onChange={(event) => {
+                  validateModuleName(event.target.value);
                   setModuleInfo({
                     ...moduleInfo,
                     moduleName: event.target.value,
@@ -261,11 +332,21 @@ const Module = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="Programming Concepts"
+                {...(validation.moduleName.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.moduleName.visibility === 2 && {
+                  isValid: true,
+                })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.moduleName.message}
+              </Form.Control.Feedback>
               <Form.Label className="pt-3">Credits</Form.Label>
               <Form.Control
                 value={moduleInfo.credits}
                 onChange={(event) => {
+                  validateCredits(event.target.value);
                   setModuleInfo({
                     ...moduleInfo,
                     credits: event.target.value,
@@ -273,40 +354,76 @@ const Module = ({ setNavbar }) => {
                 }}
                 type="text"
                 placeholder="3"
+                {...(validation.credits.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.credits.visibility === 2 && {
+                  isValid: true,
+                })}
               />
-
+              <Form.Control.Feedback type="invalid">
+                {validation.credits.message}
+              </Form.Control.Feedback>
               <div className="d-flex">
-                <div className="col pe-2 pt-4">
+                <div className="col pe-2 pt-3">
+                  <Form.Label className="">Level</Form.Label>
                   <Form.Select
                     value={moduleInfo.level}
                     onChange={(event) => {
+                      validateLevel(event.target.value);
                       setModuleInfo({
                         ...moduleInfo,
                         level: event.target.value,
                       });
                     }}
+                    {...(validation.level.visibility === 1 && {
+                      isInvalid: true,
+                    })}
+                    {...(validation.level.visibility === 2 && {
+                      isValid: true,
+                    })}
                   >
-                    <option value="Select Level">Select Level</option>
-                    <option value="1">Level 01</option>
-                    <option value="2">Level 02</option>
-                    <option value="3">Level 03</option>
-                    <option value="4">Level 04</option>
+                    {LEVELS.map((level, index) => {
+                      return (
+                        <option key={index} value={level.value}>
+                          {level.label}
+                        </option>
+                      );
+                    })}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {validation.level.message}
+                  </Form.Control.Feedback>
                 </div>
-                <div className="col ps-2 pt-4">
+                <div className="col ps-2 pt-3">
+                  <Form.Label className="">Semester</Form.Label>
                   <Form.Select
                     value={moduleInfo.semester}
                     onChange={(event) => {
+                      validateSemester(event.target.value);
                       setModuleInfo({
                         ...moduleInfo,
                         semester: event.target.value,
                       });
                     }}
+                    {...(validation.semester.visibility === 1 && {
+                      isInvalid: true,
+                    })}
+                    {...(validation.semester.visibility === 2 && {
+                      isValid: true,
+                    })}
                   >
-                    <option value="Select Semester">Select Semester</option>
-                    <option value="1">Semester 01</option>
-                    <option value="2">Semester 02</option>
+                    {SEMESTER.map((semester, index) => {
+                      return (
+                        <option key={index} value={semester.value}>
+                          {semester.label}
+                        </option>
+                      );
+                    })}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {validation.semester.message}
+                  </Form.Control.Feedback>
                 </div>
               </div>
             </Form.Group>
@@ -373,6 +490,13 @@ const Module = ({ setNavbar }) => {
                 color="success"
                 endIcon={<Add />}
                 onClick={() => {
+                  setValidation({
+                    moduleCode: { visibility: 0, message: "" },
+                    moduleName: { visibility: 0, message: "" },
+                    credits: { visibility: 0, message: "" },
+                    level: { visibility: 0, message: "" },
+                    semester: { visibility: 0, message: "" },
+                  });
                   setModuleInfo({
                     moduleCode: "",
                     moduleName: "",
