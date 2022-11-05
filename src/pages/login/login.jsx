@@ -55,8 +55,14 @@ function Login() {
           }
         },
         (data) => {
-          setErrorMessage(data.message);
-          console.log(data.message);
+          dispatcher(
+            showAlert({
+              isVisible: true,
+              message: data.message,
+              btnText: "",
+              btnAction: () => {},
+            })
+          );
         }
       );
     }
@@ -77,8 +83,14 @@ function Login() {
           }
         },
         (data) => {
-          setErrorMessage(data.message);
-          console.log(data.message);
+          dispatcher(
+            showAlert({
+              isVisible: true,
+              message: data.message,
+              btnText: "",
+              btnAction: () => {},
+            })
+          );
         }
       );
     }
@@ -100,8 +112,14 @@ function Login() {
           }
         },
         (data) => {
-          setErrorMessage(data.message);
-          console.log(data.message);
+          dispatcher(
+            showAlert({
+              isVisible: true,
+              message: data.message,
+              btnText: "",
+              btnAction: () => {},
+            })
+          );
         }
       );
     }
