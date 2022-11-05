@@ -368,7 +368,7 @@ const AllocationsView = ({ setNavbar }) => {
           ...prev.state,
           date: {
             visibility: 1,
-            message: "Please set the date of date",
+            message: "Please set the date of state",
           },
         },
       }));

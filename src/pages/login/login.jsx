@@ -1,5 +1,6 @@
 import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
@@ -8,6 +9,7 @@ import {
   sendOTP,
   verifyOTP,
 } from "../../App/LecturerServices";
+import { showAlert } from "../../reducers/alertSlice";
 import { login } from "../../reducers/loginSlice";
 
 function Login() {
@@ -27,96 +29,122 @@ function Login() {
     otp: { visibility: 0, message: "" },
   });
 
+  useEffect(() => {
+    setValidation({
+      email: { visibility: 0, message: "" },
+      password: { visibility: 0, message: "" },
+      retypedPassword: { visibility: 0, message: "" },
+      otp: { visibility: 0, message: "" },
+    });
+  }, [resetPassword]);
+
+  const dispatcher = useDispatch();
   const verifyEmail = () => {
-    setSending(true);
-    console.log("Verify email");
-    const req = {
-      email: emailAddress,
-    };
-    sendOTP(
-      req,
-      (data) => {
-        if (data.message === "success") {
-          setSending(false);
-          setResetPassword(2);
+    if (validateEmail(emailAddress)) {
+      setSending(true);
+      console.log("Verify email");
+      const req = {
+        email: emailAddress,
+      };
+      sendOTP(
+        req,
+        (data) => {
+          if (data.message === "success") {
+            setSending(false);
+            setResetPassword(2);
+          }
+        },
+        (data) => {
+          setErrorMessage(data.message);
+          console.log(data.message);
         }
-      },
-      (data) => {
-        setErrorMessage(data.message);
-        console.log(data.message);
-      }
-    );
+      );
+    }
   };
 
   const verifyCode = () => {
-    console.log("Verify code");
-    const req = {
-      email: emailAddress,
-      otp: OTPCode,
-    };
-    verifyOTP(
-      req,
-      (data) => {
-        if (data.message === "success") {
-          setResetPassword(3);
+    if (validateOTP(OTPCode)) {
+      console.log("Verify code");
+      const req = {
+        email: emailAddress,
+        otp: OTPCode,
+      };
+      verifyOTP(
+        req,
+        (data) => {
+          if (data.message === "success") {
+            setResetPassword(3);
+          }
+        },
+        (data) => {
+          setErrorMessage(data.message);
+          console.log(data.message);
         }
-      },
-      (data) => {
-        setErrorMessage(data.message);
-        console.log(data.message);
-      }
-    );
+      );
+    }
   };
   const setNewPassword = () => {
-    //TODO: verify two passwords
-    console.log("set password");
-    const req = {
-      email: emailAddress,
-      password: password,
-      otp: OTPCode,
-    };
-    resetPasswordAPI(
-      req,
-      (data) => {
-        if (data.message === "success") {
-          setPassword("");
-          setResetPassword(4);
+    if (comparePasswords(password, retypedPassword)) {
+      console.log("set password");
+      const req = {
+        email: emailAddress,
+        password: password,
+        otp: OTPCode,
+      };
+      resetPasswordAPI(
+        req,
+        (data) => {
+          if (data.message === "success") {
+            setPassword("");
+            setResetPassword(4);
+          }
+        },
+        (data) => {
+          setErrorMessage(data.message);
+          console.log(data.message);
         }
-      },
-      (data) => {
-        setErrorMessage(data.message);
-        console.log(data.message);
-      }
-    );
+      );
+    }
   };
   const lecturerLogin = () => {
-    console.log("login");
-    const req = {
-      email: emailAddress,
-      password: password,
-    };
+    const emailValid = validateEmail(emailAddress);
+    const passwordValid = validatePassword(password);
+    if (emailValid && passwordValid) {
+      console.log("login");
+      const req = {
+        email: emailAddress,
+        password: password,
+      };
 
-    lecturerLoginAPI(
-      req,
-      (data) => {
-        dispatch(
-          login({
-            isLoggedIn: true,
-            lecturerId: data.lecturerId,
-            position: data.position,
-          })
-        );
-        if (data.position === "ADMIN") {
-          navigate("/");
-        } else {
-          navigate("/lecturer/dashboard");
+      lecturerLoginAPI(
+        req,
+        (data) => {
+          dispatch(
+            login({
+              isLoggedIn: true,
+              lecturerId: data.lecturerId,
+              position: data.position,
+            })
+          );
+          if (data.position === "ADMIN") {
+            navigate("/");
+          } else {
+            navigate("/lecturer/dashboard");
+          }
+        },
+        (error) => {
+          dispatcher(
+            showAlert({
+              isVisible: true,
+              message: "Username or password is incorrect",
+              btnText: "",
+              btnAction: () => {},
+            })
+          );
         }
-      },
-      (error) => {
-        alert(error);
-      }
-    );
-    setResetPassword(0);
+      );
+      setResetPassword(0);
+    }
   };
 
   const SETPS = [
@@ -161,6 +189,86 @@ function Login() {
 
   const dispatch = useDispatch();
 
+  // ------------------------------- validations ------------------------------
+  const validateEmail = (email) => {
+    if (email.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        email: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        email: {
+          visibility: 1,
+          message: "Please enter your email address",
+        },
+      }));
+      return false;
+    }
+  };
+
+  const validatePassword = (password, errorMsg) => {
+    if (password.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        password: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        password: {
+          visibility: 1,
+          message: "Please enter your password",
+        },
+      }));
+      return false;
+    }
+  };
+  const comparePasswords = (password1, password2) => {
+    if (password1 === password2) {
+      setValidation((prev) => ({
+        ...prev,
+        password: { visibility: 2, message: "" },
+        retypedPassword: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        password: {
+          visibility: 1,
+          message: "Passwords do not match",
+        },
+        retypedPassword: { visibility: 1, message: "Passwords do not match" },
+      }));
+      return false;
+    }
+  };
+
+  const validateOTP = (otp) => {
+    if (otp.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        otp: { visibility: 2, message: "" },
+      }));
+
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        otp: {
+          visibility: 1,
+          message: "Please enter the verification code to continue",
+        },
+      }));
+      return false;
+    }
+  };
+  // ------------------------------- validations ------------------------------
+
   return (
     <div className="w-100 vh-100 bg-success d-flex justify-content-center align-items-center">
       <div className="col-11 col-md-7 col-lg-4 bg-white p-4">
@@ -175,62 +283,100 @@ function Login() {
           resetPassword === 4) && (
           <div className=" mt-4">
             <div>Email Address</div>
-            <TextField
-              sx={{ mt: 1 }}
+            <Form.Control
               variant="outlined"
               size="small"
               fullWidth
+              className="mt-2"
               value={emailAddress}
+              onBlur={(e) => {
+                validateEmail(e.target.value);
+              }}
               onChange={(e) => {
+                validateEmail(e.target.value);
                 setEmailAddress(e.target.value);
               }}
+              {...(validation.email.visibility === 1 && { isInvalid: true })}
+              {...(validation.email.visibility === 2 && { isValid: true })}
             />
+            <Form.Control.Feedback type="invalid">
+              {validation.email.message}
+            </Form.Control.Feedback>
           </div>
         )}
         {resetPassword === 2 && (
           <div className="mt-4 ">
             <div>Verification Code</div>
-            <TextField
-              sx={{ mt: 1 }}
+            <Form.Control
+              className="mt-2"
               variant="outlined"
               size="small"
               fullWidth
               value={OTPCode}
+              onBlur={(e) => {
+                validateOTP(e.target.value);
+              }}
               onChange={(e) => {
                 setOTPCode(e.target.value);
               }}
+              {...(validation.otp.visibility === 1 && { isInvalid: true })}
+              {...(validation.otp.visibility === 2 && { isValid: true })}
             />
+            <Form.Control.Feedback type="invalid">
+              {validation.otp.message}
+            </Form.Control.Feedback>
           </div>
         )}
         {resetPassword === 3 && (
           <>
             <div className=" mt-2">
               <div>Password</div>
-              <TextField
-                sx={{ mt: 1 }}
+              <Form.Control
+                className="mt-2"
                 variant="outlined"
                 size="small"
                 type={"password"}
                 fullWidth
                 value={password}
+                onBlur={(e) => {
+                  validatePassword(e.target.value);
+                }}
                 onChange={(e) => {
+                  validatePassword(e.target.value);
                   setPassword(e.target.value);
                 }}
+                {...(validation.password.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.password.visibility === 2 && { isValid: true })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.password.message}
+              </Form.Control.Feedback>
             </div>
             <div className=" mt-2">
               <div>Retype Password</div>
-              <TextField
-                sx={{ mt: 1 }}
+              <Form.Control
+                className="mt-2"
                 variant="outlined"
                 size="small"
                 type={"password"}
                 fullWidth
                 value={retypedPassword}
                 onChange={(e) => {
+                  comparePasswords(password, e.target.value);
                   setRetypedPassword(e.target.value);
                 }}
+                {...(validation.retypedPassword.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.retypedPassword.visibility === 2 && {
+                  isValid: true,
+                })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.retypedPassword.message}
+              </Form.Control.Feedback>
             </div>
           </>
         )}
@@ -238,17 +384,29 @@ function Login() {
           <>
             <div className=" mt-2">
               <div>Password</div>
-              <TextField
-                sx={{ mt: 1 }}
+              <Form.Control
+                className="mt-2"
                 variant="outlined"
                 size="small"
                 fullWidth
                 type={"password"}
                 value={password}
+                onBlur={(e) => {
+                  validatePassword(e.target.value);
+                }}
                 onChange={(e) => {
+                  validatePassword(e.target.value);
+
                   setPassword(e.target.value);
                 }}
+                {...(validation.password.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.password.visibility === 2 && { isValid: true })}
               />
+              <Form.Control.Feedback type="invalid">
+                {validation.password.message}
+              </Form.Control.Feedback>
             </div>
             <div className=" mt-2">
               Forgotten Password?
