@@ -31,6 +31,7 @@ function DashboardLecturer({ setNavbar }) {
   const [editStatusShow, setEditStatusShow] = useState(false);
   const [showStatusDetails, setShowStatusDetails] = useState(false);
   const [moduleDetails, setModuleDetails] = useState(false);
+  const [currentInfo, setCurrentInfo] = useState({});
 
   setNavbar("Dashboard");
 
@@ -60,11 +61,6 @@ function DashboardLecturer({ setNavbar }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editStatusShow]);
-
-  useEffect(() => {
-    console.log(allocations);
-    console.log(batch);
-  }, [allocations, batch]);
 
   useEffect(() => {
     if (searchKeyword.length > 0) {
@@ -121,10 +117,10 @@ function DashboardLecturer({ setNavbar }) {
   const handleClose = () => setEditStatusShow(false);
   const handleCloseStatusDetails = () => setShowStatusDetails(false);
   const handleShowEditStatus = (_id, currentStatus, lastUpdatedOn) => {
-    setStatusInfo({
+    setCurrentInfo({
       _id: _id,
-      currentStatus: currentStatus,
-      lastUpdatedOn: lastUpdatedOn,
+      name: currentStatus,
+      date: lastUpdatedOn,
     });
     setEditStatusShow(true);
   };
@@ -140,6 +136,8 @@ function DashboardLecturer({ setNavbar }) {
         setShowEditStatus={handleClose}
         setStatusInfo={setStatusInfo}
         statusInfo={statusInfo}
+        setCurrentInfo={setCurrentInfo}
+        currentInfo={currentInfo}
         update={true}
       />
       <StatusDetails

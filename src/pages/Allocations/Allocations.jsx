@@ -189,7 +189,7 @@ function Allocations({ setNavbar }) {
                       <Col>
                         {row.lecturers.map((row, index) => {
                           return (
-                            <div className="d-flex" key={index}>
+                            <div className="d-flex mt-2" key={index}>
                               <Avatar
                                 {...stringAvatar(row?.lecturer?.name + " x")}
                               />

@@ -13,12 +13,12 @@ import AutoComplete from "../../components/AutoComplete/AutoComplete";
 import EditStatus from "../../components/EditStatus/EditStatus";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Form } from "react-bootstrap";
 
 const AllocationsView = ({ setNavbar }) => {
   const location = useLocation();
 
   const allocationToUpdate = location.state;
-  console.log(allocationToUpdate);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -49,16 +49,41 @@ const AllocationsView = ({ setNavbar }) => {
   );
   const [selectedSecondExaminer, setSelectedSecondExaminer] = useState([]);
   const [selectedDemonstrators, setSelectedDemonstrators] = useState([]);
-  const [statusInfo, setStatusInfo] = useState({
-    name: "Set State",
-    date: "",
-  });
+  const [statusInfo, setStatusInfo] = useState(
+    allocationToUpdate?.state
+      ? { ...allocationToUpdate.state[allocationToUpdate.state.length - 1] }
+      : {
+          name: "Set State",
+          date: "",
+        }
+  );
+  const [currentInfo, setCurrentInfo] = useState(
+    allocationToUpdate?.state
+      ? { ...allocationToUpdate.state[allocationToUpdate.state.length - 1] }
+      : {
+          name: "Set State",
+          date: "",
+        }
+  );
 
-  // error handling
-
+  // validations
   const [invalidModule, setInvalidModule] = useState();
 
-  // error handling
+  const [validation, setValidation] = useState({
+    //error states 0 - initial view 1-error 2-valid
+    batchName: { visibility: 0, message: "" },
+    lecturers: { visibility: 0, message: "" },
+    demonstrators: { visibility: 0, message: "" },
+    secondExaminer: { visibility: 0, message: "" },
+    state: {
+      name: { visibility: 0, message: "" },
+      date: { visibility: 0, message: "" },
+    },
+  });
+
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
+
+  // validations
 
   useEffect(() => {
     selectedLecturers.map((selected) => {
@@ -93,37 +118,55 @@ const AllocationsView = ({ setNavbar }) => {
   };
 
   const onClickSaveUpdate = () => {
-    //TODO: validate all data before sending
     //make the object
-    const reqBody = {
-      ...(allocationToUpdate && { _id: allocationToUpdate._id }),
-      lecturers: selectedLecturers.map((lecturer) => ({
-        lecturer: lecturer._id,
-        workload: lecturer.workload,
-      })),
-      state: statusInfo,
-      module: selectedModule?._id,
-      batch: batch,
-      secondExaminar: selectedSecondExaminer[0]._id,
-      demonstrators: selectedDemonstrators.map(
-        (demonstrator) => demonstrator._id
-      ),
-    };
+    if (
+      validateAll(
+        selectedLecturers,
+        selectedSecondExaminer,
+        selectedDemonstrators,
+        statusInfo
+      )
+    ) {
+      const reqBody = {
+        ...(allocationToUpdate && { _id: allocationToUpdate._id }),
+        lecturers: selectedLecturers.map((lecturer) => ({
+          lecturer: lecturer._id,
+          workload: lecturer.workload,
+        })),
+        state: statusInfo,
+        module: selectedModule?._id,
+        batch: batch,
+        secondExaminar: selectedSecondExaminer[0]._id,
+        demonstrators: selectedDemonstrators.map(
+          (demonstrator) => demonstrator._id
+        ),
+      };
 
-    if (allocationToUpdate) {
-      console.log("Updating");
-      updateAllocation(reqBody, onSuccessAllocation);
-    } else {
-      isAllocated({ moduleId: selectedModule?._id, batch: batch }, (data) => {
-        if (data.message === "ALLOCATED") {
-          alert("allocated already");
-        } else {
-          newAllocation(reqBody, onSuccessAllocation);
-        }
-      });
+      if (allocationToUpdate) {
+        console.log("Updating");
+        updateAllocation(reqBody, onSuccessAllocation);
+      } else {
+        isAllocated({ moduleId: selectedModule?._id, batch: batch }, (data) => {
+          console.log(data);
+          if (data.isAllocated === "ALLOCATED") {
+            alert("allocated already");
+          } else {
+            newAllocation(reqBody, onSuccessAllocation);
+          }
+        });
+      }
     }
-    //check whether already allocated
   };
+
+  useEffect(() => {
+    //shows validatoion errors
+
+    console.log(
+      `${validation.lecturers.message},${validation.secondExaminer.message} ,${validation.demonstrators.message},${validation.state.name.message},${validation.state.date.message}`
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showValidationErrors]);
+
   useEffect(() => {
     //set all lecturers on load
     getAllLecturers(onSuccessGetAllLecturers);
@@ -137,7 +180,7 @@ const AllocationsView = ({ setNavbar }) => {
         name: allocationToUpdate
           ? allocationToUpdate.state[allocationToUpdate?.state.length - 1].name
           : "",
-        lastUpdatedOn: allocationToUpdate
+        date: allocationToUpdate
           ? allocationToUpdate.state[allocationToUpdate?.state.length - 1].date
           : "",
       });
@@ -146,115 +189,292 @@ const AllocationsView = ({ setNavbar }) => {
 
   const [showEditStatus, setShowEditStatus] = useState(false);
 
+  const validateBatch = (batchName = "") => {
+    if (batchName.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        batchName: { visibility: 2, message: "" },
+      }));
+      return true;
+    } else {
+      setValidation((prev) => ({
+        ...prev,
+        batchName: { visibility: 1, message: "Batch name is required" },
+      }));
+      return false;
+    }
+  };
+
+  const validateAll = (
+    lecturers = [],
+    secondExaminar = [],
+    demonstrator = [],
+    state = {}
+  ) => {
+    console.log(lecturers.length, secondExaminar, demonstrator);
+    let allCorrect = true;
+    if (lecturers.length > 0) {
+      if (
+        lecturers.filter(
+          (lecturer) =>
+            !lecturer.hasOwnProperty("workload") ||
+            (lecturer.hasOwnProperty("workload") &&
+              lecturer.workload.length === 0)
+        ).length > 0
+      ) {
+        allCorrect = false;
+        setValidation((prev) => ({
+          ...prev,
+          lecturers: {
+            visibility: 1,
+            message: "Please set workload for all lecturers",
+          },
+        }));
+      } else {
+        setValidation((prev) => ({
+          ...prev,
+          lecturers: {
+            visibility: 0,
+            message: "",
+          },
+        }));
+      }
+    } else {
+      allCorrect = false;
+      setValidation((prev) => ({
+        ...prev,
+        lecturers: {
+          visibility: 1,
+          message: "Please select at least one lecturer",
+        },
+      }));
+    }
+    if (secondExaminar.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        secondExaminer: {
+          visibility: 0,
+          message: "",
+        },
+      }));
+    } else {
+      allCorrect = false;
+      setValidation((prev) => ({
+        ...prev,
+        secondExaminer: {
+          visibility: 1,
+          message: "Please select the second examinor",
+        },
+      }));
+    }
+    if (demonstrator.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        demonstrators: {
+          visibility: 0,
+          message: "",
+        },
+      }));
+    } else {
+      allCorrect = false;
+      setValidation((prev) => ({
+        ...prev,
+        demonstrators: {
+          visibility: 1,
+          message: "Please select at least one demonstrator",
+        },
+      }));
+    }
+
+    if (state.name !== "Set State") {
+      setValidation((prev) => ({
+        ...prev,
+        state: {
+          ...prev.state,
+          name: {
+            visibility: 1,
+            message: "",
+          },
+        },
+      }));
+    } else {
+      allCorrect = false;
+      setValidation((prev) => ({
+        ...prev,
+        state: {
+          ...prev.state,
+          name: {
+            visibility: 1,
+            message: "Please set the state",
+          },
+        },
+      }));
+    }
+    if (new Date(state.date) !== "Invalid Date" && state.date.length > 0) {
+      setValidation((prev) => ({
+        ...prev,
+        state: {
+          ...prev.state,
+          date: {
+            visibility: 0,
+            message: "",
+          },
+        },
+      }));
+    } else {
+      allCorrect = false;
+      setValidation((prev) => ({
+        ...prev,
+        state: {
+          ...prev.state,
+          date: {
+            visibility: 1,
+            message: "Please set the date of state",
+          },
+        },
+      }));
+    }
+
+    setShowValidationErrors((prev) => !prev);
+    console.log(allCorrect);
+    return allCorrect;
+  };
+
+  console.log("Status info:", statusInfo);
   return (
     <div className="ps-3 pt-3">
       <EditStatus
         show={showEditStatus}
         setShowEditStatus={setShowEditStatus}
         statusInfo={statusInfo}
+        currentInfo={currentInfo}
+        setCurrentInfo={setCurrentInfo}
         setStatusInfo={setStatusInfo}
         {...(allocationToUpdate && { update: true })}
       />
       {/* course details section */}
       <div className="d-flex">
-        <div className="col-3">
-          {/* course details goes here */}
-          <div className="py-2 fw-semibold fs-5 pe-3">Code</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Name</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Semester</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Credits</div>
-          <div className="py-2 fw-semibold fs-5 pe-3">Level</div>
+        <div className="col-7">
+          <div className="d-flex">
+            <div className="col-3 py-2 fw-semibold fs-5 pe-3">Code</div>
+            <div className="py-2 fs-5 d-flex col-8 align-items-start">
+              :
+              <Autocomplete
+                freeSolo
+                sx={{ ml: 0.5 }}
+                fullWidth
+                options={allModules.map(
+                  (option) => option.moduleCode + " - " + option.moduleName
+                )}
+                {...(allocationToUpdate && { disabled: true })}
+                renderInput={(params) => (
+                  <TextField
+                    {...{
+                      ...params,
+                      ...(allocationToUpdate && {
+                        inputProps: {
+                          ...params.inputProps,
+                          value:
+                            selectedModule?.moduleCode +
+                            " - " +
+                            selectedModule?.moduleName,
+                        },
+                      }),
+                    }}
+                    size={"small"}
+                    fullWidth
+                    InputLabelProps={{ shrink: false }}
+                    label=" "
+                    {...(invalidModule && {
+                      error: true,
+                      helperText: "Please select a module",
+                    })}
+                    onBlur={(event) => {
+                      if (event.target.value.length > 0) {
+                        setInvalidModule(false);
+                        setSelectedModule(
+                          allModules.filter(
+                            (module) =>
+                              module.moduleCode + " - " + module.moduleName ===
+                              event.target.value
+                          )[0]
+                        );
+                      } else {
+                        setInvalidModule(true);
+                      }
+                    }}
+                    sx={{ borderWidth: 1 }}
+                  />
+                )}
+              />
+              <Button
+                variant="contained"
+                color="success"
+                className="mx-2 fw-semibold"
+              >
+                GO
+              </Button>
+            </div>
+          </div>
+          <div className="d-flex">
+            <div className="py-2 col-3 fw-semibold fs-5 pe-3">Name</div>
+            <div className="py-2 fs-5">: {selectedModule?.moduleName}</div>
+          </div>
+          <div className="d-flex">
+            <div className="py-2 col-3 fw-semibold fs-5 pe-3">Semester</div>
+            <div className="py-2 fs-5">
+              :{" "}
+              {selectedModule?.semester === "1"
+                ? `${selectedModule?.semester} st Semester`
+                : null}
+              {selectedModule?.semester === "2"
+                ? `${selectedModule?.semester} nd Semester`
+                : null}
+            </div>
+          </div>
+
+          <div className="d-flex">
+            <div className="py-2 col-3 fw-semibold fs-5 pe-3">Credits</div>
+            <div className="py-2 fs-5">
+              :{" "}
+              {selectedModule?.credits
+                ? `0${selectedModule?.credits} Credits`
+                : ""}
+            </div>
+          </div>
+          <div className="d-flex">
+            <div className="py-2 col-3 fw-semibold fs-5 pe-3">Level</div>
+            <div className="py-2 fs-5">
+              : {selectedModule?.level ? `Level 0${selectedModule?.level}` : ""}
+            </div>
+          </div>
         </div>
 
-        <div className="col-4">
-          <div className="py-2 fs-5 d-flex col-12">
-            :
-            <Autocomplete
-              freeSolo
-              sx={{ ml: 0.5 }}
-              fullWidth
-              options={allModules.map(
-                (option) => option.moduleCode + " - " + option.moduleName
-              )}
-              {...(allocationToUpdate && { disabled: true })}
-              renderInput={(params) => (
-                <TextField
-                  {...{
-                    ...params,
-                    ...(allocationToUpdate && {
-                      inputProps: {
-                        ...params.inputProps,
-                        value:
-                          selectedModule?.moduleCode +
-                          " - " +
-                          selectedModule?.moduleName,
-                      },
-                    }),
-                  }}
-                  size={"small"}
-                  fullWidth
-                  InputLabelProps={{ shrink: false }}
-                  label=" "
-                  {...(invalidModule && { error: true })}
-                  onBlur={(event) => {
-                    if (event.target.value.length > 0) {
-                      setInvalidModule(false);
-                      setSelectedModule(
-                        allModules.filter(
-                          (module) =>
-                            module.moduleCode + " - " + module.moduleName ===
-                            event.target.value
-                        )[0]
-                      );
-                    } else {
-                      setInvalidModule(true);
-                    }
-                  }}
-                  sx={{ borderWidth: 1 }}
-                />
-              )}
-            />
-            <Button
-              variant="contained"
-              color="success"
-              className="mx-2 fw-semibold"
-            >
-              GO
-            </Button>
-          </div>
-          <div className="py-2 fs-5">: {selectedModule?.moduleName}</div>
-          <div className="py-2 fs-5">
-            :{" "}
-            {selectedModule?.semester === "1"
-              ? `${selectedModule?.semester} st Semester`
-              : null}
-            {selectedModule?.semester === "2"
-              ? `${selectedModule?.semester} nd Semester`
-              : null}
-          </div>
-          <div className="py-2 fs-5">
-            :{" "}
-            {selectedModule?.credits
-              ? `0${selectedModule?.credits} Credits`
-              : ""}
-          </div>
-          <div className="py-2 fs-5">
-            : {selectedModule?.level ? `Level 0${selectedModule?.level}` : ""}
-          </div>
-        </div>
         <div className="col">
-          <div className="d-flex justify-content-end">
-            <TextField
-              sx={{ width: "10rem", mr: 1 }}
-              placeholder="IM 2018"
-              size="small"
-              value={batch}
-              onChange={(event) => {
-                setBatch(event.target.value);
-              }}
-            ></TextField>
+          <div className="d-flex justify-content-end align-items-start">
+            <div className="me-2">
+              <Form.Control
+                style={{ width: "12rem" }}
+                value={batch}
+                placeholder="IM 2018"
+                onChange={(event) => {
+                  validateBatch(event.target.value);
+                  setBatch(event.target.value);
+                }}
+                type="text"
+                {...(validation.batchName.visibility === 1 && {
+                  isInvalid: true,
+                })}
+                {...(validation.batchName.visibility === 2 && {
+                  isValid: true,
+                })}
+              />
+              <Form.Control.Feedback type="invalid">
+                {validation.batchName.message}
+              </Form.Control.Feedback>
+            </div>
             <StatusBadge
-              title={statusInfo.name}
+              title={statusInfo.name.split("_").join("  ").toLowerCase()}
               onClick={() => {
                 setShowEditStatus(true);
               }}
@@ -264,7 +484,7 @@ const AllocationsView = ({ setNavbar }) => {
       </div>
       {/* */}
       <div className="d-flex gap-2 mt-3">
-        <div className="pt-3 col">
+        <div className="pt-3 col ">
           <AutoComplete
             dataset={allLecturers}
             selected={selectedLecturers}

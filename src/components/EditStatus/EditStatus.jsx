@@ -7,7 +7,9 @@ const EditStatus = ({
   show,
   setShowEditStatus,
   statusInfo,
+  currentInfo,
   setStatusInfo,
+  setCurrentInfo,
   update = false,
 }) => {
   return (
@@ -27,7 +29,7 @@ const EditStatus = ({
             <div className="mb-3">
               <div className="d-flex mb-2">
                 <div className="col-5 col-lg-3 fw-semibold me-2">Current </div>
-                <div>: {statusInfo ? statusInfo.currentStatus : ""}</div>
+                <div>: {currentInfo ? currentInfo.name : ""}</div>
               </div>
               <div className="d-flex">
                 <div className="col-5 col-lg-3 fw-semibold me-2">
@@ -35,11 +37,11 @@ const EditStatus = ({
                 </div>
                 <div>
                   :{" "}
-                  {statusInfo
-                    ? new Date(statusInfo.lastUpdatedOn).toDateString() ===
+                  {currentInfo
+                    ? new Date(currentInfo.date).toDateString() ===
                       "Invalid Date"
                       ? ""
-                      : new Date(statusInfo.lastUpdatedOn).toDateString()
+                      : new Date(currentInfo.date).toDateString()
                     : ""}
                 </div>
               </div>
@@ -80,7 +82,7 @@ const EditStatus = ({
             onClick={() => {
               if (update) {
                 const req = {
-                  _id: statusInfo._id,
+                  _id: currentInfo._id,
                   state: {
                     name: statusInfo.name,
                     date: statusInfo.date,
@@ -88,6 +90,7 @@ const EditStatus = ({
                 };
                 updateAllocationState(req, (data) => {
                   if (data.message === "success") {
+                    setCurrentInfo(statusInfo);
                     setShowEditStatus(false);
                     alert(data.message ? data.message : "");
                   } else {
