@@ -214,6 +214,7 @@ function Allocations({ setNavbar }) {
                       <p className="text-muted mb-0">
                         {row.module?.moduleName}
                       </p>
+                      <p className="text-muted mb-0">{row?.batch}</p>
                     </Col>
                   </TableCell>
 
@@ -261,7 +262,6 @@ function Allocations({ setNavbar }) {
                       >
                         Edit
                       </Button>
-                      <Button color="error">Delete</Button>
                     </Col>
                   </TableCell>
                 </TableRow>

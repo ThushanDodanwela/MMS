@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import React, { useEffect, useState } from "react";
 import { Col, Form, Modal, Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
   getAllModules,
   isModuleExists,
@@ -19,6 +20,7 @@ import {
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { LEVELS, SEMESTER } from "../../const";
+import { showAlert } from "../../reducers/alertSlice";
 
 const Module = ({ setNavbar }) => {
   function stringToColor(string) {
@@ -68,6 +70,7 @@ const Module = ({ setNavbar }) => {
 
   const [retrivedModules, setRetrivedModules] = useState([]);
   const [filteredModules, setFilteredModules] = useState([]);
+  const dispatcher = useDispatch();
 
   const onSuccessRetrive = (data) => {
     setRetrivedModules(data.modules);
@@ -128,6 +131,25 @@ const Module = ({ setNavbar }) => {
       semester: "",
     });
     handleClose();
+    if (isUpdating) {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "Module details updated",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
+    } else {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "Module details saved",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
+    }
     setIsUpdating(false);
     setShoudRefresh((prev) => !prev);
   };

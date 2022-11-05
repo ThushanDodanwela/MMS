@@ -14,11 +14,15 @@ import EditStatus from "../../components/EditStatus/EditStatus";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../reducers/alertSlice";
+import DetailedView from "../../components/DetailedView/DetailedView";
+import ErrorDetails from "../../components/ErrorDetails/ErrorDetails";
 
 const AllocationsView = ({ setNavbar }) => {
   const location = useLocation();
 
-  const allocationToUpdate = location.state;
+  const [allocationToUpdate, setAllocationToUpdate] = useState(location.state);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -65,6 +69,8 @@ const AllocationsView = ({ setNavbar }) => {
           date: "",
         }
   );
+  const dispatcher = useDispatch();
+  const [showDetailedView, setShowDetailedView] = useState(false);
 
   // validations
   const [invalidModule, setInvalidModule] = useState();
@@ -114,7 +120,26 @@ const AllocationsView = ({ setNavbar }) => {
   };
 
   const onSuccessAllocation = () => {
-    alert("Allocation success");
+    // alert("Allocation success");
+    if (allocationToUpdate) {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "Allocation details updated",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
+    }
+    dispatcher(
+      showAlert({
+        isVisible: true,
+        message: "New allocation created",
+        btnText: "",
+        btnAction: () => {},
+      })
+    );
+    navigate("/allocations");
   };
 
   const onClickSaveUpdate = () => {
@@ -149,7 +174,14 @@ const AllocationsView = ({ setNavbar }) => {
         isAllocated({ moduleId: selectedModule?._id, batch: batch }, (data) => {
           console.log(data);
           if (data.isAllocated === "ALLOCATED") {
-            alert("allocated already");
+            dispatcher(
+              showAlert({
+                isVisible: true,
+                message: `This module has a previous allocation for ${batch} batch`,
+                btnText: "",
+                btnAction: () => {},
+              })
+            );
           } else {
             newAllocation(reqBody, onSuccessAllocation);
           }
@@ -161,6 +193,24 @@ const AllocationsView = ({ setNavbar }) => {
   useEffect(() => {
     //shows validatoion errors
 
+    if (
+      validation.lecturers.visibility ||
+      validation.secondExaminer.visibility ||
+      validation.demonstrators.visibility ||
+      validation.state.name.visibility ||
+      validation.state.date.visibility
+    ) {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: `Some fields have incorrect information`,
+          btnText: "Detailed View",
+          btnAction: () => {
+            setShowDetailedView(true);
+          },
+        })
+      );
+    }
     console.log(
       `${validation.lecturers.message},${validation.secondExaminer.message} ,${validation.demonstrators.message},${validation.state.name.message},${validation.state.date.message}`
     );
@@ -329,7 +379,7 @@ const AllocationsView = ({ setNavbar }) => {
           ...prev.state,
           date: {
             visibility: 1,
-            message: "Please set the date of state",
+            message: "Please set the date of date",
           },
         },
       }));
@@ -352,6 +402,45 @@ const AllocationsView = ({ setNavbar }) => {
         setStatusInfo={setStatusInfo}
         {...(allocationToUpdate && { update: true })}
       />
+
+      <DetailedView
+        showDetailedView={showDetailedView}
+        setShowDetailedView={setShowDetailedView}
+      >
+        <div className=" mb-3" style={{ fontSize: "1.2rem", fontWeight: 600 }}>
+          Following fields are having incorrect data
+        </div>
+        {validation.lecturers.visibility && (
+          <ErrorDetails
+            title="Lecturers"
+            message={validation.lecturers.message}
+          />
+        )}
+        {validation.secondExaminer.visibility && (
+          <ErrorDetails
+            title="Second Examinor"
+            message={validation.secondExaminer.message}
+          />
+        )}
+        {validation.demonstrators.visibility && (
+          <ErrorDetails
+            title="Demonstrators"
+            message={validation.demonstrators.message}
+          />
+        )}
+        {validation.state.name.visibility && (
+          <ErrorDetails
+            title="State Name"
+            message={validation.state.name.message}
+          />
+        )}
+        {validation.state.date.visibility && (
+          <ErrorDetails
+            title="State Date"
+            message={validation.state.name.message}
+          />
+        )}
+      </DetailedView>
       {/* course details section */}
       <div className="d-flex">
         <div className="col-7">

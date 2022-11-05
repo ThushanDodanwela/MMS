@@ -13,6 +13,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./App/store";
 import { Provider } from "react-redux";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import Alert from "./components/Alert/Alert";
 
 function App() {
   const [navbar, setNavbar] = useState("Dashboard");
@@ -21,6 +22,7 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <div className="App d-flex">
+          <Alert />
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />

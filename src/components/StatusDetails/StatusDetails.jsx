@@ -12,15 +12,19 @@ const StatusDetails = ({ show, handleClose, module }) => {
         <Modal.Body>
           <div className="mb-3">
             <div className="d-flex">
-              <div className="col-3 fw-semibold me-2">Module Code </div>
+              <div className="col-4 col-lg-3 fw-semibold me-2">
+                Module Code{" "}
+              </div>
               <div>: {module?.module?.moduleCode}</div>
             </div>
             <div className="d-flex mt-1">
-              <div className="col-3 fw-semibold me-2">Module Name </div>
+              <div className="col-4 col-lg-3 fw-semibold me-2">
+                Module Name{" "}
+              </div>
               <div>: {module?.module?.moduleName}</div>
             </div>
             <div className="d-flex mt-1">
-              <div className="col-3 fw-semibold me-2">Batch</div>
+              <div className="col-4 col-lg-3 fw-semibold me-2">Batch</div>
               <div>: {module?.batch}</div>
             </div>
             <div className="d-lg-flex col-12 gap-4 mt-3 ">

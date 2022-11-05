@@ -19,9 +19,7 @@ function Navbar({ section }) {
       <div className="col-11 ">
         <h1 className="fw-bold pt-1">{section}</h1>
       </div>
-      <div className="col d-flex justify-content-end pt-3 ">
-        <LogoutIcon className="icon text-dark" />
-      </div>
+      <div className="col d-flex justify-content-end pt-3 "></div>
     </Row>
   );
 }

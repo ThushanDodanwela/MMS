@@ -28,7 +28,7 @@ const SearchBar = ({
         <div className="ms-2 ">
           <SearchOutlined />
         </div>
-        <div className={`col-11 ${!hideFilter ? "col-lg-7" : null}`}>
+        <div className={`col-10 ${!hideFilter ? "col-lg-7" : ""}`}>
           <input
             className="form-control mx-2 border-0 "
             placeholder="Search module name or module code"

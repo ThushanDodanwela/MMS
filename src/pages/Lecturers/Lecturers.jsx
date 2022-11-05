@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import React, { useEffect, useState } from "react";
 import { Col, Form, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
   getAllLecturers,
   isEmailExists,
@@ -19,6 +20,7 @@ import {
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { POSITIONS } from "../../const";
+import { showAlert } from "../../reducers/alertSlice";
 
 const Lecturer = ({ setNavbar }) => {
   const [show, setShow] = useState(false);
@@ -58,6 +60,7 @@ const Lecturer = ({ setNavbar }) => {
 
   const [retrivedLectures, setRetrivedLecturers] = useState([]);
   const [filteredLecturers, setFilteredLecturers] = useState([]);
+  const dispatcher = useDispatch();
 
   useEffect(() => {
     if (searchKeyword.length > 0) {
@@ -105,6 +108,25 @@ const Lecturer = ({ setNavbar }) => {
       position: { visibility: 0, message: "" },
       qualifications: { visibility: 0, message: "" },
     });
+    if (isUpdating) {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "Lecturer details updated",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
+    } else {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "Lecturer details saved",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
+    }
     handleClose();
     setIsUpdating(false);
     setShoudRefresh((prev) => !prev);

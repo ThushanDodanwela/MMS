@@ -19,6 +19,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [OTPCode, setOTPCode] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
+  const [validation, setValidation] = useState({
+    //error states 0 - initial view 1-error 2-valid
+    email: { visibility: 0, message: "" },
+    password: { visibility: 0, message: "" },
+    retypedPassword: { visibility: 0, message: "" },
+    otp: { visibility: 0, message: "" },
+  });
 
   const verifyEmail = () => {
     setSending(true);
