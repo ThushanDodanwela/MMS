@@ -11,6 +11,7 @@ import {
 } from "../../App/LecturerServices";
 import { showAlert } from "../../reducers/alertSlice";
 import { login } from "../../reducers/loginSlice";
+import background from "../../assets/backgroundImage.jpg";
 
 function Login() {
   const navigate = useNavigate();
@@ -137,10 +138,12 @@ function Login() {
       lecturerLoginAPI(
         req,
         (data) => {
+          console.log(data);
           dispatch(
             login({
               isLoggedIn: true,
               lecturerId: data.lecturerId,
+              lecturerName: data.name,
               position: data.position,
             })
           );
@@ -288,8 +291,18 @@ function Login() {
   // ------------------------------- validations ------------------------------
 
   return (
-    <div className="w-100 vh-100 bg-success d-flex justify-content-center align-items-center">
-      <div className="col-11 col-md-7 col-lg-4 bg-white p-4">
+    <div
+      className="w-100 vh-100 bg-dark d-flex justify-content-center align-items-center"
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+    >
+      <div
+        className="col-11 col-md-7 col-lg-4  p-4 rounded-1"
+        style={{ backgroundColor: `rgba(255, 255, 255, 0.92)` }}
+      >
         <div className="fw-bold fs-4">
           {resetPassword === 0 || resetPassword === 4
             ? "Login"
@@ -302,9 +315,9 @@ function Login() {
           <div className=" mt-4">
             <div>Email Address</div>
             <Form.Control
-              variant="outlined"
               size="small"
               fullWidth
+              style={{ backgroundColor: "transparent" }}
               className="mt-2"
               value={emailAddress}
               onBlur={(e) => {
@@ -330,6 +343,7 @@ function Login() {
               variant="outlined"
               size="small"
               fullWidth
+              style={{ backgroundColor: "transparent" }}
               value={OTPCode}
               onBlur={(e) => {
                 validateOTP(e.target.value);
@@ -355,6 +369,7 @@ function Login() {
                 size="small"
                 type={"password"}
                 fullWidth
+                style={{ backgroundColor: "transparent" }}
                 value={password}
                 onBlur={(e) => {
                   validatePassword(e.target.value);
@@ -379,6 +394,7 @@ function Login() {
                 variant="outlined"
                 size="small"
                 type={"password"}
+                style={{ backgroundColor: "transparent" }}
                 fullWidth
                 value={retypedPassword}
                 onChange={(e) => {
@@ -406,6 +422,7 @@ function Login() {
                 className="mt-2"
                 variant="outlined"
                 size="small"
+                style={{ backgroundColor: "transparent" }}
                 fullWidth
                 type={"password"}
                 value={password}
@@ -444,7 +461,8 @@ function Login() {
         <div className=" mt-4 d-flex justify-content-end  ">
           <Button
             variant="contained"
-            color="success"
+            color="secondary"
+            sx={{ boxShadow: "none" }}
             onClick={() => {
               SETPS[resetPassword].function();
             }}

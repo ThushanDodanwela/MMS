@@ -6,13 +6,15 @@ import SchoolIcon from "@mui/icons-material/School";
 import { Button } from "@mui/material";
 import React from "react";
 import { Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../assets/IMSSALOGO.png";
 import { logout } from "../../reducers/loginSlice";
 import "./Sidebar.scss";
 
 function Sidebar({ section }) {
+  const userName = useSelector((state) => state.loginMMS.lecturerName);
+
   const dispatch = useDispatch();
   return (
     <Col lg={2} className="sidebar bg-success vh-100 position-sticky top-0 ">
@@ -25,9 +27,13 @@ function Sidebar({ section }) {
       <div className="lists">
         <ul>
           <Link to={"/"} className="text-decoration-none ">
-            <li className={section === "Dashboard" ? "selected" : " "}>
+            <li
+              className={
+                section === `Welcome Back! ${userName},` ? "selected" : " "
+              }
+            >
               <DashboardIcon />
-              <span>Dashboard</span>
+              <span>Home</span>
             </li>
           </Link>
 

@@ -190,21 +190,21 @@ const AllocationsView = ({ setNavbar }) => {
     }
   };
 
-  useEffect(() => {
-    //shows validatoion errors
+  // useEffect(() => {
+  //   //shows validatoion errors
 
-    if (
-      validation.lecturers.visibility === 1 ||
-      validation.secondExaminer.visibility === 1 ||
-      validation.demonstrators.visibility === 1 ||
-      validation.state.name.visibility === 1 ||
-      validation.state.date.visibility === 1
-    ) {
-      //FIXME:something is wrong with the validations
-    }
+  //   if (
+  //     validation.lecturers.visibility === 1 ||
+  //     validation.secondExaminer.visibility === 1 ||
+  //     validation.demonstrators.visibility === 1 ||
+  //     validation.state.name.visibility === 1 ||
+  //     validation.state.date.visibility === 1
+  //   ) {
+  //     //FIXME:something is wrong with the validations
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showValidationErrors]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [showValidationErrors]);
 
   useEffect(() => {
     //set all lecturers on load

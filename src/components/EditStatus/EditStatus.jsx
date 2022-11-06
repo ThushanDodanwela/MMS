@@ -21,15 +21,17 @@ const EditStatus = ({
     date: { visibility: 0, message: "" },
   });
   useEffect(() => {
-    setStatusInfo({
-      name: "NONE",
-      date: new Date().toISOString("en-uk").substring(0, 10),
-    });
-    setValidation({
-      //error states 0 - initial view 1-error 2-valid
-      state: { visibility: 0, message: "" },
-      date: { visibility: 0, message: "" },
-    });
+    if (show) {
+      setStatusInfo({
+        name: "NONE",
+        date: new Date().toISOString("en-uk").substring(0, 10),
+      });
+      setValidation({
+        //error states 0 - initial view 1-error 2-valid
+        state: { visibility: 0, message: "" },
+        date: { visibility: 0, message: "" },
+      });
+    }
   }, [show]);
   const validateName = (name) => {
     if (name !== "NONE") {
@@ -198,7 +200,6 @@ const EditStatus = ({
                     }
                   );
                   //send request
-                  console.log(statusInfo);
                 } else {
                   setShowEditStatus(false);
                 }

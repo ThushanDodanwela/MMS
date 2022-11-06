@@ -1,5 +1,6 @@
+import { Button } from "@mui/material";
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import RowItem from "./RowItem";
 
 const StatusDetails = ({ show, handleClose, module }) => {
@@ -7,10 +8,10 @@ const StatusDetails = ({ show, handleClose, module }) => {
     <div>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Status History</Modal.Title>
+          <Modal.Title className="fw-semibold">Module History</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="mb-3">
+          <div className="mb-lg-4">
             <div className="d-flex">
               <div className="col-4 col-lg-3 fw-semibold me-2">
                 Module Code{" "}
@@ -47,14 +48,17 @@ const StatusDetails = ({ show, handleClose, module }) => {
             </div>
             <div className="fw-semibold mt-3">History</div>
             <div>
-              <div className="d-flex bg-secondary mt-2">
+              <div
+                className="d-flex mt-2 rounded-top py-1"
+                style={{ backgroundColor: "#1BB8A0" }}
+              >
                 <div className="col ps-2 fw-bold">State</div>
                 <div className="col fw-bold">Updated On</div>
               </div>
               {module?.state?.map((oneState, index) => (
                 <div
-                  className="d-flex"
-                  style={{ backgroundColor: index % 2 ? "" : "" }}
+                  className="d-flex py-1"
+                  style={{ backgroundColor: index % 2 ? "#DFDFDF" : "" }}
                 >
                   <div
                     className="col ps-2"
@@ -70,11 +74,6 @@ const StatusDetails = ({ show, handleClose, module }) => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" className="px-4" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

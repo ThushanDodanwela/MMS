@@ -101,15 +101,6 @@ const Module = ({ setNavbar }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const columns = [
-    "Module Code",
-    "Module Name",
-    "Level",
-    "Credits",
-    "Semester",
-    "Actions",
-  ];
-
   useEffect(() => {
     setNavbar("Modules");
   });
@@ -210,11 +201,22 @@ const Module = ({ setNavbar }) => {
 
   const validateModuleCode = (moduleCode) => {
     if (moduleCode.length > 0) {
-      setValidation((prev) => ({
-        ...prev,
-        moduleCode: { visibility: 2, message: "" },
-      }));
-      return true;
+      if (moduleCode.match(/^[A-Z]{4,4}\s[0-9]{5,5}$/)) {
+        setValidation((prev) => ({
+          ...prev,
+          moduleCode: { visibility: 2, message: "" },
+        }));
+        return true;
+      } else {
+        setValidation((prev) => ({
+          ...prev,
+          moduleCode: {
+            visibility: 1,
+            message: "Module code fromat is wrong. Eg: MGTE 45875",
+          },
+        }));
+        return false;
+      }
     } else {
       setValidation((prev) => ({
         ...prev,
@@ -225,6 +227,16 @@ const Module = ({ setNavbar }) => {
       }));
       return false;
     }
+  };
+
+  const setLevelAndSemester = () => {
+    const moduleCode = moduleInfo.moduleCode;
+    console.log(moduleCode);
+    setModuleInfo({
+      ...moduleInfo,
+      level: moduleCode.split(" ")[1].substring(0, 1),
+      semester: moduleCode.split(" ")[1].substring(5, 4),
+    });
   };
 
   const validateCredits = (credits) => {
@@ -321,7 +333,9 @@ const Module = ({ setNavbar }) => {
               <Form.Control
                 value={moduleInfo.moduleCode}
                 onBlur={(event) => {
-                  validateIsModuleCodeExists(event.target.value);
+                  if (validateIsModuleCodeExists(event.target.value)) {
+                  }
+                  setLevelAndSemester();
                 }}
                 onChange={(event) => {
                   validateModuleCode(event.target.value);
