@@ -6,11 +6,13 @@ const styles = {
   textTransform: "capitalize",
 };
 
-const StatusBadge = ({ title, onClick }) => {
+const StatusBadge = ({ title, onClick, isInvalid = false }) => {
   return (
     <span
       onClick={onClick}
-      className=" px-2 py-1 rounded-5 fw-bold"
+      className={` px-2 py-1 rounded-5 fw-bold ${
+        isInvalid ? "text-danger" : ""
+      }`}
       style={styles}
     >
       {title}

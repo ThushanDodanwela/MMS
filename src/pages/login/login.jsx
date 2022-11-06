@@ -40,6 +40,7 @@ function Login() {
   }, [resetPassword]);
 
   const dispatcher = useDispatch();
+
   const verifyEmail = () => {
     if (validateEmail(emailAddress)) {
       setSending(true);
@@ -59,11 +60,12 @@ function Login() {
           dispatcher(
             showAlert({
               isVisible: true,
-              message: data.message,
+              message: data,
               btnText: "",
               btnAction: () => {},
             })
           );
+          setSending(false);
         }
       );
     }
@@ -87,7 +89,7 @@ function Login() {
           dispatcher(
             showAlert({
               isVisible: true,
-              message: data.message,
+              message: data,
               btnText: "",
               btnAction: () => {},
             })

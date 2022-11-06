@@ -70,7 +70,6 @@ const AllocationsView = ({ setNavbar }) => {
         }
   );
   const dispatcher = useDispatch();
-  const [showDetailedView, setShowDetailedView] = useState(false);
 
   // validations
   const [invalidModule, setInvalidModule] = useState();
@@ -130,15 +129,17 @@ const AllocationsView = ({ setNavbar }) => {
           btnAction: () => {},
         })
       );
+    } else {
+      dispatcher(
+        showAlert({
+          isVisible: true,
+          message: "New allocation created",
+          btnText: "",
+          btnAction: () => {},
+        })
+      );
     }
-    dispatcher(
-      showAlert({
-        isVisible: true,
-        message: "New allocation created",
-        btnText: "",
-        btnAction: () => {},
-      })
-    );
+
     navigate("/allocations");
   };
 
@@ -230,11 +231,22 @@ const AllocationsView = ({ setNavbar }) => {
 
   const validateBatch = (batchName = "") => {
     if (batchName.length > 0) {
-      setValidation((prev) => ({
-        ...prev,
-        batchName: { visibility: 2, message: "" },
-      }));
-      return true;
+      if (batchName.match(/^IM\s[0-9]{4,4}$/)) {
+        setValidation((prev) => ({
+          ...prev,
+          batchName: { visibility: 2, message: "" },
+        }));
+        return true;
+      } else {
+        setValidation((prev) => ({
+          ...prev,
+          batchName: {
+            visibility: 1,
+            message: "Please use format Eg: IM 2019",
+          },
+        }));
+        return false;
+      }
     } else {
       setValidation((prev) => ({
         ...prev,
@@ -331,7 +343,7 @@ const AllocationsView = ({ setNavbar }) => {
         state: {
           ...prev.state,
           name: {
-            visibility: 1,
+            visibility: 0,
             message: "",
           },
         },
@@ -373,22 +385,27 @@ const AllocationsView = ({ setNavbar }) => {
         },
       }));
     }
+    if (!validateBatch(batch)) {
+      allCorrect = false;
+    }
+    console.log(selectedModule);
+    if (!selectedModule._id?.length > 0) {
+      allCorrect = false;
+      setInvalidModule(true);
+    }
 
     if (!allCorrect) {
       dispatcher(
         showAlert({
           isVisible: true,
           message: `Some fields have incorrect information`,
-          btnText: "Detailed View",
-          btnAction: () => {
-            setShowDetailedView(true);
-          },
+          btnText: "",
+          btnAction: () => {},
         })
       );
     }
 
     setShowValidationErrors((prev) => !prev);
-    console.log(allCorrect);
     return allCorrect;
   };
 
@@ -404,7 +421,7 @@ const AllocationsView = ({ setNavbar }) => {
         setStatusInfo={setStatusInfo}
         {...(allocationToUpdate && { update: true })}
       />
-
+      {/* 
       <DetailedView
         showDetailedView={showDetailedView}
         setShowDetailedView={setShowDetailedView}
@@ -412,37 +429,37 @@ const AllocationsView = ({ setNavbar }) => {
         <div className=" mb-3" style={{ fontSize: "1.2rem", fontWeight: 600 }}>
           Following fields are having incorrect data
         </div>
-        {validation.lecturers.visibility && (
+        {validation.lecturers.visibility !== 0 && (
           <ErrorDetails
             title="Lecturers"
             message={validation.lecturers.message}
           />
         )}
-        {validation.secondExaminer.visibility && (
+        {validation.secondExaminer.visibility !== 0 && (
           <ErrorDetails
             title="Second Examinor"
             message={validation.secondExaminer.message}
           />
         )}
-        {validation.demonstrators.visibility && (
+        {validation.demonstrators.visibility !== 0 && (
           <ErrorDetails
             title="Demonstrators"
             message={validation.demonstrators.message}
           />
         )}
-        {validation.state.name.visibility && (
+        {validation.state.name.visibility !== 0 && (
           <ErrorDetails
             title="State Name"
             message={validation.state.name.message}
           />
         )}
-        {validation.state.date.visibility && (
+        {validation.state.date.visibility !== 0 && (
           <ErrorDetails
             title="State Date"
             message={validation.state.name.message}
           />
         )}
-      </DetailedView>
+      </DetailedView> */}
       {/* course details section */}
       <div className="d-flex">
         <div className="col-7">
@@ -566,6 +583,10 @@ const AllocationsView = ({ setNavbar }) => {
             </div>
             <StatusBadge
               title={statusInfo.name.split("_").join("  ").toLowerCase()}
+              isInvalid={
+                validation.state.name.visibility !== 0 ||
+                validation.state.date.visibility !== 0
+              }
               onClick={() => {
                 setShowEditStatus(true);
               }}
@@ -581,7 +602,21 @@ const AllocationsView = ({ setNavbar }) => {
             selected={selectedLecturers}
             setSelected={setSelectedLecturers}
             defaultValues={lecturersToUpdate}
-            title={"Lectures"}
+            title={
+              validation.lecturers.visibility !== 0 ? (
+                <div>
+                  Lecturers
+                  <span
+                    className="text-danger ps-2"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    {validation.lecturers.message}
+                  </span>
+                </div>
+              ) : (
+                "Lecturers"
+              )
+            }
           />
           {console.log(selectedLecturers)}
           {selectedLecturers.map((lecturer) => {
@@ -616,7 +651,21 @@ const AllocationsView = ({ setNavbar }) => {
             dataset={allLecturers}
             selected={selectedSecondExaminer}
             setSelected={setSelectedSecondExaminer}
-            title={"2nd Examiner"}
+            title={
+              validation.secondExaminer.visibility !== 0 ? (
+                <div>
+                  2nd Examiner
+                  <span
+                    className="text-danger ps-2"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    {validation.secondExaminer.message}
+                  </span>
+                </div>
+              ) : (
+                "2nd Examiner"
+              )
+            }
             defaultValues={secondExaminerToUpdate}
           />
         </div>
@@ -625,7 +674,21 @@ const AllocationsView = ({ setNavbar }) => {
             dataset={allLecturers}
             selected={selectedDemonstrators}
             setSelected={setSelectedDemonstrators}
-            title={"Demonstrators"}
+            title={
+              validation.demonstrators.visibility !== 0 ? (
+                <div>
+                  Demonstrators
+                  <span
+                    className="text-danger ps-2 text-nowrap"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    {validation.demonstrators.message}
+                  </span>
+                </div>
+              ) : (
+                "Demonstrators"
+              )
+            }
             defaultValues={demonstratorsToUpdate}
           />
         </div>
