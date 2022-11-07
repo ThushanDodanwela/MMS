@@ -86,6 +86,8 @@ function Allocations({ setNavbar }) {
   useEffect(() => {
     setNavbar("Allocations");
     getAllocations(onSuccessRetriveAllAllocations);
+    setPageLoadign(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -111,24 +113,21 @@ function Allocations({ setNavbar }) {
       );
     }
   }, [searchKeyword, allAllocations, filterBy]);
-  useEffect(() => {
-    setTimeout(() => {
-      setPageLoadign(false);
-    }, 500);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <>
-      {pageLoading ? (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ height: "30rem", width: "100%" }}
-        >
-          <span className="fs-4 me-4">Loading Allocations. Please wait...</span>
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden ">Loading...</span>
-          </div>
-        </div>
+      {false ? (
+        <></>
       ) : (
+        // <div
+        //   className="d-flex justify-content-center align-items-center"
+        //   style={{ height: "30rem", width: "100%" }}
+        // >
+        //   <span className="fs-4 me-4">Loading Allocations. Please wait...</span>
+        //   <div class="spinner-border" role="status">
+        //     <span class="visually-hidden ">Loading...</span>
+        //   </div>
+        // </div>
         <div className="px-3 pb-5 mb-5 pt-4">
           <TableContainer component={Paper} className="px-2 pb-5 mb-5">
             <div className=" py-2 d-flex ">
@@ -195,6 +194,22 @@ function Allocations({ setNavbar }) {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {pageLoading && (
+                  <>
+                    <TableRow>
+                      <TableCell colSpan={8}>
+                        <div className="d-flex  w-100 justify-content-center">
+                          <span className="fs-4 me-4">
+                            Loading Allocations. Please wait...
+                          </span>
+                          <div class="spinner-border" role="status">
+                            <span class="visually-hidden ">Loading...</span>
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </>
+                )}
                 {filteredAllocations.map((row, index) => (
                   <TableRow
                     key={index}
