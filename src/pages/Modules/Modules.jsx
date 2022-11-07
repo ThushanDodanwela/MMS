@@ -231,12 +231,15 @@ const Module = ({ setNavbar }) => {
 
   const setLevelAndSemester = () => {
     const moduleCode = moduleInfo.moduleCode;
-    console.log(moduleCode);
     setModuleInfo({
       ...moduleInfo,
+      credits: moduleCode.split(" ")[1].substring(4, 5),
       level: moduleCode.split(" ")[1].substring(0, 1),
-      semester: moduleCode.split(" ")[1].substring(5, 4),
+      semester: moduleCode.split(" ")[1].substring(1, 2),
     });
+    validateCredits(moduleInfo.credits);
+    validateLevel(moduleInfo.level);
+    validateSemester(moduleInfo.semester);
   };
 
   const validateCredits = (credits) => {
