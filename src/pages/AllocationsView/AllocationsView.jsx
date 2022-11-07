@@ -23,7 +23,7 @@ const AllocationsView = ({ setNavbar }) => {
   const location = useLocation();
 
   const [allocationToUpdate, setAllocationToUpdate] = useState(location.state);
-
+  console.log(allocationToUpdate);
   const navigate = useNavigate();
   useEffect(() => {
     setNavbar("Allocations");
@@ -63,7 +63,10 @@ const AllocationsView = ({ setNavbar }) => {
   );
   const [currentInfo, setCurrentInfo] = useState(
     allocationToUpdate?.state
-      ? { ...allocationToUpdate.state[allocationToUpdate.state.length - 1] }
+      ? {
+          ...allocationToUpdate.state[allocationToUpdate.state.length - 1],
+          _id: allocationToUpdate?._id,
+        }
       : {
           name: "Set State",
           date: "",

@@ -163,6 +163,7 @@ const EditStatus = ({
                 validateName(statusInfo.name)
               ) {
                 if (update) {
+                  console.log(currentInfo);
                   const req = {
                     _id: currentInfo._id,
                     state: {
