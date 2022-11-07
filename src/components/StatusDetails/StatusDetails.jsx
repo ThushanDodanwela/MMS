@@ -48,16 +48,13 @@ const StatusDetails = ({ show, handleClose, module }) => {
             </div>
             <div className="fw-semibold mt-3">History</div>
             <div>
-              <div
-                className="d-flex mt-2 rounded-top py-1"
-                style={{ backgroundColor: "#1BB8A0" }}
-              >
+              <div className="d-flex mt-2 py-1 bg-success text-light ps-1">
                 <div className="col ps-2 fw-bold">State</div>
                 <div className="col fw-bold">Updated On</div>
               </div>
               {module?.state?.map((oneState, index) => (
                 <div
-                  className="d-flex py-1"
+                  className="d-flex py-1 ps-1"
                   style={{ backgroundColor: index % 2 ? "#DFDFDF" : "" }}
                 >
                   <div
