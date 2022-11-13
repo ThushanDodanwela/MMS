@@ -81,4 +81,8 @@ export const SEMESTER = [
     label: "Semester 02",
     value: "2",
   },
+  {
+    label: "Both",
+    value: "Both",
+  },
 ];
