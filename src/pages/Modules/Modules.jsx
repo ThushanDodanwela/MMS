@@ -237,10 +237,14 @@ const Module = ({ setNavbar }) => {
       level: moduleCode.split(" ")[1].substring(0, 1),
       semester: moduleCode.split(" ")[1].substring(1, 2),
     });
+  };
+  useEffect(() => {
     validateCredits(moduleInfo.credits);
     validateLevel(moduleInfo.level);
     validateSemester(moduleInfo.semester);
-  };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moduleInfo.credits]);
 
   const validateCredits = (credits) => {
     //send request and check whether it exists

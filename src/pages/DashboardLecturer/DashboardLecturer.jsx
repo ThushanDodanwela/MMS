@@ -1,6 +1,4 @@
 import { Logout } from "@mui/icons-material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,21 +30,60 @@ function DashboardLecturer({ setNavbar }) {
   const [showStatusDetails, setShowStatusDetails] = useState(false);
   const [moduleDetails, setModuleDetails] = useState(false);
   const [currentInfo, setCurrentInfo] = useState({});
+  const [cardData, setCardData] = useState({
+    lecturers_ongoing: 0,
+    exams_ongoing: 0,
+    paper_marking_one: 0,
+    paper_marking_two: 0,
+    results_released: 0,
+  });
 
   setNavbar("Dashboard");
 
   const onSuccess = (data) => {
-    data.allocations?.map((module) => {
-      setBatch((prev) => {
-        let isExist = prev.filter((val) => val === module.batch);
-        if (isExist.length > 0) {
-          return [...prev];
-        } else {
-          return [...prev, module.batch];
-        }
-      });
+    let batchArray = [];
+
+    let ONGOING_LECTURES = 0;
+    let EXAMS_ONGOING = 0;
+    let PAPER_MARKING_I = 0;
+    let PAPER_MARKING_II = 0;
+    let RESULTS_RELEASED = 0;
+
+    data.allocations?.forEach((module) => {
+      console.log("module", module);
+      switch (module?.state[module?.state.length - 1].name) {
+        case "ONGOING_LECTURES":
+          ONGOING_LECTURES++;
+          break;
+        case "EXAMS_ONGOING":
+          EXAMS_ONGOING++;
+          break;
+        case "PAPER_MARKING_I":
+          PAPER_MARKING_I++;
+          break;
+        case "PAPER_MARKING_II":
+          PAPER_MARKING_II++;
+          break;
+        case "RESULTS_RELEASED":
+          RESULTS_RELEASED++;
+          break;
+        default:
+          break;
+      }
+      let isExist = batchArray.filter((val) => val === module.batch);
+      if (isExist.length === 0) {
+        batchArray.push(module.batch);
+      }
     });
+    setBatch(batchArray.reverse());
     setAllocations(data.allocations);
+    setCardData({
+      lecturers_ongoing: ONGOING_LECTURES,
+      exams_ongoing: EXAMS_ONGOING,
+      paper_marking_one: PAPER_MARKING_I,
+      paper_marking_two: PAPER_MARKING_II,
+      results_released: RESULTS_RELEASED,
+    });
   };
 
   useEffect(() => {
@@ -186,12 +223,27 @@ function DashboardLecturer({ setNavbar }) {
           />
         </div>
 
-        <div className="d-none d-lg-flex justify-content-between mt-3 ">
-          <LecturerDashboardSmallCard count="27" />
-          <LecturerDashboardSmallCard title="Exams ongoing" count="10" />
-          <LecturerDashboardSmallCard title="Paper marking" count="10" />
-          <LecturerDashboardSmallCard title="Pending Results" count="05" />
-          <LecturerDashboardSmallCard title="Lectures ongoing" count="02" />
+        <div className="d-none d-lg-flex justify-content-between mt-3 gap-3">
+          <LecturerDashboardSmallCard
+            title="Lectures Ongoing"
+            count={cardData.lecturers_ongoing}
+          />
+          <LecturerDashboardSmallCard
+            title="Exams Mngoing"
+            count={cardData.exams_ongoing}
+          />
+          <LecturerDashboardSmallCard
+            title="Paper Marking"
+            count={cardData.paper_marking_one}
+          />
+          <LecturerDashboardSmallCard
+            title="Paper Marking II"
+            count={cardData.paper_marking_two}
+          />
+          <LecturerDashboardSmallCard
+            title="Results Released"
+            count={cardData.results_released}
+          />
         </div>
         {selectedBatch.length === 0 &&
           batch.map((batch, index) => {

@@ -82,11 +82,11 @@ function Allocations({ setNavbar }) {
 
   const onSuccessRetriveAllAllocations = (data) => {
     setAllAllocations(data.allocations);
+    setPageLoadign(false);
   };
   useEffect(() => {
     setNavbar("Allocations");
     getAllocations(onSuccessRetriveAllAllocations);
-    setPageLoadign(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

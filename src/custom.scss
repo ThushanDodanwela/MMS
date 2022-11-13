@@ -1,4 +1,5 @@
 
+
 $theme-colors: (
     "primary":    #0d6efd,
     "secondary":  #6c757d,
@@ -17,7 +18,8 @@ $input-border-color:#b0c8e0;
 $input-focus-border-color:tint-color(#38aa75, 50%);
 $input-focus-border-color:#38aa75;
 $input-focus-box-shadow:none;
-
+$form-select-focus-border-color: tint-color(#38aa75, 50%);
+$form-select-focus-box-shadow: 0 0 0 1px #38aa75;
 .MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows{
     margin-bottom: 0px;
 }
