@@ -229,7 +229,7 @@ function DashboardLecturer({ setNavbar }) {
             count={cardData.lecturers_ongoing}
           />
           <LecturerDashboardSmallCard
-            title="Exams Mngoing"
+            title="Exams Ongoing"
             count={cardData.exams_ongoing}
           />
           <LecturerDashboardSmallCard

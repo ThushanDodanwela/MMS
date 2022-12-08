@@ -235,7 +235,10 @@ const Module = ({ setNavbar }) => {
       ...moduleInfo,
       credits: moduleCode.split(" ")[1].substring(4, 5),
       level: moduleCode.split(" ")[1].substring(0, 1),
-      semester: moduleCode.split(" ")[1].substring(1, 2),
+      semester:
+        moduleCode.split(" ")[1].substring(1, 2) === "3"
+          ? "Both"
+          : moduleCode.split(" ")[1].substring(1, 2),
     });
   };
   useEffect(() => {
