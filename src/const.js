@@ -36,12 +36,41 @@ export const POSITIONS = [
     value: "NONE",
   },
   {
+    label: "Professor",
+    value: "PROFESSOR",
+  },
+
+  {
+    label: "Senior Lecturer",
+    value: "SENIOR_LECTURER",
+  },
+  {
+    label: "Adjunct Professor",
+    value: "ADJUNCT_PROFESSOR",
+  },
+  {
+    label: "Adjunct Professor",
+    value: "ADJUNCT_PROFESSOR",
+  },
+  {
+    label: "Senior Lecturer Grade I",
+    value: "SENIOR_LECTURER_GRADE_I",
+  },
+  {
+    label: "Senior Lecturer Grade II",
+    value: "SENIOR_LECTURER_GRADE_II",
+  },
+  {
+    label: "Lecturer",
+    value: "LECTURER",
+  },
+  {
     label: "Visiting Lecturer",
     value: "VISITING_LECTURER",
   },
   {
-    label: "Senior Lecturer",
-    value: "SENIOR_LECTURER",
+    label: "Lecturer (Probationary)",
+    value: "LECTURER_PROBATIONARY",
   },
 ];
 
