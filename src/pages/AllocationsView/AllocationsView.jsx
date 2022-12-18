@@ -321,24 +321,24 @@ const AllocationsView = ({ setNavbar }) => {
         },
       }));
     }
-    if (demonstrator.length > 0) {
-      setValidation((prev) => ({
-        ...prev,
-        demonstrators: {
-          visibility: 0,
-          message: "",
-        },
-      }));
-    } else {
-      allCorrect = false;
-      setValidation((prev) => ({
-        ...prev,
-        demonstrators: {
-          visibility: 1,
-          message: "Please select at least one demonstrator",
-        },
-      }));
-    }
+    // if (demonstrator.length > 0) {
+    //   setValidation((prev) => ({
+    //     ...prev,
+    //     demonstrators: {
+    //       visibility: 0,
+    //       message: "",
+    //     },
+    //   }));
+    // } else {
+    //   allCorrect = false;
+    //   setValidation((prev) => ({
+    //     ...prev,
+    //     demonstrators: {
+    //       visibility: 1,
+    //       message: "Please select at least one demonstrator",
+    //     },
+    //   }));
+    // }
 
     if (state.name !== "Set State") {
       setValidation((prev) => ({

@@ -55,7 +55,10 @@ function ModuleCard({
           <div className="fw-semibold pt-1" style={{ fontSize: "15px" }}>
             {moduleName}
           </div>
-          <div className="text-secondary">Semester 0{semester}</div>
+          <div className="text-secondary">
+            Semester{" "}
+            {semester === "1" || semester === "2" ? `0${semester}` : semester}
+          </div>
           <div className="d-flex justify-content-between">
             <div className="text-secondary">Level 0{level}</div>
             <div>

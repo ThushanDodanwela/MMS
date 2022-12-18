@@ -30,7 +30,7 @@ const Lecturer = ({ setNavbar }) => {
     name: "",
     position: "",
     email: "",
-    phoneNumber: "",
+    phoneNumber: " ",
     qualifications: "",
   });
 
@@ -38,7 +38,7 @@ const Lecturer = ({ setNavbar }) => {
     //error states 0 - initial view 1-error 2-valid
     name: { visibility: 0, message: "" },
     email: { visibility: 0, message: "" },
-    phoneNumber: { visibility: 0, message: "" },
+    phoneNumber: { visibility: 2, message: "" },
     position: { visibility: 0, message: "" },
     qualifications: { visibility: 0, message: "" },
   });
@@ -222,20 +222,27 @@ const Lecturer = ({ setNavbar }) => {
 
   const validatePoneNumber = (phoneNumber) => {
     if (phoneNumber.length > 0) {
-      setValidation((prev) => ({
-        ...prev,
-        phoneNumber: { visibility: 2, message: "" },
-      }));
-      return true;
-    } else {
-      setValidation((prev) => ({
-        ...prev,
-        phoneNumber: {
-          visibility: 1,
-          message: "Phone Number is required",
-        },
-      }));
-      return false;
+      const regex =
+        /^(?:0|94|\+94)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|912)(0|2|3|4|5|7|9)|7(0|1|2|4|5|6|7|8)\d)\d{6}$/;
+
+      let matches = regex.exec(phoneNumber);
+      if (matches) {
+        setValidation((prev) => ({
+          ...prev,
+          phoneNumber: { visibility: 2, message: "" },
+        }));
+        console.log(matches);
+        return true;
+      } else {
+        setValidation((prev) => ({
+          ...prev,
+          phoneNumber: {
+            visibility: 1,
+            message: "Phone Number is invalid.",
+          },
+        }));
+        return false;
+      }
     }
   };
 
@@ -395,7 +402,7 @@ const Lecturer = ({ setNavbar }) => {
                   });
                 }}
                 type="text"
-                placeholder="011 2914482(ext204)"
+                placeholder="0112914482"
                 {...(validation.phoneNumber.visibility === 1 && {
                   isInvalid: true,
                 })}
@@ -533,7 +540,9 @@ const Lecturer = ({ setNavbar }) => {
 
                   <TableCell component="th" scope="row">
                     <Col>
-                      <p className=" mb-1  text-center">{row?.phoneNumber}</p>
+                      <p className=" mb-1  text-center">
+                        {row?.phoneNumber.length > 0 ? row.phoneNumber : "-"}
+                      </p>
                     </Col>
                   </TableCell>
 

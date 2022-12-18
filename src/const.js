@@ -72,6 +72,10 @@ export const POSITIONS = [
     label: "Lecturer (Probationary)",
     value: "LECTURER_PROBATIONARY",
   },
+  {
+    label: "Demonstrator",
+    value: "DEMONSTRATOR",
+  },
 ];
 
 export const LEVELS = [
@@ -113,5 +117,9 @@ export const SEMESTER = [
   {
     label: "Both",
     value: "Both",
+  },
+  {
+    label: "One or Two",
+    value: "One or Two",
   },
 ];
