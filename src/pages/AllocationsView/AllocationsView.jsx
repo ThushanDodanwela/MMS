@@ -165,7 +165,9 @@ const AllocationsView = ({ setNavbar }) => {
         state: statusInfo,
         module: selectedModule?._id,
         batch: batch,
-        secondExaminar: selectedSecondExaminer[0]._id,
+        secondExaminar: selectedSecondExaminer[0]
+          ? selectedSecondExaminer[0]._id
+          : "",
         demonstrators: selectedDemonstrators.map(
           (demonstrator) => demonstrator._id
         ),
@@ -234,7 +236,7 @@ const AllocationsView = ({ setNavbar }) => {
 
   const validateBatch = (batchName = "") => {
     if (batchName.length > 0) {
-      if (batchName.match(/^IM\s[0-9]{4,4}$/)) {
+      if (batchName.match(/^[A-Z]{2,2}\s[0-9]{4,4}$/)) {
         setValidation((prev) => ({
           ...prev,
           batchName: { visibility: 2, message: "" },
@@ -303,24 +305,24 @@ const AllocationsView = ({ setNavbar }) => {
         },
       }));
     }
-    if (secondExaminar.length > 0) {
-      setValidation((prev) => ({
-        ...prev,
-        secondExaminer: {
-          visibility: 0,
-          message: "",
-        },
-      }));
-    } else {
-      allCorrect = false;
-      setValidation((prev) => ({
-        ...prev,
-        secondExaminer: {
-          visibility: 1,
-          message: "Please select the second examinor",
-        },
-      }));
-    }
+    // if (secondExaminar.length > 0) {
+    //   setValidation((prev) => ({
+    //     ...prev,
+    //     secondExaminer: {
+    //       visibility: 0,
+    //       message: "",
+    //     },
+    //   }));
+    // } else {
+    //   allCorrect = false;
+    //   setValidation((prev) => ({
+    //     ...prev,
+    //     secondExaminer: {
+    //       visibility: 1,
+    //       message: "Please select the second examinor",
+    //     },
+    //   }));
+    // }
     // if (demonstrator.length > 0) {
     //   setValidation((prev) => ({
     //     ...prev,
@@ -540,6 +542,10 @@ const AllocationsView = ({ setNavbar }) => {
                 : null}
               {selectedModule?.semester === "2"
                 ? `${selectedModule?.semester} nd Semester`
+                : null}
+              {selectedModule?.semester !== "1" &&
+              selectedModule?.semester !== "2"
+                ? `${selectedModule?.semester} `
                 : null}
             </div>
           </div>

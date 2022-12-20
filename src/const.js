@@ -44,10 +44,7 @@ export const POSITIONS = [
     label: "Senior Lecturer",
     value: "SENIOR_LECTURER",
   },
-  {
-    label: "Adjunct Professor",
-    value: "ADJUNCT_PROFESSOR",
-  },
+
   {
     label: "Adjunct Professor",
     value: "ADJUNCT_PROFESSOR",
@@ -65,6 +62,10 @@ export const POSITIONS = [
     value: "LECTURER",
   },
   {
+    label: "Temporary Lecturer",
+    value: "TEMPORARY_LECTURER",
+  },
+  {
     label: "Visiting Lecturer",
     value: "VISITING_LECTURER",
   },
@@ -75,6 +76,10 @@ export const POSITIONS = [
   {
     label: "Demonstrator",
     value: "DEMONSTRATOR",
+  },
+  {
+    label: "Temporary Demonstrator",
+    value: "TEMPORARY_DEMONSTRATOR",
   },
 ];
 
