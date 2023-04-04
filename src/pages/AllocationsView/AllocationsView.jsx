@@ -536,17 +536,18 @@ const AllocationsView = ({ setNavbar }) => {
           <div className="d-flex">
             <div className="py-2 col-3 fw-semibold fs-5 pe-3">Semester</div>
             <div className="py-2 fs-5">
-              :{" "}
+              :
               {selectedModule?.semester === "1"
-                ? `${selectedModule?.semester} st Semester`
-                : null}
+                ? ` ${selectedModule?.semester} st Semester`
+                : ""}
               {selectedModule?.semester === "2"
-                ? `${selectedModule?.semester} nd Semester`
-                : null}
+                ? ` ${selectedModule?.semester} nd Semester`
+                : ""}
               {selectedModule?.semester !== "1" &&
-              selectedModule?.semester !== "2"
-                ? `${selectedModule?.semester} `
-                : null}
+              selectedModule?.semester !== "2" &&
+              selectedModule?.semester
+                ? ` ${selectedModule?.semester} `
+                : ""}
             </div>
           </div>
 
