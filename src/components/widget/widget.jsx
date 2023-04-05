@@ -49,3 +49,4 @@ function widget({ type }) {
 }
 
 export default widget;
+//

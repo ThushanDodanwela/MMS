@@ -25,3 +25,5 @@ function Navbar({ section }) {
 }
 
 export default Navbar;
+
+// Path: src\components\Navbar\navbar.scss

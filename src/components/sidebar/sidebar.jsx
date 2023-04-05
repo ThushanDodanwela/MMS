@@ -76,3 +76,5 @@ function Sidebar({ section }) {
 }
 
 export default Sidebar;
+
+// Path: src\components\Sidebar\sidebar.scss
